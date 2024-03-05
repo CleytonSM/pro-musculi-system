@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: '123'
+      MYSQL_DATABASE: 'promusculisystem'
+      MYSQL_USER: 'dba'
+      MYSQL_PASSWORD: '123'
+
+    ports:
+      - "3310:3306"
