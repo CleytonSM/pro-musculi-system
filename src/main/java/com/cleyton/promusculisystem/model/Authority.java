@@ -13,7 +13,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "authorities")
-@Data
 public class Authority {
 
     @Id
@@ -25,4 +24,36 @@ public class Authority {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public Authority() {
+    }
+
+    public Authority(String name, User user) {
+        this.name = name;
+        this.user = user;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
