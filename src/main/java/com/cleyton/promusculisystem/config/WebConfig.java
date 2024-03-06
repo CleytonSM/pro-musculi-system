@@ -30,7 +30,7 @@ public class WebConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/user/register").permitAll()
-                        .requestMatchers("/user/test").hasRole("ADMIN")
+                        .requestMatchers("/user/admin/**").hasRole("ADMIN")
                         .requestMatchers("/error").permitAll()
                 )
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
