@@ -9,8 +9,4 @@ import java.util.Optional;
 @Component
 public class ModelMapperHelper {
 
-    public Sort.Direction getSortType(final PaginationDto paginationDto) {
-        return Optional.ofNullable(paginationDto.getSortType()).map(sortType ->
-                Sort.Direction.valueOf(sortType.toString())).orElse(Sort.Direction.ASC);
-    }
 }

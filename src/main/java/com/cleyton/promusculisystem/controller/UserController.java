@@ -1,6 +1,7 @@
 package com.cleyton.promusculisystem.controller;
 
 import com.cleyton.promusculisystem.model.User;
+import com.cleyton.promusculisystem.model.dto.LoginDto;
 import com.cleyton.promusculisystem.model.dto.PaginationDto;
 import com.cleyton.promusculisystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.stream.Stream;
 
 @RestController()
 @RequestMapping("/user")
@@ -31,7 +33,13 @@ public class UserController {
     }
 
     @GetMapping("/admin/users")
-    public ResponseEntity<?> findUsers(@RequestBody PaginationDto paginationDto) {
+    public ResponseEntity<Stream<User>> findUsers(@RequestBody PaginationDto paginationDto) {
         return new ResponseEntity<>(service.getUsers(paginationDto), HttpStatus.OK);
     }
+
+    @GetMapping("/auth")
+    public ResponseEntity<?> login(@RequestBody LoginDto logInDto) {
+        return new ResponseEntity<>(service.login(logInDto));
+    }
+
 }

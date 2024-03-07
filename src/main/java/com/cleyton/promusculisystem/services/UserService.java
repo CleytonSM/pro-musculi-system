@@ -3,12 +3,15 @@ package com.cleyton.promusculisystem.services;
 import com.cleyton.promusculisystem.helper.ModelMapperHelper;
 import com.cleyton.promusculisystem.model.Authority;
 import com.cleyton.promusculisystem.model.User;
+import com.cleyton.promusculisystem.model.dto.LoginDto;
 import com.cleyton.promusculisystem.model.dto.PaginationDto;
 import com.cleyton.promusculisystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +61,18 @@ public class UserService {
     public Stream<User> getUsers(PaginationDto paginationDto) {
        Pageable pageable = Pageable.ofSize(paginationDto.getPageSize()).withPage(paginationDto.getPageNumber());
        return repository.findAll(pageable).stream();
+    }
+
+    public HttpStatus login(LoginDto loginDto) {
+        Optional<User> optionalUser = repository.findByEmail(loginDto.getEmail());
+        if(optionalUser.isEmpty()) {
+            return HttpStatus.UNAUTHORIZED;
+        }
+        if(!passwordEncoder.matches(loginDto.getPassword(), optionalUser.get().getPassword())) {
+            return HttpStatus.FORBIDDEN;
+        }
+
+        return HttpStatus.OK;
     }
 
     private void isEmailAlreadyInUse(String email) {

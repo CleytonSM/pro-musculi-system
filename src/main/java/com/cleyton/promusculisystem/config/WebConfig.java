@@ -4,6 +4,7 @@ import com.cleyton.promusculisystem.filter.CsrfCookieFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -22,13 +23,16 @@ public class WebConfig {
         CsrfTokenRequestHandler requestHandler = new CsrfTokenRequestAttributeHandler();
 
         return http
+                .securityContext(s -> s.requireExplicitSave(false))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .csrf(csrf -> csrf
                         .csrfTokenRequestHandler(requestHandler)
-                        .ignoringRequestMatchers("/user/register", "/login")
+                        .ignoringRequestMatchers("/user/register", "/login", "/user/auth")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 )
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/login").permitAll()
+                        .requestMatchers("/user/auth").permitAll()
                         .requestMatchers("/user/register").permitAll()
                         .requestMatchers("/user/admin/**").hasRole("ADMIN")
                         .requestMatchers("/error").permitAll()
