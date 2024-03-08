@@ -16,7 +16,7 @@ import org.springframework.security.web.csrf.CsrfTokenRequestHandler;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
-public class WebConfig {
+public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
