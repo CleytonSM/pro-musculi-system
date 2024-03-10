@@ -3,14 +3,17 @@ package com.cleyton.promusculisystem.controller;
 import com.cleyton.promusculisystem.model.User;
 import com.cleyton.promusculisystem.model.dto.LoginDto;
 import com.cleyton.promusculisystem.model.dto.PaginationDto;
+import com.cleyton.promusculisystem.model.dto.UserDto;
 import com.cleyton.promusculisystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.stream.Stream;
@@ -42,4 +45,8 @@ public class UserController {
         return new ResponseEntity<>(service.login(logInDto));
     }
 
+    @PutMapping("/admin/update/")
+    public ResponseEntity<?> update(@RequestParam(name = "id") Integer id, @RequestBody UserDto dto) {
+        return new ResponseEntity<>(service.updateUser(id, dto), HttpStatus.OK);
+    }
 }
