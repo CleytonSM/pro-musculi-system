@@ -28,6 +28,10 @@ public class Authority {
     public Authority() {
     }
 
+    public Authority(String name) {
+        this.name = name;
+    }
+
     public Authority(String name, User user) {
         this.name = name;
         this.user = user;

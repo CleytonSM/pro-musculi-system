@@ -26,13 +26,15 @@ public class UserController {
     private UserService service;
 
     @PostMapping("/register")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        return new ResponseEntity<>(service.createUser(user), HttpStatus.CREATED);
+    public ResponseEntity<User> createUser(@RequestBody UserDto userDto) {
+        service.createUser(userDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PostMapping("/admin/register")
-    public ResponseEntity<User> createAdmin(@RequestBody User user) {
-        return new ResponseEntity<>(service.createAdmin(user), HttpStatus.CREATED);
+    public ResponseEntity<User> createAdmin(@RequestBody UserDto userDto) {
+        service.createAdmin(userDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/admin/users")
