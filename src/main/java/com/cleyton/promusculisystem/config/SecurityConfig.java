@@ -38,7 +38,7 @@ public class SecurityConfig {
                         .requestMatchers("/error").permitAll()
                 )
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
-                .formLogin(withDefaults())
+                .formLogin(login -> login.loginProcessingUrl("/user/auth"))
                 .httpBasic(withDefaults())
                 .build();
     }
