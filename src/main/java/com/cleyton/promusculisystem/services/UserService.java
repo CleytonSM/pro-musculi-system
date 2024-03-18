@@ -9,6 +9,7 @@ import com.cleyton.promusculisystem.model.dto.RoleDto;
 import com.cleyton.promusculisystem.model.dto.UserDto;
 import com.cleyton.promusculisystem.repository.AuthorityRepository;
 import com.cleyton.promusculisystem.repository.UserRepository;
+import jakarta.persistence.EntityExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -82,7 +83,7 @@ public class UserService {
 
     private void isEmailAlreadyInUse(String email) {
         if(repository.findByEmail(email).isPresent()) {
-            throw new RuntimeException("This email is already in use!");
+            throw new EntityExistsException("This email is already in use!");
         }
     }
 }

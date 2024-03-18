@@ -4,8 +4,7 @@ import com.cleyton.promusculisystem.model.Authority;
 import com.cleyton.promusculisystem.model.User;
 import com.cleyton.promusculisystem.model.dto.RoleDto;
 import com.cleyton.promusculisystem.model.dto.UserDto;
-import com.cleyton.promusculisystem.repository.AuthorityRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -46,7 +45,7 @@ public class ModelHelper {
 
     public static Object verifyEmptyOptionalEntity (Optional<?> optionalObject) {
         if(optionalObject.isEmpty()) {
-            throw new RuntimeException("This entity doesn't exists");
+            throw new EntityNotFoundException("This entity doesn't exists");
         }
 
         return optionalObject.get();
@@ -55,7 +54,7 @@ public class ModelHelper {
     public static void verifyRole (UserDto userDto) {
         if (!userDto.getRole().toString().equals(RoleDto.ROLE_ADMIN.toString())
                 && !userDto.getRole().toString().equals(RoleDto.ROLE_USER.toString())) {
-            throw new RuntimeException("Invalid role submission");
+            return;
         }
     }
 }
