@@ -3,8 +3,10 @@ package com.cleyton.promusculisystem.config;
 import com.cleyton.promusculisystem.model.Authority;
 import com.cleyton.promusculisystem.model.User;
 import com.cleyton.promusculisystem.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -41,10 +43,10 @@ import java.util.Set;
                 if(passwordEncoder.matches(password, user.getPassword())) {
                     return new UsernamePasswordAuthenticationToken(user, password, grantedAuthority(user.getAuthorities()));
                 } else {
-                    throw new RuntimeException("Wrong Email or Password");
+                    throw new BadCredentialsException("Wrong Email or Password");
                 }
             } else {
-                throw new RuntimeException("User not found");
+                throw new EntityNotFoundException("User not found");
             }
         }
 
