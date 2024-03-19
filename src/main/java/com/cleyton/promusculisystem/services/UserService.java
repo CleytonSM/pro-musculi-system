@@ -19,8 +19,6 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static com.cleyton.promusculisystem.helper.ModelHelper.updateUserAttributeSetter;
-import static com.cleyton.promusculisystem.helper.ModelHelper.userAttributeSetter;
 import static com.cleyton.promusculisystem.helper.ModelHelper.verifyEmptyOptionalEntity;
 import static com.cleyton.promusculisystem.helper.ModelHelper.verifyRole;
 
@@ -42,7 +40,7 @@ public class UserService {
         isEmailAlreadyInUse(userDto.getEmail());
 
         Authority authority = new Authority(RoleDto.ROLE_USER.toString());
-        repository.save(userAttributeSetter(userDto, passwordEncoder, authority));
+        repository.save(modelHelper.userAttributeSetter(userDto, passwordEncoder, authority));
         authorityRepository.save(authority);
     }
     public void createAdmin(UserDto userDto) {
@@ -50,7 +48,7 @@ public class UserService {
         isEmailAlreadyInUse(userDto.getEmail());
 
         Authority authority = new Authority(RoleDto.ROLE_ADMIN.toString());
-        repository.save(userAttributeSetter(userDto, passwordEncoder, authority));
+        repository.save(modelHelper.userAttributeSetter(userDto, passwordEncoder, authority));
         authorityRepository.save(authority);
     }
 
@@ -78,7 +76,13 @@ public class UserService {
 
         Authority authority = new Authority(userDto.getRole().toString(), user);
 
-        return repository.save(updateUserAttributeSetter(user, userDto, passwordEncoder, authority));
+        return repository.save(modelHelper.updateUserAttributeSetter(user, userDto, passwordEncoder, authority));
+    }
+
+    public User patchUser(Integer id, UserDto userDto) {
+        User user = (User) verifyEmptyOptionalEntity(repository.findById(id));
+
+        return repository.save(modelHelper.patchUserAttributeSetter(user, userDto, passwordEncoder));
     }
 
     private void isEmailAlreadyInUse(String email) {
