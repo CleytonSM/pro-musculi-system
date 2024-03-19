@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,12 +44,17 @@ public class UserController {
     }
 
     @GetMapping("/auth")
-    public ResponseEntity<?> login(@RequestBody LoginDto logInDto) {
+    public ResponseEntity<HttpStatus> login(@RequestBody LoginDto logInDto) {
         return new ResponseEntity<>(service.login(logInDto));
     }
 
     @PutMapping("/admin/update/")
-    public ResponseEntity<?> update(@RequestParam(name = "id") Integer id, @RequestBody UserDto dto) {
-        return new ResponseEntity<>(service.updateUser(id, dto), HttpStatus.OK);
+    public ResponseEntity<?> updateUser(@RequestParam(name = "id") Integer id, @RequestBody UserDto userDto) {
+        return new ResponseEntity<>(service.updateUser(id, userDto), HttpStatus.OK);
+    }
+
+    @PatchMapping("/admin/update/partial/")
+    public ResponseEntity<?> patchUser(@RequestParam(name = "id") Integer id, @RequestBody UserDto userDto) {
+        return new ResponseEntity<>(service.patchUser(id, userDto), HttpStatus.OK);
     }
 }
