@@ -20,7 +20,6 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.cleyton.promusculisystem.helper.ModelHelper.verifyEmptyOptionalEntity;
-import static com.cleyton.promusculisystem.helper.ModelHelper.verifyRole;
 
 @Service
 public class UserService {
@@ -72,11 +71,8 @@ public class UserService {
 
     public User updateUser(Integer id, UserDto userDto) {
         User user = (User) verifyEmptyOptionalEntity(repository.findById(id));
-        verifyRole(userDto);
 
-        Authority authority = new Authority(userDto.getRole().toString(), user);
-
-        return repository.save(modelHelper.updateUserAttributeSetter(user, userDto, passwordEncoder, authority));
+        return repository.save(modelHelper.updateUserAttributeSetter(user, userDto, passwordEncoder));
     }
 
     public User patchUser(Integer id, UserDto userDto) {

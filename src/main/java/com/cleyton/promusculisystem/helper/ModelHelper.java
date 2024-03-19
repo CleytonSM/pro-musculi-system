@@ -5,6 +5,7 @@ import com.cleyton.promusculisystem.model.User;
 import com.cleyton.promusculisystem.model.dto.RoleDto;
 import com.cleyton.promusculisystem.model.dto.UserDto;
 import com.cleyton.promusculisystem.repository.AuthorityRepository;
+import com.cleyton.promusculisystem.services.AuthorityService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,7 +20,7 @@ import java.util.Set;
 public class ModelHelper {
 
     @Autowired
-    private AuthorityRepository authorityRepository;
+    private AuthorityService authorityService;
 
     public User userAttributeSetter(UserDto userDto, PasswordEncoder passwordEncoder, Authority authority) {
         User user = new User();
@@ -32,10 +33,11 @@ public class ModelHelper {
         return user;
     }
 
-    public User updateUserAttributeSetter(User user, UserDto userDto, PasswordEncoder passwordEncoder, Authority authority) {
+    public User updateUserAttributeSetter(User user, UserDto userDto, PasswordEncoder passwordEncoder) {
         user.setEmail(userDto.getEmail());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setCreatedAt(LocalDateTime.now());
+        Authority authority = authorityService.create(userDto.getRole().toString(), user);
         user.setAuthorities(authoritySet(authority));
 
         return user;
@@ -49,7 +51,6 @@ public class ModelHelper {
           user.setPassword(passwordEncoder.encode(userDto.getPassword()));
       }
       if(userDto.getRole() != null) {
-          verifyRole(userDto);
           Authority authority = new Authority(userDto.getRole().toString(), user);
           authoritySet(authority);
       }
@@ -58,7 +59,7 @@ public class ModelHelper {
     }
 
     private void updateAuthority(Authority authority) {
-        authorityRepository.save(authority);
+        authorityService.save(authority);
     }
 
     private Set<Authority> authoritySet(Authority authority) {
@@ -75,12 +76,5 @@ public class ModelHelper {
         }
 
         return optionalObject.get();
-    }
-
-    public static void verifyRole (UserDto userDto) {
-        if (!userDto.getRole().toString().equals(RoleDto.ROLE_ADMIN.toString())
-                && !userDto.getRole().toString().equals(RoleDto.ROLE_USER.toString())) {
-            throw new RuntimeException("This role doesn't exist");
-        }
     }
 }
