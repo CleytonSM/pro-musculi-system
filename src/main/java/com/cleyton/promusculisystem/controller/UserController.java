@@ -5,9 +5,12 @@ import com.cleyton.promusculisystem.model.dto.LoginDto;
 import com.cleyton.promusculisystem.model.dto.PaginationDto;
 import com.cleyton.promusculisystem.model.dto.UserDto;
 import com.cleyton.promusculisystem.services.UserService;
+import jakarta.servlet.http.PushBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 @RestController()
@@ -39,7 +43,7 @@ public class UserController {
     }
 
     @GetMapping("/admin/users")
-    public ResponseEntity<Stream<User>> findUsers(@RequestBody PaginationDto paginationDto) {
+    public ResponseEntity<List<User>> findUsers(@RequestBody PaginationDto paginationDto) {
         return new ResponseEntity<>(service.getUsers(paginationDto), HttpStatus.OK);
     }
 
@@ -50,11 +54,25 @@ public class UserController {
 
     @PutMapping("/admin/update/")
     public ResponseEntity<?> updateUser(@RequestParam(name = "id") Integer id, @RequestBody UserDto userDto) {
-        return new ResponseEntity<>(service.updateUser(id, userDto), HttpStatus.OK);
+        service.updateUser(id, userDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping("/admin/update/partial/")
     public ResponseEntity<?> patchUser(@RequestParam(name = "id") Integer id, @RequestBody UserDto userDto) {
-        return new ResponseEntity<>(service.patchUser(id, userDto), HttpStatus.OK);
+        service.patchUser(id, userDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/admin/delete/")
+    public ResponseEntity<HttpStatus> deleteUser(@RequestParam(name = "id") Integer id) {
+        service.deleteUser(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/admin/reactive/")
+    public ResponseEntity<HttpStatus> reactiveUser(@RequestParam(name = "id") Integer id, @RequestBody UserDto userDto) {
+        service.reactiveUser(id, userDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -9,11 +9,13 @@ import com.cleyton.promusculisystem.model.dto.UserDto;
 import com.cleyton.promusculisystem.repository.UserRepository;
 import jakarta.persistence.EntityExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -43,9 +45,10 @@ public class UserService {
         repository.save(modelHelper.postUserAttributeSetter(userDto, passwordEncoder, RoleDto.ROLE_ADMIN.toString()));
     }
 
-    public Stream<User> getUsers(PaginationDto paginationDto) {
+    public List<User> getUsers(PaginationDto paginationDto) {
        Pageable pageable = Pageable.ofSize(paginationDto.getPageSize()).withPage(paginationDto.getPageNumber());
-       return repository.findAll(pageable).stream();
+
+       return repository.findAllActive();
     }
 
     public HttpStatus login(LoginDto loginDto) {
@@ -61,16 +64,28 @@ public class UserService {
         return HttpStatus.OK;
     }
 
-    public User updateUser(Integer id, UserDto userDto) {
+    public void updateUser(Integer id, UserDto userDto) {
         User user = (User) verifyEmptyOptionalEntity(repository.findById(id));
 
-        return repository.save(modelHelper.updateUserAttributeSetter(user, userDto, passwordEncoder));
+        repository.save(modelHelper.updateUserAttributeSetter(user, userDto, passwordEncoder));
     }
 
-    public User patchUser(Integer id, UserDto userDto) {
+    public void patchUser(Integer id, UserDto userDto) {
         User user = (User) verifyEmptyOptionalEntity(repository.findById(id));
 
-        return repository.save(modelHelper.patchUserAttributeSetter(user, userDto, passwordEncoder));
+        repository.save(modelHelper.patchUserAttributeSetter(user, userDto, passwordEncoder));
+    }
+
+    public void deleteUser(Integer id) {
+        User user = (User) verifyEmptyOptionalEntity(repository.findById(id));
+
+        repository.save(modelHelper.deleteUserAttributeSetter(user));
+    }
+
+    public void reactiveUser(Integer id, UserDto userDto) {
+        User user = (User) verifyEmptyOptionalEntity(repository.findById(id));
+
+        repository.save(modelHelper.reactiveUserAttributeSetter(user, userDto));
     }
 
     private void isEmailAlreadyInUse(String email) {

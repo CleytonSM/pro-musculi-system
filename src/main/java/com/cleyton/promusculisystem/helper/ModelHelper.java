@@ -52,10 +52,29 @@ public class ModelHelper {
       }
       if(userDto.getRole() != null) {
           Authority authority = authorityService.update(user, userDto);
+
           user.setAuthorities(authoritySetup(authority));
       }
 
       return user;
+    }
+
+    public User deleteUserAttributeSetter(User user) {
+        Authority authority = authorityService.delete(user);
+
+        user.setActive(Boolean.FALSE);
+        user.setAuthorities(authoritySetup(authority));
+
+        return user;
+    }
+
+    public User reactiveUserAttributeSetter(User user, UserDto userDto) {
+        Authority authority = authorityService.update(user, userDto);
+
+        user.setActive(Boolean.TRUE);
+        user.setAuthorities(authoritySetup(authority));
+
+        return user;
     }
 
     private Set<Authority> authoritySetup(Authority authority) {
