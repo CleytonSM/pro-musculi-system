@@ -2,9 +2,8 @@ package com.cleyton.promusculisystem.helper;
 
 import com.cleyton.promusculisystem.model.Authority;
 import com.cleyton.promusculisystem.model.User;
-import com.cleyton.promusculisystem.model.dto.RoleDto;
 import com.cleyton.promusculisystem.model.dto.UserDto;
-import com.cleyton.promusculisystem.repository.AuthorityRepository;
+import com.cleyton.promusculisystem.services.AuthorityService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,24 +18,27 @@ import java.util.Set;
 public class ModelHelper {
 
     @Autowired
-    private AuthorityRepository authorityRepository;
+    private AuthorityService authorityService;
 
-    public User userAttributeSetter(UserDto userDto, PasswordEncoder passwordEncoder, Authority authority) {
+    public User postUserAttributeSetter(UserDto userDto, PasswordEncoder passwordEncoder, String role) {
         User user = new User();
 
         user.setEmail(userDto.getEmail());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setCreatedAt(LocalDateTime.now());
-        user.setAuthorities(authoritySet(authority));
+        Authority authority = authorityService.create(role, user);
+        user.setAuthorities(authoritySetup(authority));
 
         return user;
     }
 
-    public User updateUserAttributeSetter(User user, UserDto userDto, PasswordEncoder passwordEncoder, Authority authority) {
+    public User updateUserAttributeSetter(User user, UserDto userDto, PasswordEncoder passwordEncoder) {
+        Authority authority = authorityService.update(user, userDto);
+
         user.setEmail(userDto.getEmail());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setCreatedAt(LocalDateTime.now());
-        user.setAuthorities(authoritySet(authority));
+        user.setAuthorities(authoritySetup(authority));
 
         return user;
     }
@@ -49,22 +51,36 @@ public class ModelHelper {
           user.setPassword(passwordEncoder.encode(userDto.getPassword()));
       }
       if(userDto.getRole() != null) {
-          verifyRole(userDto);
-          Authority authority = new Authority(userDto.getRole().toString(), user);
-          authoritySet(authority);
+          Authority authority = authorityService.update(user, userDto);
+
+          user.setAuthorities(authoritySetup(authority));
       }
 
       return user;
     }
 
-    private void updateAuthority(Authority authority) {
-        authorityRepository.save(authority);
+    public User deleteUserAttributeSetter(User user) {
+        Authority authority = authorityService.delete(user);
+
+        user.setActive(Boolean.FALSE);
+        user.setAuthorities(authoritySetup(authority));
+
+        return user;
     }
 
-    private Set<Authority> authoritySet(Authority authority) {
+    public User reactiveUserAttributeSetter(User user, UserDto userDto) {
+        Authority authority = authorityService.update(user, userDto);
+
+        user.setActive(Boolean.TRUE);
+        user.setAuthorities(authoritySetup(authority));
+
+        return user;
+    }
+
+    private Set<Authority> authoritySetup(Authority authority) {
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authority);
-        updateAuthority(authority);
+
         return authorities;
     }
 
@@ -75,12 +91,5 @@ public class ModelHelper {
         }
 
         return optionalObject.get();
-    }
-
-    public static void verifyRole (UserDto userDto) {
-        if (!userDto.getRole().toString().equals(RoleDto.ROLE_ADMIN.toString())
-                && !userDto.getRole().toString().equals(RoleDto.ROLE_USER.toString())) {
-            throw new RuntimeException("This role doesn't exist");
-        }
     }
 }

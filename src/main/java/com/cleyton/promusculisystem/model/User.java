@@ -14,6 +14,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.query.sql.internal.ParameterRecognizerImpl;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -33,7 +34,8 @@ public class User {
     private String password;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private LocalDateTime createdAt;
-
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Boolean active;
     @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Authority> authorities;
@@ -84,5 +86,13 @@ public class User {
 
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

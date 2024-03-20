@@ -9,5 +9,8 @@ CREATE TABLE authorities (
                              id INTEGER PRIMARY KEY AUTO_INCREMENT,
                              name VARCHAR(20) NOT NULL,
                              user_id INTEGER,
-                             CONSTRAINT pk_user_id FOREIGN KEY (user_id) REFERENCES users(id)
+                             CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+ALTER TABLE users
+ADD COLUMN active TINYINT NOT NULL DEFAULT(1);
