@@ -2,9 +2,7 @@ package com.cleyton.promusculisystem.helper;
 
 import com.cleyton.promusculisystem.model.Authority;
 import com.cleyton.promusculisystem.model.User;
-import com.cleyton.promusculisystem.model.dto.RoleDto;
 import com.cleyton.promusculisystem.model.dto.UserDto;
-import com.cleyton.promusculisystem.repository.AuthorityRepository;
 import com.cleyton.promusculisystem.services.AuthorityService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,23 +20,25 @@ public class ModelHelper {
     @Autowired
     private AuthorityService authorityService;
 
-    public User userAttributeSetter(UserDto userDto, PasswordEncoder passwordEncoder, Authority authority) {
+    public User postUserAttributeSetter(UserDto userDto, PasswordEncoder passwordEncoder, String role) {
         User user = new User();
 
         user.setEmail(userDto.getEmail());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setCreatedAt(LocalDateTime.now());
-        user.setAuthorities(authoritySet(authority));
+        Authority authority = authorityService.create(role, user);
+        user.setAuthorities(authoritySetup(authority));
 
         return user;
     }
 
     public User updateUserAttributeSetter(User user, UserDto userDto, PasswordEncoder passwordEncoder) {
+        Authority authority = authorityService.update(user, userDto);
+
         user.setEmail(userDto.getEmail());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setCreatedAt(LocalDateTime.now());
-        Authority authority = authorityService.create(userDto.getRole().toString(), user);
-        user.setAuthorities(authoritySet(authority));
+        user.setAuthorities(authoritySetup(authority));
 
         return user;
     }
@@ -51,21 +51,17 @@ public class ModelHelper {
           user.setPassword(passwordEncoder.encode(userDto.getPassword()));
       }
       if(userDto.getRole() != null) {
-          Authority authority = new Authority(userDto.getRole().toString(), user);
-          authoritySet(authority);
+          Authority authority = authorityService.update(user, userDto);
+          user.setAuthorities(authoritySetup(authority));
       }
 
       return user;
     }
 
-    private void updateAuthority(Authority authority) {
-        authorityService.save(authority);
-    }
-
-    private Set<Authority> authoritySet(Authority authority) {
+    private Set<Authority> authoritySetup(Authority authority) {
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authority);
-        updateAuthority(authority);
+
         return authorities;
     }
 

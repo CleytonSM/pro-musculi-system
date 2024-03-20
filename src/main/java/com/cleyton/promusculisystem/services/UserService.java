@@ -1,13 +1,11 @@
 package com.cleyton.promusculisystem.services;
 
 import com.cleyton.promusculisystem.helper.ModelHelper;
-import com.cleyton.promusculisystem.model.Authority;
 import com.cleyton.promusculisystem.model.User;
 import com.cleyton.promusculisystem.model.dto.LoginDto;
 import com.cleyton.promusculisystem.model.dto.PaginationDto;
 import com.cleyton.promusculisystem.model.dto.RoleDto;
 import com.cleyton.promusculisystem.model.dto.UserDto;
-import com.cleyton.promusculisystem.repository.AuthorityRepository;
 import com.cleyton.promusculisystem.repository.UserRepository;
 import jakarta.persistence.EntityExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +25,6 @@ public class UserService {
     @Autowired
     private UserRepository repository;
     @Autowired
-    private AuthorityRepository authorityRepository;
-    @Autowired
     private ModelHelper modelHelper;
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -38,17 +34,13 @@ public class UserService {
         // TODO create email validation filter
         isEmailAlreadyInUse(userDto.getEmail());
 
-        Authority authority = new Authority(RoleDto.ROLE_USER.toString());
-        repository.save(modelHelper.userAttributeSetter(userDto, passwordEncoder, authority));
-        authorityRepository.save(authority);
+        repository.save(modelHelper.postUserAttributeSetter(userDto, passwordEncoder, RoleDto.ROLE_USER.toString()));
     }
     public void createAdmin(UserDto userDto) {
         // TODO create email validation filter
         isEmailAlreadyInUse(userDto.getEmail());
 
-        Authority authority = new Authority(RoleDto.ROLE_ADMIN.toString());
-        repository.save(modelHelper.userAttributeSetter(userDto, passwordEncoder, authority));
-        authorityRepository.save(authority);
+        repository.save(modelHelper.postUserAttributeSetter(userDto, passwordEncoder, RoleDto.ROLE_ADMIN.toString()));
     }
 
     public Stream<User> getUsers(PaginationDto paginationDto) {

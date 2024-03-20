@@ -16,10 +16,6 @@ public class AuthorityService {
     @Autowired
     private AuthorityRepository repository;
 
-    public void save(Authority authority) {
-        repository.save(authority);
-    }
-
     public Authority create(String role, User user) {
         Authority authority = new Authority(role, user);
         save(authority);
@@ -38,5 +34,9 @@ public class AuthorityService {
         save(authority);
 
         return authority;
+    }
+
+    private void save(Authority authority) {
+        repository.save(authority);
     }
 }
