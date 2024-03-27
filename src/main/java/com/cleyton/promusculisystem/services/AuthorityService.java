@@ -17,11 +17,8 @@ public class AuthorityService {
     @Autowired
     private AuthorityRepository repository;
 
-    public Authority create(String role, User user) {
-        Authority authority = new Authority(role, user);
+    public void create(Authority authority) {
         save(authority);
-
-        return authority;
     }
 
     public Authority update(User user, UserDto userDto) {
