@@ -34,6 +34,20 @@ public class AuthorityService {
         return authority;
     }
 
+    public Authority reactivateAuthority(User user) {
+        Optional<Authority> optionalAuthority = repository.findByUser(user.getId());
+
+        if(optionalAuthority.isEmpty()) {
+            throw new EntityNotFoundException("This entity doesn't exist");
+        }
+
+        Authority authority = optionalAuthority.get();
+        authority.setName("ROLE_USER");
+        save(authority);
+
+        return authority;
+    }
+
     public Authority delete(User user) {
         Optional<Authority> optionalAuthority = repository.findByUser(user.getId());
 

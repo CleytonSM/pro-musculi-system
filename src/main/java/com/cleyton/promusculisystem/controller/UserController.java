@@ -68,8 +68,8 @@ public class UserController {
     }
 
     @PostMapping("/admin/reactive/")
-    public ResponseEntity<HttpStatus> reactiveUser(@RequestParam(name = "id") Integer id, @RequestBody UserDto userDto) {
-        service.reactiveUser(id, userDto);
+    public ResponseEntity<HttpStatus> reactivateUser(@RequestParam(name = "id") Integer id) {
+        service.reactiveUser(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

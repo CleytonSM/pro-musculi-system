@@ -85,13 +85,11 @@ public class UserService {
         repository.save(modelHelper.deleteUserAttributeSetter(user));
     }
 
-    public void reactiveUser(Integer id, UserDto userDto) {
+    public void reactiveUser(Integer id) {
         User user = (User) verifyEmptyOptionalEntity(repository.findById(id));
 
-        repository.save(modelHelper.reactiveUserAttributeSetter(user, userDto));
+        repository.save(modelHelper.reactivateUserAttributeSetter(user));
     }
-
-
 
     private void isEmailAlreadyInUse(String email) {
         if(repository.findByEmail(email).isPresent()) {

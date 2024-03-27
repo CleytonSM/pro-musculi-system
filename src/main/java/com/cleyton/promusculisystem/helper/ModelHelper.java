@@ -78,8 +78,8 @@ public class ModelHelper {
         return user;
     }
 
-    public User reactiveUserAttributeSetter(User user, UserDto userDto) {
-        Authority authority = authorityService.update(user, userDto);
+    public User reactivateUserAttributeSetter(User user) {
+        Authority authority = authorityService.reactivateAuthority(user);
 
         user.setActive(Boolean.TRUE);
         user.setAuthorities(authoritySetup(authority));
