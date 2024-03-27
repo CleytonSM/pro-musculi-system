@@ -3,6 +3,7 @@ package com.cleyton.promusculisystem.controller;
 import com.cleyton.promusculisystem.model.User;
 import com.cleyton.promusculisystem.model.dto.LoginDto;
 import com.cleyton.promusculisystem.model.dto.PaginationDto;
+import com.cleyton.promusculisystem.model.dto.PageResponse;
 import com.cleyton.promusculisystem.model.dto.UserDto;
 import com.cleyton.promusculisystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController()
 @RequestMapping("/user")
@@ -40,7 +39,7 @@ public class UserController {
     }
 
     @GetMapping("/admin/users")
-    public ResponseEntity<List<User>> findUsers(@RequestBody PaginationDto paginationDto) {
+    public ResponseEntity<PageResponse<User>> findUsers(@RequestBody PaginationDto paginationDto) {
         return new ResponseEntity<>(service.getUsers(paginationDto), HttpStatus.OK);
     }
 
