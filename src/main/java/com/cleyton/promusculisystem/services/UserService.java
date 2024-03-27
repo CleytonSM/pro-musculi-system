@@ -1,6 +1,7 @@
 package com.cleyton.promusculisystem.services;
 
 import com.cleyton.promusculisystem.helper.ModelHelper;
+import com.cleyton.promusculisystem.model.Authority;
 import com.cleyton.promusculisystem.model.User;
 import com.cleyton.promusculisystem.model.dto.LoginDto;
 import com.cleyton.promusculisystem.model.dto.PaginationDto;
@@ -10,14 +11,12 @@ import com.cleyton.promusculisystem.repository.UserRepository;
 import jakarta.persistence.EntityExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static com.cleyton.promusculisystem.helper.ModelHelper.verifyEmptyOptionalEntity;
 
@@ -30,25 +29,29 @@ public class UserService {
     private ModelHelper modelHelper;
     @Autowired
     private PasswordEncoder passwordEncoder;
-
+    @Autowired
+    private AuthorityService authorityService;
 
     public void createUser(UserDto userDto) {
-        // TODO create email validation filter
         isEmailAlreadyInUse(userDto.getEmail());
 
-        repository.save(modelHelper.postUserAttributeSetter(userDto, passwordEncoder, RoleDto.ROLE_USER.toString()));
+        Authority authority = new Authority(RoleDto.ROLE_USER.toString());
+
+        repository.save(modelHelper.postUserAttributeSetter(userDto, passwordEncoder, authority));
+        authorityService.create(authority);
     }
     public void createAdmin(UserDto userDto) {
-        // TODO create email validation filter
         isEmailAlreadyInUse(userDto.getEmail());
+        Authority authority = new Authority(RoleDto.ROLE_ADMIN.toString());
 
-        repository.save(modelHelper.postUserAttributeSetter(userDto, passwordEncoder, RoleDto.ROLE_ADMIN.toString()));
+        repository.save(modelHelper.postUserAttributeSetter(userDto, passwordEncoder, authority));
+        authorityService.create(authority);
     }
 
     public List<User> getUsers(PaginationDto paginationDto) {
-       Pageable pageable = Pageable.ofSize(paginationDto.getPageSize()).withPage(paginationDto.getPageNumber());
+        Page<User> users = repository.findAllActive(modelHelper.setupPagination(paginationDto));
 
-       return repository.findAllActive();
+        return users.getContent();
     }
 
     public HttpStatus login(LoginDto loginDto) {
@@ -82,10 +85,10 @@ public class UserService {
         repository.save(modelHelper.deleteUserAttributeSetter(user));
     }
 
-    public void reactiveUser(Integer id, UserDto userDto) {
+    public void reactiveUser(Integer id) {
         User user = (User) verifyEmptyOptionalEntity(repository.findById(id));
 
-        repository.save(modelHelper.reactiveUserAttributeSetter(user, userDto));
+        repository.save(modelHelper.reactivateUserAttributeSetter(user));
     }
 
     private void isEmailAlreadyInUse(String email) {

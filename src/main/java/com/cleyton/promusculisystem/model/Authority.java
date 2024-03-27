@@ -12,7 +12,7 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "authorities")
+@Table(name = "tb_authorities")
 public class Authority {
 
     @Id

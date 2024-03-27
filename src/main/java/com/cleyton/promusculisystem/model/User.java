@@ -20,22 +20,23 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "tb_users")
 public class User {
 
     @Id
     @GeneratedValue(generator = "native", strategy = GenerationType.AUTO)
     @GenericGenerator(name = "native")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Integer id;
     @Column(length = 100, nullable = false, unique = true)
     private String email;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(length = 100, nullable = false)
     private String password;
+    @JsonIgnore
+    private Boolean active;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private LocalDateTime createdAt;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Boolean active;
     @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Authority> authorities;

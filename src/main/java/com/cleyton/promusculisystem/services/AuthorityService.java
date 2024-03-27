@@ -17,11 +17,8 @@ public class AuthorityService {
     @Autowired
     private AuthorityRepository repository;
 
-    public Authority create(String role, User user) {
-        Authority authority = new Authority(role, user);
+    public void create(Authority authority) {
         save(authority);
-
-        return authority;
     }
 
     public Authority update(User user, UserDto userDto) {
@@ -32,6 +29,20 @@ public class AuthorityService {
         }
         Authority authority = optionalAuthority.get();
         authority.setName(userDto.getRole().toString());
+        save(authority);
+
+        return authority;
+    }
+
+    public Authority reactivateAuthority(User user) {
+        Optional<Authority> optionalAuthority = repository.findByUser(user.getId());
+
+        if(optionalAuthority.isEmpty()) {
+            throw new EntityNotFoundException("This entity doesn't exist");
+        }
+
+        Authority authority = optionalAuthority.get();
+        authority.setName("ROLE_USER");
         save(authority);
 
         return authority;

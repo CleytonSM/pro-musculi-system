@@ -27,11 +27,10 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .csrf(csrf -> csrf
                         .csrfTokenRequestHandler(requestHandler)
-                        .ignoringRequestMatchers("/user/register", "/login", "/user/auth")
+                        .ignoringRequestMatchers("/user/register", "/user/auth")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 )
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/login").permitAll()
                         .requestMatchers("/user/auth").permitAll()
                         .requestMatchers("/user/register").permitAll()
                         .requestMatchers("/user/admin/**").hasRole("ADMIN")
