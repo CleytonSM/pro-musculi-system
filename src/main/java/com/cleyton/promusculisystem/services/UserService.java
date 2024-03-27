@@ -5,6 +5,7 @@ import com.cleyton.promusculisystem.model.Authority;
 import com.cleyton.promusculisystem.model.User;
 import com.cleyton.promusculisystem.model.dto.LoginDto;
 import com.cleyton.promusculisystem.model.dto.PaginationDto;
+import com.cleyton.promusculisystem.model.dto.PageResponse;
 import com.cleyton.promusculisystem.model.dto.RoleDto;
 import com.cleyton.promusculisystem.model.dto.UserDto;
 import com.cleyton.promusculisystem.repository.UserRepository;
@@ -15,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 import static com.cleyton.promusculisystem.helper.ModelHelper.verifyEmptyOptionalEntity;
@@ -48,10 +48,10 @@ public class UserService {
         authorityService.create(authority);
     }
 
-    public List<User> getUsers(PaginationDto paginationDto) {
-        Page<User> users = repository.findAllActive(modelHelper.setupPagination(paginationDto));
+    public PageResponse<User> getUsers(PaginationDto paginationDto) {
+        Page<User> users = repository.findAllActive(modelHelper.setupPageable(paginationDto));
 
-        return users.getContent();
+        return modelHelper.setupPageResponse(users, paginationDto);
     }
 
     public HttpStatus login(LoginDto loginDto) {

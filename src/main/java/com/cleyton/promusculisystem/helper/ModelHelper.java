@@ -3,10 +3,12 @@ package com.cleyton.promusculisystem.helper;
 import com.cleyton.promusculisystem.model.Authority;
 import com.cleyton.promusculisystem.model.User;
 import com.cleyton.promusculisystem.model.dto.PaginationDto;
+import com.cleyton.promusculisystem.model.dto.PageResponse;
 import com.cleyton.promusculisystem.model.dto.UserDto;
 import com.cleyton.promusculisystem.services.AuthorityService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -24,10 +26,19 @@ public class ModelHelper {
     @Autowired
     private AuthorityService authorityService;
 
-    public Pageable setupPagination(PaginationDto paginationDto) {
+    public Pageable setupPageable(PaginationDto paginationDto) {
         Sort sort = Sort.by(Sort.Direction.valueOf(paginationDto.getSortType()), paginationDto.getSortBy());
         return PageRequest.of(paginationDto.getPageNumber(), paginationDto.getPageSize(), sort);
     };
+
+    public <T> PageResponse<T> setupPageResponse(Page<T> page, PaginationDto paginationDto) {
+        PageResponse<T> pageResponse = new PageResponse<>();
+
+        pageResponse.setTotal(page.getTotalElements());
+        pageResponse.setRecord(page.getContent());
+
+        return pageResponse;
+    }
 
     public User postUserAttributeSetter(UserDto userDto, PasswordEncoder passwordEncoder, Authority authority) {
         User user = new User();
