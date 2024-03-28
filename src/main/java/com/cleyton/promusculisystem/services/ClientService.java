@@ -73,4 +73,9 @@ public class ClientService {
 
         save(modelHelper.reactivateClientAttributeSetter(client));
     }
+
+    public Object findClientByEmail(String email) {
+
+        
+    }
 }
