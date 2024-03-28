@@ -13,4 +13,7 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
 
     @Query("SELECT c FROM Client c WHERE c.active != false")
     Page<Client> findAllActive(Pageable pageable);
+
+    @Query("SELECT c FROM Client c WHERE c.active = false")
+    Page<Client> findAllInactive(Pageable pageable);
 }

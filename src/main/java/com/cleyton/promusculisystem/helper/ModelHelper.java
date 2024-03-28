@@ -37,7 +37,7 @@ public class ModelHelper {
         PageResponse<T> pageResponse = new PageResponse<>();
 
         pageResponse.setTotal(page.getTotalElements());
-        pageResponse.setRecord(page.getContent());
+        pageResponse.setRecords(page.getContent());
 
         return pageResponse;
     }
@@ -120,6 +120,31 @@ public class ModelHelper {
         return client;
     }
 
+    public Client patchClientAttributeSetter(Client client, ClientDto clientDto) {
+        if(clientDto.getName() != null) {
+            client.setName(clientDto.getName());
+        }
+        if(clientDto.getEmail() != null) {
+            client.setEmail(clientDto.getEmail());
+        }
+        if (clientDto.getPhone() != null) {
+            client.setPhone(client.getPhone());
+        }
+
+        return client;
+    }
+
+    public Client deleteClientAttributeSetter(Client client) {
+        client.setActive(Boolean.FALSE);
+
+        return client;
+    }
+
+    public Client reactivateClientAttributeSetter(Client client) {
+        client.setActive(Boolean.TRUE);
+
+        return client;
+    }
     private Set<Authority> authoritySetup(Authority authority) {
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authority);

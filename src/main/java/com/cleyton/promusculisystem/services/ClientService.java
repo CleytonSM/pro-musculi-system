@@ -40,13 +40,37 @@ public class ClientService {
         return modelHelper.setupPageResponse(clients, paginationDto);
     }
 
+    public PageResponse<Client> findInactiveClients(PaginationDto paginationDto) {
+        Page<Client> clients = repository.findAllInactive(modelHelper.setupPageable(paginationDto));
+
+        return modelHelper.setupPageResponse(clients, paginationDto);
+    }
+
     public void updateClient(Integer id, ClientDto clientDto) {
         Client client = verifyEmptyOptionalEntity(repository.findById(id));
 
         save(modelHelper.updateClientAttributeSetter(client, clientDto));
     }
 
+    public void patchClient(Integer id, ClientDto clientDto) {
+        Client client = verifyEmptyOptionalEntity(repository.findById(id));
+
+        save(modelHelper.patchClientAttributeSetter(client, clientDto));
+    }
+
     private void save(Client client) {
         repository.save(client);
+    }
+
+    public void deleteClient(Integer id) {
+        Client client = verifyEmptyOptionalEntity(repository.findById(id));
+
+        save(modelHelper.deleteClientAttributeSetter(client));
+    }
+
+    public void reactivateClient(Integer id) {
+        Client client = verifyEmptyOptionalEntity(repository.findById(id));
+
+        save(modelHelper.reactivateClientAttributeSetter(client));
     }
 }
