@@ -41,6 +41,11 @@ public class ClientController {
         return new ResponseEntity<>(service.findInactiveClients(paginationDto), HttpStatus.OK);
     }
 
+    @GetMapping("/filter/")
+    public ResponseEntity<?> findClientByEmail(@RequestParam("email") String email) {
+        return new ResponseEntity<>(service.findClientByEmail(email), HttpStatus.OK);
+    }
+
     @PutMapping("/update/")
     public ResponseEntity<HttpStatus> updateClient(@RequestParam(name = "id") Integer id, @RequestBody ClientDto clientDto) {
         service.updateClient(id, clientDto);
