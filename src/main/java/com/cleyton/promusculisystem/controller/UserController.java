@@ -71,4 +71,14 @@ public class UserController {
         service.reactiveUser(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/admin/inactive/users")
+    public ResponseEntity<PageResponse<User>> findInactiveUsers(@RequestBody PaginationDto paginationDto) {
+        return new ResponseEntity<>(service.getInactiveUsers(paginationDto), HttpStatus.OK);
+    }
+
+    @GetMapping("/admin/find/")
+    public ResponseEntity<User> findUserByEmail(@RequestParam("email") String email) {
+        return new ResponseEntity<>(service.findUserByEmail(email), HttpStatus.OK);
+    }
 }
