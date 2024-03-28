@@ -8,7 +8,9 @@ import com.cleyton.promusculisystem.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,9 +36,32 @@ public class ClientController {
         return new ResponseEntity<>(service.findClients(paginationDto), HttpStatus.OK);
     }
 
+    @GetMapping("/inactive")
+    public ResponseEntity<PageResponse<Client>> findInactiveClients(@RequestBody PaginationDto paginationDto) {
+        return new ResponseEntity<>(service.findInactiveClients(paginationDto), HttpStatus.OK);
+    }
+
     @PutMapping("/update/")
-    public ResponseEntity<HttpStatus> updateClient (@RequestParam(name = "id") Integer id, @RequestBody ClientDto clientDto) {
+    public ResponseEntity<HttpStatus> updateClient(@RequestParam(name = "id") Integer id, @RequestBody ClientDto clientDto) {
         service.updateClient(id, clientDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PatchMapping("/update/partial/")
+    public ResponseEntity<HttpStatus> partialClient(@RequestParam(name = "id") Integer id, @RequestBody ClientDto clientDto) {
+        service.patchClient(id, clientDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/")
+    public ResponseEntity<HttpStatus> deleteClient(@RequestParam(name = "id") Integer id) {
+        service.deleteClient(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/reactivate/")
+    public ResponseEntity<HttpStatus> reactivateClient(@RequestParam(name = "id") Integer id) {
+        service.reactivateClient(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
