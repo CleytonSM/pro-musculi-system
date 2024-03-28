@@ -1,7 +1,9 @@
 package com.cleyton.promusculisystem.helper;
 
 import com.cleyton.promusculisystem.model.Authority;
+import com.cleyton.promusculisystem.model.Client;
 import com.cleyton.promusculisystem.model.User;
+import com.cleyton.promusculisystem.model.dto.ClientDto;
 import com.cleyton.promusculisystem.model.dto.PaginationDto;
 import com.cleyton.promusculisystem.model.dto.PageResponse;
 import com.cleyton.promusculisystem.model.dto.UserDto;
@@ -98,6 +100,26 @@ public class ModelHelper {
         return user;
     }
 
+    public Client postClientAttributeSetter(ClientDto clientDto) {
+        Client client = new Client();
+
+        client.setName(clientDto.getName());
+        client.setEmail(clientDto.getEmail());
+        client.setPhone(clientDto.getPhone());
+        client.setActive(Boolean.TRUE);
+        client.setCreatedAt(LocalDateTime.now());
+
+        return client;
+    }
+
+    public Client updateClientAttributeSetter(Client client, ClientDto clientDto) {
+        client.setName(clientDto.getName());
+        client.setEmail(clientDto.getEmail());
+        client.setPhone(clientDto.getPhone());
+
+        return client;
+    }
+
     private Set<Authority> authoritySetup(Authority authority) {
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authority);
@@ -105,8 +127,7 @@ public class ModelHelper {
         return authorities;
     }
 
-
-    public static Object verifyEmptyOptionalEntity (Optional<?> optionalObject) {
+    public static <T> T verifyEmptyOptionalEntity(Optional<T> optionalObject) {
         if(optionalObject.isEmpty()) {
             throw new EntityNotFoundException("This entity doesn't exists");
         }

@@ -35,6 +35,7 @@ public class SecurityConfig {
                         .requestMatchers("/user/register").permitAll()
                         .requestMatchers("/user/admin/**").hasRole("ADMIN")
                         .requestMatchers("/error").permitAll()
+                        .requestMatchers("/clients/**").hasAnyRole("ADMIN", "USER")
                 )
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
                 .formLogin(login -> login.loginProcessingUrl("/user/auth"))
