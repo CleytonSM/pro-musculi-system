@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface ClientRepository extends JpaRepository<Client, Integer> {
     Optional<Client> findByEmail(String email);
+    Optional<Client> findByName(String name);
 
     @Query("SELECT c FROM Client c WHERE c.active != false")
     Page<Client> findAllActive(Pageable pageable);

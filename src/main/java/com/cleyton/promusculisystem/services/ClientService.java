@@ -74,8 +74,11 @@ public class ClientService {
         save(modelHelper.reactivateClientAttributeSetter(client));
     }
 
-    public Object findClientByEmail(String email) {
+    public Client findClientByEmail(String email) {
+        return verifyEmptyOptionalEntity(repository.findByEmail(email));
+    }
 
-        
+    public Client findClientByName(String name) {
+        return verifyEmptyOptionalEntity(repository.findByName(name));
     }
 }
