@@ -41,9 +41,14 @@ public class ClientController {
         return new ResponseEntity<>(service.findInactiveClients(paginationDto), HttpStatus.OK);
     }
 
-    @GetMapping("/filter/")
+    @GetMapping("/findByEmail/")
     public ResponseEntity<?> findClientByEmail(@RequestParam("email") String email) {
         return new ResponseEntity<>(service.findClientByEmail(email), HttpStatus.OK);
+    }
+
+    @GetMapping("/findByName/")
+    public ResponseEntity<?> findClientByName(@RequestParam("name") String name) {
+        return new ResponseEntity<>(service.findClientByName(name), HttpStatus.OK);
     }
 
     @PutMapping("/update/")
