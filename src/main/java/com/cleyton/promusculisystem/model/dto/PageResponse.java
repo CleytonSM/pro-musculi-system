@@ -8,5 +8,5 @@ import java.util.List;
 public class PageResponse<T> {
     //private PaginationDto pagination;
     private long total;
-    private List<T> record;
+    private List<T> records;
 }
