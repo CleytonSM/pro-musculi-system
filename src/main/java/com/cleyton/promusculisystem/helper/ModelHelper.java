@@ -2,8 +2,10 @@ package com.cleyton.promusculisystem.helper;
 
 import com.cleyton.promusculisystem.model.Authority;
 import com.cleyton.promusculisystem.model.Client;
+import com.cleyton.promusculisystem.model.GymPlan;
 import com.cleyton.promusculisystem.model.User;
 import com.cleyton.promusculisystem.model.dto.ClientDto;
+import com.cleyton.promusculisystem.model.dto.GymPlanDto;
 import com.cleyton.promusculisystem.model.dto.PaginationDto;
 import com.cleyton.promusculisystem.model.dto.PageResponse;
 import com.cleyton.promusculisystem.model.dto.UserDto;
@@ -144,6 +146,16 @@ public class ModelHelper {
         client.setActive(Boolean.TRUE);
 
         return client;
+    }
+
+    public GymPlan postGymPlanAttributeSetter (GymPlanDto gymPlanDto) {
+        GymPlan gymPlan = new GymPlan();
+
+        gymPlan.setName(gymPlanDto.getName());
+        gymPlan.setPrice(gymPlanDto.getPrice());
+        gymPlan.setDuration(gymPlanDto.getDuration());
+
+        return gymPlan;
     }
     private Set<Authority> authoritySetup(Authority authority) {
         Set<Authority> authorities = new HashSet<>();
