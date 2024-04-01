@@ -10,6 +10,7 @@ import com.cleyton.promusculisystem.model.dto.PaginationDto;
 import com.cleyton.promusculisystem.model.dto.PageResponse;
 import com.cleyton.promusculisystem.model.dto.UserDto;
 import com.cleyton.promusculisystem.services.AuthorityService;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,7 +36,7 @@ public class ModelHelper {
         return PageRequest.of(paginationDto.getPageNumber(), paginationDto.getPageSize(), sort);
     };
 
-    public <T> PageResponse<T> setupPageResponse(Page<T> page, PaginationDto paginationDto) {
+    public <T> PageResponse<T> setupPageResponse(Page<T> page) {
         PageResponse<T> pageResponse = new PageResponse<>();
 
         pageResponse.setTotal(page.getTotalElements());
@@ -151,7 +152,7 @@ public class ModelHelper {
     public GymPlan postGymPlanAttributeSetter (GymPlanDto gymPlanDto) {
         GymPlan gymPlan = new GymPlan();
 
-        gymPlan.setName(gymPlanDto.getName());
+        gymPlan.setName(gymPlanDto.getName().toString());
         gymPlan.setPrice(gymPlanDto.getPrice());
         gymPlan.setDuration(gymPlanDto.getDuration());
 
@@ -164,11 +165,17 @@ public class ModelHelper {
         return authorities;
     }
 
-    public static <T> T verifyEmptyOptionalEntity(Optional<T> optionalObject) {
-        if(optionalObject.isEmpty()) {
+    public static <T> T verifyOptionalEntity(Optional<T> optionalT) {
+        if(optionalT.isEmpty()) {
             throw new EntityNotFoundException("This entity doesn't exists");
         }
 
-        return optionalObject.get();
+        return optionalT.get();
+    }
+
+    public static <T> void isEntityAlreadyInUse(Optional<T> optionalT) {
+        if(optionalT.isPresent()) {
+            throw new EntityExistsException("This Entity already exists");
+        }
     }
 }

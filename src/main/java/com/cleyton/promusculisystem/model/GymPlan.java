@@ -1,5 +1,6 @@
 package com.cleyton.promusculisystem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,6 +23,7 @@ public class GymPlan {
     @Id
     @GeneratedValue(generator = "native", strategy = GenerationType.AUTO)
     @GenericGenerator(name = "native")
+    @JsonIgnore
     private Integer id;
     @Column(length = 40, nullable = false)
     private String name;

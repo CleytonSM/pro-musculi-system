@@ -34,6 +34,7 @@ public class SecurityConfig {
                         .requestMatchers("/user/auth").permitAll()
                         .requestMatchers("/user/register").permitAll()
                         .requestMatchers("/user/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/gymplan/**").hasRole("ADMIN")
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/clients/**").hasAnyRole("ADMIN", "USER")
                 )
