@@ -79,21 +79,24 @@ public class UserService {
     }
 
     public void updateUser(Integer id, UserDto userDto) {
-        //TODO verify isEntityAlreadyInUse logistic here
         User user = verifyOptionalEntity(repository.findById(id));
+        if(!user.getEmail().equals(userDto.getEmail())) {
+            isEntityAlreadyInUse(repository.findByEmail(userDto.getEmail()));
+        }
 
         save(modelHelper.updateUserAttributeSetter(user, userDto, passwordEncoder));
     }
 
     public void patchUser(Integer id, UserDto userDto) {
-        //TODO verify isEntityAlreadyInUse logistic here
         User user = verifyOptionalEntity(repository.findById(id));
+        if(!user.getEmail().equals(userDto.getEmail())) {
+            isEntityAlreadyInUse(repository.findByEmail(userDto.getEmail()));
+        }
 
         save(modelHelper.patchUserAttributeSetter(user, userDto, passwordEncoder));
     }
 
     public void deleteUser(Integer id) {
-        //TODO verify isEntityAlreadyInUse logistic here
         User user = verifyOptionalEntity(repository.findById(id));
 
         save(modelHelper.deleteUserAttributeSetter(user));
