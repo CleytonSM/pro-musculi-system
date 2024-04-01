@@ -39,4 +39,9 @@ public class GymPlanService {
     public GymPlan findByName(String name) {
         return verifyOptionalEntity(repository.findByName(name));
     }
+
+    public void delete(String name) {
+        GymPlan gymPlan = verifyOptionalEntity(repository.findByName(name));
+        repository.deleteById(gymPlan.getId());
+    }
 }
