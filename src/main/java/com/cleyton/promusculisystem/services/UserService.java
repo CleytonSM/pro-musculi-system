@@ -4,12 +4,11 @@ import com.cleyton.promusculisystem.helper.ModelHelper;
 import com.cleyton.promusculisystem.model.Authority;
 import com.cleyton.promusculisystem.model.User;
 import com.cleyton.promusculisystem.model.dto.LoginDto;
-import com.cleyton.promusculisystem.model.dto.PaginationDto;
 import com.cleyton.promusculisystem.model.dto.PageResponse;
+import com.cleyton.promusculisystem.model.dto.PaginationDto;
 import com.cleyton.promusculisystem.model.dto.RoleDto;
 import com.cleyton.promusculisystem.model.dto.UserDto;
 import com.cleyton.promusculisystem.repository.UserRepository;
-import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,7 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static com.cleyton.promusculisystem.helper.ModelHelper.verifyEmptyOptionalEntity;
+import static com.cleyton.promusculisystem.helper.ModelHelper.isEntityAlreadyInUse;
+import static com.cleyton.promusculisystem.helper.ModelHelper.verifyOptionalEntity;
 
 @Service
 public class UserService {
@@ -38,7 +38,7 @@ public class UserService {
     }
 
     public void createUser(UserDto userDto) {
-        isEmailAlreadyInUse(userDto.getEmail());
+        isEntityAlreadyInUse(repository.findByEmail(userDto.getEmail()));
 
         Authority authority = new Authority(RoleDto.ROLE_USER.toString());
 
@@ -46,7 +46,7 @@ public class UserService {
         authorityService.create(authority);
     }
     public void createAdmin(UserDto userDto) {
-        isEmailAlreadyInUse(userDto.getEmail());
+        isEntityAlreadyInUse(repository.findByEmail(userDto.getEmail()));
         Authority authority = new Authority(RoleDto.ROLE_ADMIN.toString());
 
         repository.save(modelHelper.postUserAttributeSetter(userDto, passwordEncoder, authority));
@@ -56,13 +56,13 @@ public class UserService {
     public PageResponse<User> getUsers(PaginationDto paginationDto) {
         Page<User> users = repository.findAllActive(modelHelper.setupPageable(paginationDto));
 
-        return modelHelper.setupPageResponse(users, paginationDto);
+        return modelHelper.setupPageResponse(users);
     }
 
     public PageResponse<User> getInactiveUsers(PaginationDto paginationDto) {
         Page<User> users = repository.findAllInactive(modelHelper.setupPageable(paginationDto));
 
-        return modelHelper.setupPageResponse(users, paginationDto);
+        return modelHelper.setupPageResponse(users);
     }
 
     public HttpStatus login(LoginDto loginDto) {
@@ -79,25 +79,28 @@ public class UserService {
     }
 
     public void updateUser(Integer id, UserDto userDto) {
-        User user = (User) verifyEmptyOptionalEntity(repository.findById(id));
+        //TODO verify isEntityAlreadyInUse logistic here
+        User user = verifyOptionalEntity(repository.findById(id));
 
         save(modelHelper.updateUserAttributeSetter(user, userDto, passwordEncoder));
     }
 
     public void patchUser(Integer id, UserDto userDto) {
-        User user = verifyEmptyOptionalEntity(repository.findById(id));
+        //TODO verify isEntityAlreadyInUse logistic here
+        User user = verifyOptionalEntity(repository.findById(id));
 
         save(modelHelper.patchUserAttributeSetter(user, userDto, passwordEncoder));
     }
 
     public void deleteUser(Integer id) {
-        User user = verifyEmptyOptionalEntity(repository.findById(id));
+        //TODO verify isEntityAlreadyInUse logistic here
+        User user = verifyOptionalEntity(repository.findById(id));
 
         save(modelHelper.deleteUserAttributeSetter(user));
     }
 
     public void reactiveUser(Integer id) {
-        User user = verifyEmptyOptionalEntity(repository.findById(id));
+        User user = verifyOptionalEntity(repository.findById(id));
 
         save(modelHelper.reactivateUserAttributeSetter(user));
     }
@@ -110,11 +113,5 @@ public class UserService {
         }
 
         return optionalUser.get();
-    }
-
-    private void isEmailAlreadyInUse(String email) {
-        if(repository.findByEmail(email).isPresent()) {
-            throw new EntityExistsException("This email is already in use!");
-        }
     }
 }
