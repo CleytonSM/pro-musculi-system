@@ -41,16 +41,19 @@ public class ClientService {
     }
 
     public void updateClient(Integer id, ClientDto clientDto) {
-        //TODO verify isEntityAlreadyInUse logistic here
         Client client = verifyOptionalEntity(repository.findById(id));
+        if (!client.getEmail().equals(clientDto.getEmail())) {
+            isEntityAlreadyInUse(repository.findByEmail(clientDto.getEmail()));
+        }
 
         save(modelHelper.updateClientAttributeSetter(client, clientDto));
     }
 
     public void patchClient(Integer id, ClientDto clientDto) {
-        //TODO verify isEntityAlreadyInUse logistic here
         Client client = verifyOptionalEntity(repository.findById(id));
-
+        if (!client.getEmail().equals(clientDto.getEmail())) {
+            isEntityAlreadyInUse(repository.findByEmail(clientDto.getEmail()));
+        }
         save(modelHelper.patchClientAttributeSetter(client, clientDto));
     }
 
