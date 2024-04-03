@@ -1,6 +1,7 @@
 package com.cleyton.promusculisystem.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,9 +23,11 @@ public class Client {
     @Id
     @GeneratedValue(generator = "native", strategy = GenerationType.AUTO)
     @GenericGenerator(name = "native")
+    @JsonIgnore
     private Integer id;
     @ManyToOne
     @JoinColumn(name = "gym_plan_id", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private GymPlan gymPlan;
     @Column(nullable = false, length = 60)
     private String name;

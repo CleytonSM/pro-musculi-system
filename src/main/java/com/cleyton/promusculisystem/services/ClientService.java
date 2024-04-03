@@ -4,8 +4,8 @@ package com.cleyton.promusculisystem.services;
 import com.cleyton.promusculisystem.helper.ModelHelper;
 import com.cleyton.promusculisystem.model.Client;
 import com.cleyton.promusculisystem.model.dto.ClientDto;
-import com.cleyton.promusculisystem.model.dto.PageResponse;
 import com.cleyton.promusculisystem.model.dto.PaginationDto;
+import com.cleyton.promusculisystem.model.response.PageResponse;
 import com.cleyton.promusculisystem.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,7 +30,6 @@ public class ClientService {
 
     public PageResponse<Client> findClients(PaginationDto paginationDto) {
         Page<Client> clients = repository.findAllActive(modelHelper.setupPageable(paginationDto));
-
         return modelHelper.setupPageResponse(clients);
     }
 

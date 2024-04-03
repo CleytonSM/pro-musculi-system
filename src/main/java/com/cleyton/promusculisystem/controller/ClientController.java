@@ -2,7 +2,7 @@ package com.cleyton.promusculisystem.controller;
 
 import com.cleyton.promusculisystem.model.Client;
 import com.cleyton.promusculisystem.model.dto.ClientDto;
-import com.cleyton.promusculisystem.model.dto.PageResponse;
+import com.cleyton.promusculisystem.model.response.PageResponse;
 import com.cleyton.promusculisystem.model.dto.PaginationDto;
 import com.cleyton.promusculisystem.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
