@@ -5,9 +5,10 @@ import com.cleyton.promusculisystem.model.Client;
 import com.cleyton.promusculisystem.model.GymPlan;
 import com.cleyton.promusculisystem.model.User;
 import com.cleyton.promusculisystem.model.dto.ClientDto;
+import com.cleyton.promusculisystem.model.response.GymPlanClientsResponse;
 import com.cleyton.promusculisystem.model.dto.GymPlanDto;
 import com.cleyton.promusculisystem.model.dto.PaginationDto;
-import com.cleyton.promusculisystem.model.dto.PageResponse;
+import com.cleyton.promusculisystem.model.response.PageResponse;
 import com.cleyton.promusculisystem.model.dto.UserDto;
 import com.cleyton.promusculisystem.services.AuthorityService;
 import jakarta.persistence.EntityExistsException;
@@ -158,6 +159,15 @@ public class ModelHelper {
 
         return gymPlan;
     }
+
+    public GymPlanClientsResponse gymPlanClientsResponseBuilder(GymPlan gymPlan, PageResponse<Client> clients) {
+       return GymPlanClientsResponse.builder()
+               .name(gymPlan.getName())
+               .price(gymPlan.getPrice())
+               .clients(clients)
+               .build();
+    }
+
     private Set<Authority> authoritySetup(Authority authority) {
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authority);

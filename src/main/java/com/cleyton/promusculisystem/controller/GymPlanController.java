@@ -2,7 +2,7 @@ package com.cleyton.promusculisystem.controller;
 
 import com.cleyton.promusculisystem.model.GymPlan;
 import com.cleyton.promusculisystem.model.dto.GymPlanDto;
-import com.cleyton.promusculisystem.model.dto.PageResponse;
+import com.cleyton.promusculisystem.model.response.PageResponse;
 import com.cleyton.promusculisystem.model.dto.PaginationDto;
 import com.cleyton.promusculisystem.services.GymPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +42,11 @@ public class GymPlanController {
     public ResponseEntity<HttpStatus> deleteGymPlan(@RequestParam("name") String name) {
         service.delete(name);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/find/clients_in_plan/")
+    public ResponseEntity<?> findActiveClientsInGymPlanByName
+            (@RequestParam("name") String name, @RequestBody PaginationDto paginationDto) {
+        return new ResponseEntity<>(service.getActiveClientsFromPlan(name, paginationDto), HttpStatus.OK);
     }
 }

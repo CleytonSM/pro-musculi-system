@@ -32,5 +32,6 @@ public class GymPlan {
     private Integer duration;
 
     @OneToMany(mappedBy = "gymPlan", fetch = FetchType.EAGER)
+    @JsonIgnore
     private Set<Client> clients;
 }
