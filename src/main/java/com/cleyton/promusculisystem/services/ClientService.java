@@ -1,18 +1,18 @@
 package com.cleyton.promusculisystem.services;
 
 
-import com.cleyton.promusculisystem.helper.ModelHelper;
+import com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper;
 import com.cleyton.promusculisystem.model.Client;
 import com.cleyton.promusculisystem.model.dto.ClientDto;
-import com.cleyton.promusculisystem.model.dto.PageResponse;
 import com.cleyton.promusculisystem.model.dto.PaginationDto;
+import com.cleyton.promusculisystem.model.response.PageResponse;
 import com.cleyton.promusculisystem.repository.ClientRepository;
-import jakarta.persistence.EntityExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import static com.cleyton.promusculisystem.helper.ModelHelper.verifyEmptyOptionalEntity;
+import static com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper.isEntityAlreadyInUse;
+import static com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper.verifyOptionalEntity;
 
 @Service
 public class ClientService {
@@ -20,65 +20,62 @@ public class ClientService {
     @Autowired
     private ClientRepository repository;
     @Autowired
-    private ModelHelper modelHelper;
+    private ModelAttributeSetterHelper modelAttributeSetterHelper;
 
     public void createClient (ClientDto clientDto){
-        isEmailAlreadyInUse(clientDto.getEmail());
-
-        repository.save(modelHelper.postClientAttributeSetter(clientDto));
-    }
-
-    private void isEmailAlreadyInUse(String email) {
-        if(repository.findByEmail(email).isPresent()) {
-            throw new EntityExistsException("This email is already in use!");
-        }
+        isEntityAlreadyInUse(repository.findByEmail(clientDto.getEmail()));
+        repository.save(modelAttributeSetterHelper.postClientAttributeSetter(clientDto));
     }
 
     public PageResponse<Client> findClients(PaginationDto paginationDto) {
-        Page<Client> clients = repository.findAllActive(modelHelper.setupPageable(paginationDto));
-
-        return modelHelper.setupPageResponse(clients, paginationDto);
+        Page<Client> clients = repository.findAllActive(modelAttributeSetterHelper.setupPageable(paginationDto));
+        return modelAttributeSetterHelper.setupPageResponse(clients);
     }
 
     public PageResponse<Client> findInactiveClients(PaginationDto paginationDto) {
-        Page<Client> clients = repository.findAllInactive(modelHelper.setupPageable(paginationDto));
+        Page<Client> clients = repository.findAllInactive(modelAttributeSetterHelper.setupPageable(paginationDto));
 
-        return modelHelper.setupPageResponse(clients, paginationDto);
+        return modelAttributeSetterHelper.setupPageResponse(clients);
     }
 
-    public void updateClient(Integer id, ClientDto clientDto) {
-        Client client = verifyEmptyOptionalEntity(repository.findById(id));
+    public void updateClient(String name, ClientDto clientDto) {
+        Client client = verifyOptionalEntity(repository.findByName(name));
+        if (!client.getEmail().equals(clientDto.getEmail())) {
+            isEntityAlreadyInUse(repository.findByEmail(clientDto.getEmail()));
+        }
 
-        save(modelHelper.updateClientAttributeSetter(client, clientDto));
+        save(modelAttributeSetterHelper.updateClientAttributeSetter(client, clientDto));
     }
 
-    public void patchClient(Integer id, ClientDto clientDto) {
-        Client client = verifyEmptyOptionalEntity(repository.findById(id));
-
-        save(modelHelper.patchClientAttributeSetter(client, clientDto));
+    public void patchClient(String name, ClientDto clientDto) {
+        Client client = verifyOptionalEntity(repository.findByName(name));
+        if (!client.getEmail().equals(clientDto.getEmail())) {
+            isEntityAlreadyInUse(repository.findByEmail(clientDto.getEmail()));
+        }
+        save(modelAttributeSetterHelper.patchClientAttributeSetter(client, clientDto));
     }
 
     private void save(Client client) {
         repository.save(client);
     }
 
-    public void deleteClient(Integer id) {
-        Client client = verifyEmptyOptionalEntity(repository.findById(id));
+    public void deleteClient(String name) {
+        Client client = verifyOptionalEntity(repository.findByName(name));
 
-        save(modelHelper.deleteClientAttributeSetter(client));
+        save(modelAttributeSetterHelper.deleteClientAttributeSetter(client));
     }
 
-    public void reactivateClient(Integer id) {
-        Client client = verifyEmptyOptionalEntity(repository.findById(id));
+    public void reactivateClient(String name) {
+        Client client = verifyOptionalEntity(repository.findByName(name));
 
-        save(modelHelper.reactivateClientAttributeSetter(client));
+        save(modelAttributeSetterHelper.reactivateClientAttributeSetter(client));
     }
 
     public Client findClientByEmail(String email) {
-        return verifyEmptyOptionalEntity(repository.findByEmail(email));
+        return verifyOptionalEntity(repository.findByEmail(email));
     }
 
     public Client findClientByName(String name) {
-        return verifyEmptyOptionalEntity(repository.findByName(name));
+        return verifyOptionalEntity(repository.findByName(name));
     }
 }

@@ -2,12 +2,16 @@ package com.cleyton.promusculisystem.helper;
 
 import com.cleyton.promusculisystem.model.Authority;
 import com.cleyton.promusculisystem.model.Client;
+import com.cleyton.promusculisystem.model.GymPlan;
 import com.cleyton.promusculisystem.model.User;
 import com.cleyton.promusculisystem.model.dto.ClientDto;
+import com.cleyton.promusculisystem.model.dto.GymPlanDto;
 import com.cleyton.promusculisystem.model.dto.PaginationDto;
-import com.cleyton.promusculisystem.model.dto.PageResponse;
 import com.cleyton.promusculisystem.model.dto.UserDto;
+import com.cleyton.promusculisystem.model.response.PageResponse;
 import com.cleyton.promusculisystem.services.AuthorityService;
+import com.cleyton.promusculisystem.services.GymPlanService;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,24 +27,12 @@ import java.util.Optional;
 import java.util.Set;
 
 @Component
-public class ModelHelper {
+public class ModelAttributeSetterHelper {
 
     @Autowired
     private AuthorityService authorityService;
-
-    public Pageable setupPageable(PaginationDto paginationDto) {
-        Sort sort = Sort.by(Sort.Direction.valueOf(paginationDto.getSortType()), paginationDto.getSortBy());
-        return PageRequest.of(paginationDto.getPageNumber(), paginationDto.getPageSize(), sort);
-    };
-
-    public <T> PageResponse<T> setupPageResponse(Page<T> page, PaginationDto paginationDto) {
-        PageResponse<T> pageResponse = new PageResponse<>();
-
-        pageResponse.setTotal(page.getTotalElements());
-        pageResponse.setRecords(page.getContent());
-
-        return pageResponse;
-    }
+    @Autowired
+    private GymPlanService gymPlanService;
 
     public User postUserAttributeSetter(UserDto userDto, PasswordEncoder passwordEncoder, Authority authority) {
         User user = new User();
@@ -67,12 +59,8 @@ public class ModelHelper {
     }
 
     public User patchUserAttributeSetter(User user, UserDto userDto, PasswordEncoder passwordEncoder) {
-      if(userDto.getEmail() != null) {
-          user.setEmail(userDto.getEmail());
-      }
-      if(userDto.getPassword() != null) {
-          user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-      }
+      user.setEmail(Optional.ofNullable(userDto.getEmail()).orElse(user.getEmail()));
+      user.setPassword((Optional.ofNullable(passwordEncoder.encode(userDto.getPassword())).orElse(user.getPassword())));
       if(userDto.getRole() != null) {
           Authority authority = authorityService.update(user, userDto);
 
@@ -102,7 +90,7 @@ public class ModelHelper {
 
     public Client postClientAttributeSetter(ClientDto clientDto) {
         Client client = new Client();
-
+        client.setGymPlan(gymPlanService.findByName(clientDto.getGymPlanName()));
         client.setName(clientDto.getName());
         client.setEmail(clientDto.getEmail());
         client.setPhone(clientDto.getPhone());
@@ -116,20 +104,17 @@ public class ModelHelper {
         client.setName(clientDto.getName());
         client.setEmail(clientDto.getEmail());
         client.setPhone(clientDto.getPhone());
+        client.setGymPlan(gymPlanService.findByName(clientDto.getGymPlanName()));
 
         return client;
     }
 
     public Client patchClientAttributeSetter(Client client, ClientDto clientDto) {
-        if(clientDto.getName() != null) {
-            client.setName(clientDto.getName());
-        }
-        if(clientDto.getEmail() != null) {
-            client.setEmail(clientDto.getEmail());
-        }
-        if (clientDto.getPhone() != null) {
-            client.setPhone(client.getPhone());
-        }
+        client.setName(Optional.ofNullable(clientDto.getName()).orElse(client.getName()));
+        client.setEmail(Optional.ofNullable(clientDto.getEmail()).orElse(client.getEmail()));
+        client.setPhone(Optional.ofNullable(client.getPhone()).orElse(client.getPhone()));
+        client.setGymPlan(clientDto.getGymPlanName() == null
+                ? client.getGymPlan() : gymPlanService.findByName(clientDto.getGymPlanName()));
 
         return client;
     }
@@ -145,6 +130,31 @@ public class ModelHelper {
 
         return client;
     }
+
+    public GymPlan postGymPlanAttributeSetter (GymPlanDto gymPlanDto) {
+        GymPlan gymPlan = new GymPlan();
+
+        gymPlan.setName(gymPlanDto.getName());
+        gymPlan.setPrice(gymPlanDto.getPrice());
+        gymPlan.setDuration(gymPlanDto.getDuration());
+
+        return gymPlan;
+    }
+
+    public GymPlan updateGymPlanAttributeSetter(GymPlan gymPlan, GymPlanDto gymPlanDto) {
+        gymPlan.setName(gymPlanDto.getName());
+        gymPlan.setPrice(gymPlanDto.getPrice());
+        gymPlan.setDuration(gymPlanDto.getDuration());
+        return gymPlan;
+    }
+
+    public GymPlan patchGymPlanAttributeSetter(GymPlan gymPlan, GymPlanDto gymPlanDto) {
+        gymPlan.setName(Optional.ofNullable(gymPlanDto.getName()).orElse(gymPlan.getName()));
+        gymPlan.setPrice(Optional.ofNullable(gymPlanDto.getPrice()).orElse(gymPlan.getPrice()));
+        gymPlan.setDuration(Optional.ofNullable(gymPlanDto.getDuration()).orElse(gymPlan.getDuration()));
+        return gymPlan;
+    }
+
     private Set<Authority> authoritySetup(Authority authority) {
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authority);
@@ -152,11 +162,31 @@ public class ModelHelper {
         return authorities;
     }
 
-    public static <T> T verifyEmptyOptionalEntity(Optional<T> optionalObject) {
-        if(optionalObject.isEmpty()) {
+    public static <T> T verifyOptionalEntity(Optional<T> optionalT) {
+        if(optionalT.isEmpty()) {
             throw new EntityNotFoundException("This entity doesn't exists");
         }
 
-        return optionalObject.get();
+        return optionalT.get();
+    }
+
+    public static <T> void isEntityAlreadyInUse(Optional<T> optionalT) {
+        if(optionalT.isPresent()) {
+            throw new EntityExistsException("This Entity already exists");
+        }
+    }
+
+    public Pageable setupPageable(PaginationDto paginationDto) {
+        Sort sort = Sort.by(Sort.Direction.valueOf(paginationDto.getSortType()), paginationDto.getSortBy());
+        return PageRequest.of(paginationDto.getPageNumber(), paginationDto.getPageSize(), sort);
+    }
+
+    public <T> PageResponse<T> setupPageResponse(Page<T> page) {
+        PageResponse<T> pageResponse = new PageResponse<>();
+
+        pageResponse.setTotal(page.getTotalElements());
+        pageResponse.setRecords(page.getContent());
+
+        return pageResponse;
     }
 }
