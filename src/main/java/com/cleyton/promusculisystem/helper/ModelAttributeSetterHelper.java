@@ -10,6 +10,7 @@ import com.cleyton.promusculisystem.model.dto.PaginationDto;
 import com.cleyton.promusculisystem.model.dto.UserDto;
 import com.cleyton.promusculisystem.model.response.PageResponse;
 import com.cleyton.promusculisystem.services.AuthorityService;
+import com.cleyton.promusculisystem.services.GymPlanService;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,8 @@ public class ModelAttributeSetterHelper {
 
     @Autowired
     private AuthorityService authorityService;
+    @Autowired
+    private GymPlanService gymPlanService;
 
     public Pageable setupPageable(PaginationDto paginationDto) {
         Sort sort = Sort.by(Sort.Direction.valueOf(paginationDto.getSortType()), paginationDto.getSortBy());
@@ -101,7 +104,7 @@ public class ModelAttributeSetterHelper {
 
     public Client postClientAttributeSetter(ClientDto clientDto) {
         Client client = new Client();
-
+        client.setGymPlan(gymPlanService.findByName(clientDto.getGymPlanName()));
         client.setName(clientDto.getName());
         client.setEmail(clientDto.getEmail());
         client.setPhone(clientDto.getPhone());
@@ -115,6 +118,7 @@ public class ModelAttributeSetterHelper {
         client.setName(clientDto.getName());
         client.setEmail(clientDto.getEmail());
         client.setPhone(clientDto.getPhone());
+        client.setGymPlan(gymPlanService.findByName(clientDto.getGymPlanName()));
 
         return client;
     }
@@ -123,6 +127,8 @@ public class ModelAttributeSetterHelper {
         client.setName(Optional.ofNullable(clientDto.getName()).orElse(client.getName()));
         client.setEmail(Optional.ofNullable(clientDto.getEmail()).orElse(client.getEmail()));
         client.setPhone(Optional.ofNullable(client.getPhone()).orElse(client.getPhone()));
+        client.setGymPlan(clientDto.getGymPlanName() == null
+                ? client.getGymPlan() : gymPlanService.findByName(clientDto.getGymPlanName()));
 
         return client;
     }
