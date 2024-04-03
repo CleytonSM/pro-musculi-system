@@ -1,6 +1,7 @@
 package com.cleyton.promusculisystem.services;
 
-import com.cleyton.promusculisystem.helper.ModelHelper;
+import com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper;
+import com.cleyton.promusculisystem.helper.ModelBuilderHelper;
 import com.cleyton.promusculisystem.model.Client;
 import com.cleyton.promusculisystem.model.GymPlan;
 import com.cleyton.promusculisystem.model.response.GymPlanClientsResponse;
@@ -12,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import static com.cleyton.promusculisystem.helper.ModelHelper.isEntityAlreadyInUse;
-import static com.cleyton.promusculisystem.helper.ModelHelper.verifyOptionalEntity;
+import static com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper.isEntityAlreadyInUse;
+import static com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper.verifyOptionalEntity;
 
 @Service
 public class GymPlanService {
@@ -21,7 +22,9 @@ public class GymPlanService {
     @Autowired
     private GymPlanRepository repository;
     @Autowired
-    private ModelHelper modelHelper;
+    private ModelAttributeSetterHelper modelAttributeSetterHelper;
+    @Autowired
+    private ModelBuilderHelper modelBuilderHelper;
     @Autowired
     private ClientService clientService;
 
@@ -31,13 +34,13 @@ public class GymPlanService {
 
     public void createGymPlan(GymPlanDto gymPlanDto) {
         isEntityAlreadyInUse(repository.findByName(gymPlanDto.getName()));
-        save(modelHelper.postGymPlanAttributeSetter(gymPlanDto));
+        save(modelAttributeSetterHelper.postGymPlanAttributeSetter(gymPlanDto));
     }
 
     public PageResponse<GymPlan> findAllGymPlans(PaginationDto paginationDto) {
-        Page<GymPlan> gymPlanPage = repository.findAllGymPlans(modelHelper.setupPageable(paginationDto));
+        Page<GymPlan> gymPlanPage = repository.findAllGymPlans(modelAttributeSetterHelper.setupPageable(paginationDto));
 
-        return modelHelper.setupPageResponse(gymPlanPage);
+        return modelAttributeSetterHelper.setupPageResponse(gymPlanPage);
     }
 
     public GymPlan findByName(String name) {
@@ -49,10 +52,29 @@ public class GymPlanService {
         repository.deleteById(gymPlan.getId());
     }
 
-    public GymPlanClientsResponse getActiveClientsFromPlan(String name, PaginationDto paginationDto) {
+    public GymPlanClientsResponse findActiveClientsFromPlan(String name, PaginationDto paginationDto) {
         GymPlan gymPlan = verifyOptionalEntity(repository.findByName(name));
         PageResponse<Client> clients = clientService.findClients(paginationDto);
 
-        return modelHelper.gymPlanClientsResponseBuilder(gymPlan, clients);
+        return modelBuilderHelper.gymPlanClientsResponseBuilder(gymPlan, clients);
+    }
+
+    public GymPlanClientsResponse findInactiveClientsFromPlan(String name, PaginationDto paginationDto) {
+        GymPlan gymPlan = verifyOptionalEntity(repository.findByName(name));
+        PageResponse<Client> clients = clientService.findInactiveClients(paginationDto);
+
+        return modelBuilderHelper.gymPlanClientsResponseBuilder(gymPlan, clients);
+    }
+
+    public void update(String name, GymPlanDto gymPlanDto) {
+        GymPlan gymPlan = verifyOptionalEntity(repository.findByName(name));
+
+        save(modelAttributeSetterHelper.updateGymPlanAttributeSetter(gymPlan, gymPlanDto));
+    }
+
+    public void patch(String name, GymPlanDto gymPlanDto) {
+        GymPlan gymPlan = verifyOptionalEntity(repository.findByName(name));
+
+        save(modelAttributeSetterHelper.patchGymPlanAttributeSetter(gymPlan, gymPlanDto));
     }
 }

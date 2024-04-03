@@ -41,12 +41,13 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
 
             if(passwordEncoder.matches(password, user.getPassword())) {
                 return new UsernamePasswordAuthenticationToken(user, password, grantedAuthority(user.getAuthorities()));
-            } else {
-                throw new BadCredentialsException("Wrong Email or Password");
             }
-        } else {
-            throw new EntityNotFoundException("User not found");
+
+            throw new BadCredentialsException("Wrong Email or Password");
         }
+
+        throw new EntityNotFoundException("User not found");
+
     }
 
     private List<GrantedAuthority> grantedAuthority(Set<Authority> authorities) {

@@ -58,7 +58,7 @@ public class ClientController {
     }
 
     @PatchMapping("/update/partial/")
-    public ResponseEntity<HttpStatus> partialClient(@RequestParam(name = "id") Integer id, @RequestBody ClientDto clientDto) {
+    public ResponseEntity<HttpStatus> patchClient(@RequestParam(name = "id") Integer id, @RequestBody ClientDto clientDto) {
         service.patchClient(id, clientDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -5,11 +5,10 @@ import com.cleyton.promusculisystem.model.Client;
 import com.cleyton.promusculisystem.model.GymPlan;
 import com.cleyton.promusculisystem.model.User;
 import com.cleyton.promusculisystem.model.dto.ClientDto;
-import com.cleyton.promusculisystem.model.response.GymPlanClientsResponse;
 import com.cleyton.promusculisystem.model.dto.GymPlanDto;
 import com.cleyton.promusculisystem.model.dto.PaginationDto;
-import com.cleyton.promusculisystem.model.response.PageResponse;
 import com.cleyton.promusculisystem.model.dto.UserDto;
+import com.cleyton.promusculisystem.model.response.PageResponse;
 import com.cleyton.promusculisystem.services.AuthorityService;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
@@ -27,7 +26,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Component
-public class ModelHelper {
+public class ModelAttributeSetterHelper {
 
     @Autowired
     private AuthorityService authorityService;
@@ -71,12 +70,8 @@ public class ModelHelper {
     }
 
     public User patchUserAttributeSetter(User user, UserDto userDto, PasswordEncoder passwordEncoder) {
-      if(userDto.getEmail() != null) {
-          user.setEmail(userDto.getEmail());
-      }
-      if(userDto.getPassword() != null) {
-          user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-      }
+      user.setEmail(Optional.ofNullable(userDto.getEmail()).orElse(user.getEmail()));
+      user.setPassword((Optional.ofNullable(passwordEncoder.encode(userDto.getPassword())).orElse(user.getPassword())));
       if(userDto.getRole() != null) {
           Authority authority = authorityService.update(user, userDto);
 
@@ -125,15 +120,9 @@ public class ModelHelper {
     }
 
     public Client patchClientAttributeSetter(Client client, ClientDto clientDto) {
-        if(clientDto.getName() != null) {
-            client.setName(clientDto.getName());
-        }
-        if(clientDto.getEmail() != null) {
-            client.setEmail(clientDto.getEmail());
-        }
-        if (clientDto.getPhone() != null) {
-            client.setPhone(client.getPhone());
-        }
+        client.setName(Optional.ofNullable(clientDto.getName()).orElse(client.getName()));
+        client.setEmail(Optional.ofNullable(clientDto.getEmail()).orElse(client.getEmail()));
+        client.setPhone(Optional.ofNullable(client.getPhone()).orElse(client.getPhone()));
 
         return client;
     }
@@ -153,19 +142,25 @@ public class ModelHelper {
     public GymPlan postGymPlanAttributeSetter (GymPlanDto gymPlanDto) {
         GymPlan gymPlan = new GymPlan();
 
-        gymPlan.setName(gymPlanDto.getName().toString());
+        gymPlan.setName(gymPlanDto.getName());
         gymPlan.setPrice(gymPlanDto.getPrice());
         gymPlan.setDuration(gymPlanDto.getDuration());
 
         return gymPlan;
     }
 
-    public GymPlanClientsResponse gymPlanClientsResponseBuilder(GymPlan gymPlan, PageResponse<Client> clients) {
-       return GymPlanClientsResponse.builder()
-               .name(gymPlan.getName())
-               .price(gymPlan.getPrice())
-               .clients(clients)
-               .build();
+    public GymPlan updateGymPlanAttributeSetter(GymPlan gymPlan, GymPlanDto gymPlanDto) {
+        gymPlan.setName(gymPlanDto.getName());
+        gymPlan.setPrice(gymPlanDto.getPrice());
+        gymPlan.setDuration(gymPlanDto.getDuration());
+        return gymPlan;
+    }
+
+    public GymPlan patchGymPlanAttributeSetter(GymPlan gymPlan, GymPlanDto gymPlanDto) {
+        gymPlan.setName(Optional.ofNullable(gymPlanDto.getName()).orElse(gymPlan.getName()));
+        gymPlan.setPrice(Optional.ofNullable(gymPlanDto.getPrice()).orElse(gymPlan.getPrice()));
+        gymPlan.setDuration(Optional.ofNullable(gymPlanDto.getDuration()).orElse(gymPlan.getDuration()));
+        return gymPlan;
     }
 
     private Set<Authority> authoritySetup(Authority authority) {
