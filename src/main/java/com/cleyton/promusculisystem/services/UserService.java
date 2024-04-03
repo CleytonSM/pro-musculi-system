@@ -1,6 +1,6 @@
 package com.cleyton.promusculisystem.services;
 
-import com.cleyton.promusculisystem.helper.ModelHelper;
+import com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper;
 import com.cleyton.promusculisystem.model.Authority;
 import com.cleyton.promusculisystem.model.User;
 import com.cleyton.promusculisystem.model.dto.LoginDto;
@@ -18,8 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static com.cleyton.promusculisystem.helper.ModelHelper.isEntityAlreadyInUse;
-import static com.cleyton.promusculisystem.helper.ModelHelper.verifyOptionalEntity;
+import static com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper.isEntityAlreadyInUse;
+import static com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper.verifyOptionalEntity;
 
 @Service
 public class UserService {
@@ -27,7 +27,7 @@ public class UserService {
     @Autowired
     private UserRepository repository;
     @Autowired
-    private ModelHelper modelHelper;
+    private ModelAttributeSetterHelper modelAttributeSetterHelper;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -42,27 +42,27 @@ public class UserService {
 
         Authority authority = new Authority(RoleDto.ROLE_USER.toString());
 
-        save(modelHelper.postUserAttributeSetter(userDto, passwordEncoder, authority));
+        save(modelAttributeSetterHelper.postUserAttributeSetter(userDto, passwordEncoder, authority));
         authorityService.create(authority);
     }
     public void createAdmin(UserDto userDto) {
         isEntityAlreadyInUse(repository.findByEmail(userDto.getEmail()));
         Authority authority = new Authority(RoleDto.ROLE_ADMIN.toString());
 
-        repository.save(modelHelper.postUserAttributeSetter(userDto, passwordEncoder, authority));
+        repository.save(modelAttributeSetterHelper.postUserAttributeSetter(userDto, passwordEncoder, authority));
         authorityService.create(authority);
     }
 
     public PageResponse<User> getUsers(PaginationDto paginationDto) {
-        Page<User> users = repository.findAllActive(modelHelper.setupPageable(paginationDto));
+        Page<User> users = repository.findAllActive(modelAttributeSetterHelper.setupPageable(paginationDto));
 
-        return modelHelper.setupPageResponse(users);
+        return modelAttributeSetterHelper.setupPageResponse(users);
     }
 
     public PageResponse<User> getInactiveUsers(PaginationDto paginationDto) {
-        Page<User> users = repository.findAllInactive(modelHelper.setupPageable(paginationDto));
+        Page<User> users = repository.findAllInactive(modelAttributeSetterHelper.setupPageable(paginationDto));
 
-        return modelHelper.setupPageResponse(users);
+        return modelAttributeSetterHelper.setupPageResponse(users);
     }
 
     public HttpStatus login(LoginDto loginDto) {
@@ -84,7 +84,7 @@ public class UserService {
             isEntityAlreadyInUse(repository.findByEmail(userDto.getEmail()));
         }
 
-        save(modelHelper.updateUserAttributeSetter(user, userDto, passwordEncoder));
+        save(modelAttributeSetterHelper.updateUserAttributeSetter(user, userDto, passwordEncoder));
     }
 
     public void patchUser(Integer id, UserDto userDto) {
@@ -93,19 +93,19 @@ public class UserService {
             isEntityAlreadyInUse(repository.findByEmail(userDto.getEmail()));
         }
 
-        save(modelHelper.patchUserAttributeSetter(user, userDto, passwordEncoder));
+        save(modelAttributeSetterHelper.patchUserAttributeSetter(user, userDto, passwordEncoder));
     }
 
     public void deleteUser(Integer id) {
         User user = verifyOptionalEntity(repository.findById(id));
 
-        save(modelHelper.deleteUserAttributeSetter(user));
+        save(modelAttributeSetterHelper.deleteUserAttributeSetter(user));
     }
 
     public void reactiveUser(Integer id) {
         User user = verifyOptionalEntity(repository.findById(id));
 
-        save(modelHelper.reactivateUserAttributeSetter(user));
+        save(modelAttributeSetterHelper.reactivateUserAttributeSetter(user));
     }
 
     public User findUserByEmail(String email) {
