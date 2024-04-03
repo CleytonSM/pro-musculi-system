@@ -26,12 +26,12 @@ public class Client {
     @JsonIgnore
     private Integer id;
     @ManyToOne
-    @JoinColumn(name = "gym_plan_id", nullable = false)
+    @JoinColumn(name = "gym_plan_id")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private GymPlan gymPlan;
     @Column(nullable = false, length = 60)
     private String name;
-    @Column(nullable = false, length = 100, unique = true)
+    @Column(length = 100, unique = true)
     private String email;
     @Column(length = 11, unique = true)
     private String phone;

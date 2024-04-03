@@ -15,9 +15,9 @@ CREATE TABLE tb_authorities (
 
 CREATE TABLE tb_clients (
                             id INTEGER AUTO_INCREMENT,
-                            gym_plan_id INTEGER NOT NULL,
+                            gym_plan_id INTEGER,
                             name VARCHAR(60) NOT NULL,
-                            email VARCHAR(100) NOT NULL UNIQUE,
+                            email VARCHAR(100) UNIQUE,
                             phone VARCHAR(11) UNIQUE,
                             active TINYINT NOT NULL DEFAULT(1),
                             created_at TIMESTAMP,

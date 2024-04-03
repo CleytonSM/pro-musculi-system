@@ -24,7 +24,6 @@ public class ClientService {
 
     public void createClient (ClientDto clientDto){
         isEntityAlreadyInUse(repository.findByEmail(clientDto.getEmail()));
-
         repository.save(modelAttributeSetterHelper.postClientAttributeSetter(clientDto));
     }
 
