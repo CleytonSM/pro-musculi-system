@@ -34,20 +34,6 @@ public class ModelAttributeSetterHelper {
     @Autowired
     private GymPlanService gymPlanService;
 
-    public Pageable setupPageable(PaginationDto paginationDto) {
-        Sort sort = Sort.by(Sort.Direction.valueOf(paginationDto.getSortType()), paginationDto.getSortBy());
-        return PageRequest.of(paginationDto.getPageNumber(), paginationDto.getPageSize(), sort);
-    };
-
-    public <T> PageResponse<T> setupPageResponse(Page<T> page) {
-        PageResponse<T> pageResponse = new PageResponse<>();
-
-        pageResponse.setTotal(page.getTotalElements());
-        pageResponse.setRecords(page.getContent());
-
-        return pageResponse;
-    }
-
     public User postUserAttributeSetter(UserDto userDto, PasswordEncoder passwordEncoder, Authority authority) {
         User user = new User();
 
@@ -188,5 +174,19 @@ public class ModelAttributeSetterHelper {
         if(optionalT.isPresent()) {
             throw new EntityExistsException("This Entity already exists");
         }
+    }
+
+    public Pageable setupPageable(PaginationDto paginationDto) {
+        Sort sort = Sort.by(Sort.Direction.valueOf(paginationDto.getSortType()), paginationDto.getSortBy());
+        return PageRequest.of(paginationDto.getPageNumber(), paginationDto.getPageSize(), sort);
+    }
+
+    public <T> PageResponse<T> setupPageResponse(Page<T> page) {
+        PageResponse<T> pageResponse = new PageResponse<>();
+
+        pageResponse.setTotal(page.getTotalElements());
+        pageResponse.setRecords(page.getContent());
+
+        return pageResponse;
     }
 }
