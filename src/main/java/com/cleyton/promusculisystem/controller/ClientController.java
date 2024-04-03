@@ -52,26 +52,26 @@ public class ClientController {
     }
 
     @PutMapping("/update/")
-    public ResponseEntity<HttpStatus> updateClient(@RequestParam(name = "id") Integer id, @RequestBody ClientDto clientDto) {
-        service.updateClient(id, clientDto);
+    public ResponseEntity<HttpStatus> updateClient(@RequestParam(name = "name") String name, @RequestBody ClientDto clientDto) {
+        service.updateClient(name, clientDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping("/update/partial/")
-    public ResponseEntity<HttpStatus> patchClient(@RequestParam(name = "id") Integer id, @RequestBody ClientDto clientDto) {
-        service.patchClient(id, clientDto);
+    public ResponseEntity<HttpStatus> patchClient(@RequestParam(name = "name") String name, @RequestBody ClientDto clientDto) {
+        service.patchClient(name, clientDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/")
-    public ResponseEntity<HttpStatus> deleteClient(@RequestParam(name = "id") Integer id) {
-        service.deleteClient(id);
+    public ResponseEntity<HttpStatus> deleteClient(@RequestParam(name = "name") String name) {
+        service.deleteClient(name);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/reactivate/")
-    public ResponseEntity<HttpStatus> reactivateClient(@RequestParam(name = "id") Integer id) {
-        service.reactivateClient(id);
+    public ResponseEntity<HttpStatus> reactivateClient(@RequestParam(name = "name") String name) {
+        service.reactivateClient(name);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

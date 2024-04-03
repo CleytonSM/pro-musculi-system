@@ -38,8 +38,8 @@ public class ClientService {
         return modelAttributeSetterHelper.setupPageResponse(clients);
     }
 
-    public void updateClient(Integer id, ClientDto clientDto) {
-        Client client = verifyOptionalEntity(repository.findById(id));
+    public void updateClient(String name, ClientDto clientDto) {
+        Client client = verifyOptionalEntity(repository.findByName(name));
         if (!client.getEmail().equals(clientDto.getEmail())) {
             isEntityAlreadyInUse(repository.findByEmail(clientDto.getEmail()));
         }
@@ -47,8 +47,8 @@ public class ClientService {
         save(modelAttributeSetterHelper.updateClientAttributeSetter(client, clientDto));
     }
 
-    public void patchClient(Integer id, ClientDto clientDto) {
-        Client client = verifyOptionalEntity(repository.findById(id));
+    public void patchClient(String name, ClientDto clientDto) {
+        Client client = verifyOptionalEntity(repository.findByName(name));
         if (!client.getEmail().equals(clientDto.getEmail())) {
             isEntityAlreadyInUse(repository.findByEmail(clientDto.getEmail()));
         }
@@ -59,14 +59,14 @@ public class ClientService {
         repository.save(client);
     }
 
-    public void deleteClient(Integer id) {
-        Client client = verifyOptionalEntity(repository.findById(id));
+    public void deleteClient(String name) {
+        Client client = verifyOptionalEntity(repository.findByName(name));
 
         save(modelAttributeSetterHelper.deleteClientAttributeSetter(client));
     }
 
-    public void reactivateClient(Integer id) {
-        Client client = verifyOptionalEntity(repository.findById(id));
+    public void reactivateClient(String name) {
+        Client client = verifyOptionalEntity(repository.findByName(name));
 
         save(modelAttributeSetterHelper.reactivateClientAttributeSetter(client));
     }
