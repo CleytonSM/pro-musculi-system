@@ -68,12 +68,18 @@ public class GymPlanService {
 
     public void update(String name, GymPlanDto gymPlanDto) {
         GymPlan gymPlan = verifyOptionalEntity(repository.findByName(name));
+        if(!gymPlanDto.getName().equals(gymPlan.getName())) {
+            isEntityAlreadyInUse(repository.findByName(gymPlanDto.getName()));
+        }
 
         save(modelAttributeSetterHelper.updateGymPlanAttributeSetter(gymPlan, gymPlanDto));
     }
 
     public void patch(String name, GymPlanDto gymPlanDto) {
         GymPlan gymPlan = verifyOptionalEntity(repository.findByName(name));
+        if(!gymPlanDto.getName().equals(gymPlan.getName())) {
+            isEntityAlreadyInUse(repository.findByName(gymPlanDto.getName()));
+        }
 
         save(modelAttributeSetterHelper.patchGymPlanAttributeSetter(gymPlan, gymPlanDto));
     }
