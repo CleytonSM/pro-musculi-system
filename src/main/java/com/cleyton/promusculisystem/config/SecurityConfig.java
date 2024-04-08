@@ -37,6 +37,7 @@ public class SecurityConfig {
                         .requestMatchers("/gymplan/**").hasRole("ADMIN")
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/clients/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers("/danceclass/**").hasAnyRole("ADMIN", "USER")
                 )
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
                 .formLogin(login -> login.loginProcessingUrl("/user/auth"))
