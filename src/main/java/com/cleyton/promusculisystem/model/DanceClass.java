@@ -31,6 +31,10 @@ public class DanceClass {
     private User user;
     @Column(length = 60)
     private String name;
-    @Column(name = "dt_class")
-    private LocalDateTime dateTime;
+    @Column(name = "dt_start")
+    private LocalDateTime start;
+    @Column(name = "dt_end")
+    private LocalDateTime end;
+    @Column(length = 100)
+    private String description;
 }
