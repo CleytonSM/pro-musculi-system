@@ -33,3 +33,16 @@ CREATE TABLE tb_gym_plan (
                              duration INTEGER,
                              CONSTRAINT pk_tb_gym_plan_id PRIMARY KEY (id)
 );
+
+CREATE TABLE tb_dance_classes (
+                                  id 			INTEGER AUTO_INCREMENT,
+                                  client_id		INTEGER,
+                                  instructor_id	INTEGER NOT NULL,
+                                  name			VARCHAR(60),
+                                  dt_class		TIMESTAMP,
+                                  CONSTRAINT pk_tb_dance_classes_id PRIMARY KEY (id),
+                                  CONSTRAINT fk_tb_dance_classes_client_id FOREIGN KEY (client_id)
+                                      REFERENCES tb_clients(id),
+                                  CONSTRAINT fk_tb_dance_classes_instructor_id FOREIGN KEY (instructor_id)
+                                      REFERENCES tb_users(id)
+);
