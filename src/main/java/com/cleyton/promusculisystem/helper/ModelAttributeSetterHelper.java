@@ -2,15 +2,19 @@ package com.cleyton.promusculisystem.helper;
 
 import com.cleyton.promusculisystem.model.Authority;
 import com.cleyton.promusculisystem.model.Client;
+import com.cleyton.promusculisystem.model.DanceClass;
 import com.cleyton.promusculisystem.model.GymPlan;
 import com.cleyton.promusculisystem.model.User;
 import com.cleyton.promusculisystem.model.dto.ClientDto;
+import com.cleyton.promusculisystem.model.dto.DanceClassDto;
 import com.cleyton.promusculisystem.model.dto.GymPlanDto;
 import com.cleyton.promusculisystem.model.dto.PaginationDto;
 import com.cleyton.promusculisystem.model.dto.UserDto;
 import com.cleyton.promusculisystem.model.response.PageResponse;
 import com.cleyton.promusculisystem.services.AuthorityService;
+import com.cleyton.promusculisystem.services.ClientService;
 import com.cleyton.promusculisystem.services.GymPlanService;
+import com.cleyton.promusculisystem.services.UserService;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +37,10 @@ public class ModelAttributeSetterHelper {
     private AuthorityService authorityService;
     @Autowired
     private GymPlanService gymPlanService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private ClientService clientService;
 
     public User postUserAttributeSetter(UserDto userDto, PasswordEncoder passwordEncoder, Authority authority) {
         User user = new User();
@@ -153,6 +161,19 @@ public class ModelAttributeSetterHelper {
         gymPlan.setPrice(Optional.ofNullable(gymPlanDto.getPrice()).orElse(gymPlan.getPrice()));
         gymPlan.setDuration(Optional.ofNullable(gymPlanDto.getDuration()).orElse(gymPlan.getDuration()));
         return gymPlan;
+    }
+
+    public DanceClass postDanceClassAttributeSetter(DanceClassDto danceClassDto) {
+        DanceClass danceClass = new DanceClass();
+
+        danceClass.setUser(userService.findUserByEmail(danceClassDto.getInstructorEmail()));
+        danceClass.setClient(clientService.findClientByName(danceClassDto.getClientName()));
+        danceClass.setName(danceClassDto.getName());
+        danceClass.setStart(danceClassDto.getStart());
+        danceClass.setEnd(danceClassDto.getEnd());
+        danceClass.setDescription(danceClassDto.getDescription());
+
+        return danceClass;
     }
 
     private Set<Authority> authoritySetup(Authority authority) {

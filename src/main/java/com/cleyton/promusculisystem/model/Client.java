@@ -9,11 +9,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Data
@@ -39,4 +41,8 @@ public class Client {
     @JsonIgnore
     private Boolean active;
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "client")
+    @JsonIgnore
+    private Set<DanceClass> danceClasses;
 }

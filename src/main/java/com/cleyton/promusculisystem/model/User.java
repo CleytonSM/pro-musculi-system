@@ -38,6 +38,10 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Authority> authorities;
 
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private Set<DanceClass> danceClasses;
+
     public User() {
     }
 
@@ -92,5 +96,13 @@ public class User {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public Set<DanceClass> getDanceClasses() {
+        return danceClasses;
+    }
+
+    public void setDanceClasses(Set<DanceClass> danceClasses) {
+        this.danceClasses = danceClasses;
     }
 }

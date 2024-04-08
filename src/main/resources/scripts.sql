@@ -39,7 +39,9 @@ CREATE TABLE tb_dance_classes (
                                   client_id		INTEGER,
                                   instructor_id	INTEGER NOT NULL,
                                   name			VARCHAR(60),
-                                  dt_class		TIMESTAMP,
+                                  dt_start		TIMESTAMP UNIQUE,
+                                  dt_end		TIMESTAMP UNIQUE,
+                                  description 	VARCHAR(100),
                                   CONSTRAINT pk_tb_dance_classes_id PRIMARY KEY (id),
                                   CONSTRAINT fk_tb_dance_classes_client_id FOREIGN KEY (client_id)
                                       REFERENCES tb_clients(id),
