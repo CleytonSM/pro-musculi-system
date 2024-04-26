@@ -34,6 +34,17 @@ CREATE TABLE tb_gym_plan (
                              CONSTRAINT pk_tb_gym_plan_id PRIMARY KEY (id)
 );
 
+CREATE TABLE tb_instructors (
+                                id 			INTEGER AUTO_INCREMENT,
+                                name 		VARCHAR(60) NOT NULL,
+                                salary		DECIMAL(6,2) NOT NULL,
+                                cpf 		CHAR(11) NOT NULL UNIQUE,
+                                active		TINYINT,
+                                created_at	TIMESTAMP,
+                                phone		CHAR(11),
+                                CONSTRAINT pk_tb_instructors_id PRIMARY KEY (id)
+);
+
 CREATE TABLE tb_dance_classes (
                                   id 			INTEGER AUTO_INCREMENT,
                                   client_id		INTEGER,
