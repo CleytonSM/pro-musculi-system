@@ -191,6 +191,15 @@ public class ModelAttributeSetterHelper {
         return instructor;
     }
 
+    public Instructor updateInstructorAttributeSetter(Instructor instructor, InstructorDto instructorDto) {
+        instructor.setName(instructorDto.getName());
+        instructor.setSalary(instructorDto.getSalary());
+        instructor.setCpf(instructorDto.getCpf());
+        instructor.setPhone(instructorDto.getPhone());
+
+        return instructor;
+    }
+
     private Set<Authority> authoritySetup(Authority authority) {
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authority);
