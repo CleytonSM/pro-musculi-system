@@ -42,4 +42,13 @@ public class InstructorService {
 
         save(modelAttributeSetterHelper.updateInstructorAttributeSetter(instructor, instructorDto));
     }
+
+    public void patchInstructorByCpf(String cpf, InstructorDto instructorDto) {
+        Instructor instructor = verifyOptionalEntity(repository.findByCpf(cpf));
+        if(!instructor.getCpf().equals(instructorDto.getCpf())) {
+            isEntityAlreadyInUse(repository.findByCpf(instructorDto.getCpf()));
+        }
+
+        save(modelAttributeSetterHelper.patchInstructorAttributeSetter(instructor, instructorDto));
+    }
 }

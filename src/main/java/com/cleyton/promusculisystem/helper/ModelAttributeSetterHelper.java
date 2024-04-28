@@ -200,6 +200,15 @@ public class ModelAttributeSetterHelper {
         return instructor;
     }
 
+    public Instructor patchInstructorAttributeSetter(Instructor instructor, InstructorDto instructorDto) {
+        instructor.setName(Optional.ofNullable(instructorDto.getName()).orElse(instructor.getName()));
+        instructor.setSalary(Optional.ofNullable(instructorDto.getSalary()).orElse(instructor.getSalary()));
+        instructor.setCpf(Optional.ofNullable(instructorDto.getCpf()).orElse(instructor.getCpf()));
+        instructor.setPhone(Optional.ofNullable(instructorDto.getPhone()).orElse(instructor.getPhone()));
+
+        return instructor;
+    }
+
     private Set<Authority> authoritySetup(Authority authority) {
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authority);
