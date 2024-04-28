@@ -50,4 +50,10 @@ public class InstructorController {
         service.deleteInstructorByCpf(cpf);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PatchMapping("/reactivate/")
+    public ResponseEntity<HttpStatus> reactivateInstructorByCpf(@RequestParam("cpf") String cpf) {
+        service.reactivateInstructByCpf(cpf);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
