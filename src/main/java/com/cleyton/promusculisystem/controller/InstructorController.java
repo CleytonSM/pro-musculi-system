@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +35,12 @@ public class InstructorController {
     @PutMapping("/update/")
     public ResponseEntity<HttpStatus> updateInstructorByCpf(@RequestParam("cpf") String cpf, @RequestBody InstructorDto instructorDto) {
         service.updateInstructorByCpf(cpf, instructorDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PatchMapping("/partial_update/")
+    public ResponseEntity<HttpStatus> patchInstructorByCpf(@RequestParam("cpf") String cpf, @RequestBody InstructorDto instructorDto) {
+        service.patchInstructorByCpf(cpf, instructorDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
