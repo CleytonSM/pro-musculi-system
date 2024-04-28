@@ -33,4 +33,34 @@ public class InstructorService {
     public Instructor findInstructorByCpf(String cpf) {
         return Optional.of(verifyOptionalEntity(repository.findByCpf(cpf))).orElseThrow();
     }
+
+    public void updateInstructorByCpf(String cpf, InstructorDto instructorDto) {
+        Instructor instructor = verifyOptionalEntity(repository.findByCpf(cpf));
+        if(!instructor.getCpf().equals(instructorDto.getCpf())) {
+            isEntityAlreadyInUse(repository.findByCpf(instructorDto.getCpf()));
+        }
+
+        save(modelAttributeSetterHelper.updateInstructorAttributeSetter(instructor, instructorDto));
+    }
+
+    public void patchInstructorByCpf(String cpf, InstructorDto instructorDto) {
+        Instructor instructor = verifyOptionalEntity(repository.findByCpf(cpf));
+        if(!instructor.getCpf().equals(instructorDto.getCpf())) {
+            isEntityAlreadyInUse(repository.findByCpf(instructorDto.getCpf()));
+        }
+
+        save(modelAttributeSetterHelper.patchInstructorAttributeSetter(instructor, instructorDto));
+    }
+
+    public void deleteInstructorByCpf(String cpf) {
+        Instructor instructor = verifyOptionalEntity(repository.findByCpf(cpf));
+
+        save(modelAttributeSetterHelper.deleteInstructorAttributeSetter(instructor));
+    }
+
+    public void reactivateInstructByCpf(String cpf) {
+        Instructor instructor = verifyOptionalEntity(repository.findByCpf(cpf));
+
+        save(modelAttributeSetterHelper.reactivateInstructorAttributeSetter(instructor));
+    }
 }

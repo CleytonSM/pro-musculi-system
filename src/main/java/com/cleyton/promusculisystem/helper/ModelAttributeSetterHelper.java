@@ -191,6 +191,36 @@ public class ModelAttributeSetterHelper {
         return instructor;
     }
 
+    public Instructor updateInstructorAttributeSetter(Instructor instructor, InstructorDto instructorDto) {
+        instructor.setName(instructorDto.getName());
+        instructor.setSalary(instructorDto.getSalary());
+        instructor.setCpf(instructorDto.getCpf());
+        instructor.setPhone(instructorDto.getPhone());
+
+        return instructor;
+    }
+
+    public Instructor patchInstructorAttributeSetter(Instructor instructor, InstructorDto instructorDto) {
+        instructor.setName(Optional.ofNullable(instructorDto.getName()).orElse(instructor.getName()));
+        instructor.setSalary(Optional.ofNullable(instructorDto.getSalary()).orElse(instructor.getSalary()));
+        instructor.setCpf(Optional.ofNullable(instructorDto.getCpf()).orElse(instructor.getCpf()));
+        instructor.setPhone(Optional.ofNullable(instructorDto.getPhone()).orElse(instructor.getPhone()));
+
+        return instructor;
+    }
+
+    public Instructor deleteInstructorAttributeSetter(Instructor instructor) {
+        instructor.setActive(Boolean.FALSE);
+
+        return instructor;
+    }
+
+    public Instructor reactivateInstructorAttributeSetter(Instructor instructor) {
+        instructor.setActive(Boolean.TRUE);
+
+        return instructor;
+    }
+
     private Set<Authority> authoritySetup(Authority authority) {
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authority);
