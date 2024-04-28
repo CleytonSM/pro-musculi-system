@@ -4,10 +4,12 @@ import com.cleyton.promusculisystem.model.Authority;
 import com.cleyton.promusculisystem.model.Client;
 import com.cleyton.promusculisystem.model.DanceClass;
 import com.cleyton.promusculisystem.model.GymPlan;
+import com.cleyton.promusculisystem.model.Instructor;
 import com.cleyton.promusculisystem.model.User;
 import com.cleyton.promusculisystem.model.dto.ClientDto;
 import com.cleyton.promusculisystem.model.dto.DanceClassDto;
 import com.cleyton.promusculisystem.model.dto.GymPlanDto;
+import com.cleyton.promusculisystem.model.dto.InstructorDto;
 import com.cleyton.promusculisystem.model.dto.PaginationDto;
 import com.cleyton.promusculisystem.model.dto.UserDto;
 import com.cleyton.promusculisystem.model.response.PageResponse;
@@ -174,6 +176,19 @@ public class ModelAttributeSetterHelper {
         danceClass.setDescription(danceClassDto.getDescription());
 
         return danceClass;
+    }
+
+    public Instructor postInstructorAttributeSetter(InstructorDto instructorDto) {
+        Instructor instructor = new Instructor();
+
+        instructor.setName(instructorDto.getName());
+        instructor.setSalary(instructorDto.getSalary());
+        instructor.setCpf(instructorDto.getCpf());
+        instructor.setActive(Boolean.TRUE);
+        instructor.setPhone(instructorDto.getPhone());
+        instructor.setCreatedAt(LocalDateTime.now());
+
+        return instructor;
     }
 
     private Set<Authority> authoritySetup(Authority authority) {
