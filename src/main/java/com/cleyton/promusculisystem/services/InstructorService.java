@@ -8,7 +8,10 @@ import com.cleyton.promusculisystem.repository.InstructorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 import static com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper.isEntityAlreadyInUse;
+import static com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper.verifyOptionalEntity;
 
 @Service
 public class InstructorService {
@@ -25,5 +28,9 @@ public class InstructorService {
     public void createInstructor(InstructorDto instructorDto) {
         isEntityAlreadyInUse(repository.findByCpf(instructorDto.getCpf()));
         save(modelAttributeSetterHelper.postInstructorAttributeSetter(instructorDto));
+    }
+
+    public Instructor findInstructorByCpf(String cpf) {
+        return Optional.of(verifyOptionalEntity(repository.findByCpf(cpf))).orElseThrow();
     }
 }
