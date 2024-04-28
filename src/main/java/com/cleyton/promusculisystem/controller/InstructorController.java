@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,5 +29,11 @@ public class InstructorController {
     @GetMapping("/find/")
     public ResponseEntity<?> findInstructorByCpf(@RequestParam("cpf") String cpf) {
         return new ResponseEntity<>(service.findInstructorByCpf(cpf), HttpStatus.OK);
+    }
+
+    @PutMapping("/update/")
+    public ResponseEntity<HttpStatus> updateInstructorByCpf(@RequestParam("cpf") String cpf, @RequestBody InstructorDto instructorDto) {
+        service.updateInstructorByCpf(cpf, instructorDto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
