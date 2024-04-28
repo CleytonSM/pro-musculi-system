@@ -209,6 +209,12 @@ public class ModelAttributeSetterHelper {
         return instructor;
     }
 
+    public Instructor deleteInstructorAttributeSetter(Instructor instructor) {
+        instructor.setActive(Boolean.FALSE);
+
+        return instructor;
+    }
+
     private Set<Authority> authoritySetup(Authority authority) {
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authority);

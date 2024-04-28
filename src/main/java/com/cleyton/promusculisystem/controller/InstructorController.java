@@ -5,6 +5,7 @@ import com.cleyton.promusculisystem.services.InstructorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,6 +42,12 @@ public class InstructorController {
     @PatchMapping("/partial_update/")
     public ResponseEntity<HttpStatus> patchInstructorByCpf(@RequestParam("cpf") String cpf, @RequestBody InstructorDto instructorDto) {
         service.patchInstructorByCpf(cpf, instructorDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/")
+    public ResponseEntity<HttpStatus> deleteInstructorByCpf(@RequestParam("cpf") String cpf) {
+        service.deleteInstructorByCpf(cpf);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -51,4 +51,10 @@ public class InstructorService {
 
         save(modelAttributeSetterHelper.patchInstructorAttributeSetter(instructor, instructorDto));
     }
+
+    public void deleteInstructorByCpf(String cpf) {
+        Instructor instructor = verifyOptionalEntity(repository.findByCpf(cpf));
+
+        save(modelAttributeSetterHelper.deleteInstructorAttributeSetter(instructor));
+    }
 }
