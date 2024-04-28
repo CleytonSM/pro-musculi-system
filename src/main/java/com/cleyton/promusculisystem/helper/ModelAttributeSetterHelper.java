@@ -215,6 +215,12 @@ public class ModelAttributeSetterHelper {
         return instructor;
     }
 
+    public Instructor reactivateInstructorAttributeSetter(Instructor instructor) {
+        instructor.setActive(Boolean.TRUE);
+
+        return instructor;
+    }
+
     private Set<Authority> authoritySetup(Authority authority) {
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authority);
