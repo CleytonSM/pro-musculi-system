@@ -28,7 +28,7 @@ public class DanceClass {
     private Client client;
     @ManyToOne
     @JoinColumn(name = "instructor_id")
-    private User user;
+    private Instructor instructor;
     @Column(length = 60)
     private String name;
     @Column(name = "dt_start")

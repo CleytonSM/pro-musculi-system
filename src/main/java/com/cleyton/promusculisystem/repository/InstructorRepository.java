@@ -13,4 +13,7 @@ public interface InstructorRepository extends JpaRepository<Instructor, Integer>
 
     @Query("SELECT i FROM Instructor i WHERE i.cpf = :cpf AND i.active = TRUE")
     Optional<Instructor> findByCpf(@Param("cpf") String cpf);
+
+    @Query("SELECT i FROM Instructor i WHERE i.name = :instructorName AND i.active = TRUE")
+    Optional<Instructor> findByName(@Param("instructorName") String instructorName);
 }

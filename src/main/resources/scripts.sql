@@ -57,5 +57,5 @@ CREATE TABLE tb_dance_classes (
                                   CONSTRAINT fk_tb_dance_classes_client_id FOREIGN KEY (client_id)
                                       REFERENCES tb_clients(id),
                                   CONSTRAINT fk_tb_dance_classes_instructor_id FOREIGN KEY (instructor_id)
-                                      REFERENCES tb_users(id)
+                                      REFERENCES tb_instructors(id)
 );

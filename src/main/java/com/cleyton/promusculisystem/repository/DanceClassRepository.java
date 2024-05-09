@@ -16,6 +16,6 @@ public interface DanceClassRepository extends JpaRepository<DanceClass, Integer>
 
     Optional<DanceClass> findByStartAndEnd(LocalDateTime start, LocalDateTime end);
     Optional<DanceClass> findByName(String name);
-    @Query("SELECT dc FROM DanceClass dc WHERE dc.user.email = :email")
-    Page<DanceClass> findAllByUserEmail(@Param("email") String email, Pageable pageable);
+    @Query("SELECT dc FROM DanceClass dc WHERE dc.instructor.name = :name")
+    Page<DanceClass> findAllByInstructorName(@Param("name") String name, Pageable pageable);
 }

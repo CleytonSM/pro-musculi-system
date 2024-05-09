@@ -34,6 +34,10 @@ public class InstructorService {
         return Optional.of(verifyOptionalEntity(repository.findByCpf(cpf))).orElseThrow();
     }
 
+    public Instructor findInstructorByName(String instructorName) {
+        return Optional.of(verifyOptionalEntity(repository.findByName(instructorName))).orElseThrow();
+    }
+
     public void updateInstructorByCpf(String cpf, InstructorDto instructorDto) {
         Instructor instructor = verifyOptionalEntity(repository.findByCpf(cpf));
         if(!instructor.getCpf().equals(instructorDto.getCpf())) {
@@ -63,4 +67,5 @@ public class InstructorService {
 
         save(modelAttributeSetterHelper.reactivateInstructorAttributeSetter(instructor));
     }
+
 }
