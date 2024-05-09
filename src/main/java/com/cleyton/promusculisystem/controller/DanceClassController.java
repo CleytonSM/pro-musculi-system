@@ -34,7 +34,7 @@ public class DanceClassController {
     }
 
     @GetMapping("/find/instructor/")
-    public ResponseEntity<PageResponse<?>> findAllDanceClassesByInstructor(@RequestParam("instructor_email") String instructorEmail, @RequestBody PaginationDto paginationDto) {
-        return new ResponseEntity<>(service.findAllDanceClassesByInstructor(instructorEmail, paginationDto), HttpStatus.OK);
+    public ResponseEntity<PageResponse<?>> findAllDanceClassesByInstructor(@RequestParam("instructor_name") String instructorName, @RequestBody PaginationDto paginationDto) {
+        return new ResponseEntity<>(service.findAllDanceClassesByInstructor(instructorName, paginationDto), HttpStatus.OK);
     }
 }

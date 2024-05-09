@@ -43,7 +43,7 @@ public class DanceClassService {
     }
 
     public PageResponse<?> findAllDanceClassesByInstructor(String instructorName, PaginationDto paginationDto) {
-        Page<DanceClass> danceClasses = repository.findAllByUserEmail(instructorName, modelAttributeSetterHelper.setupPageable(paginationDto));
+        Page<DanceClass> danceClasses = repository.findAllByInstructorName(instructorName, modelAttributeSetterHelper.setupPageable(paginationDto));
 
         return modelAttributeSetterHelper.setupPageResponse(danceClasses);
     }
