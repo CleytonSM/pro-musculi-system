@@ -1,5 +1,6 @@
 package com.cleyton.promusculisystem.controller;
 
+import com.cleyton.promusculisystem.model.Instructor;
 import com.cleyton.promusculisystem.model.dto.InstructorDto;
 import com.cleyton.promusculisystem.services.InstructorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,14 @@ public class InstructorController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/find/")
-    public ResponseEntity<?> findInstructorByCpf(@RequestParam("cpf") String cpf) {
+    @GetMapping("/find/cpf/")
+    public ResponseEntity<Instructor> findInstructorByCpf(@RequestParam("cpf") String cpf) {
         return new ResponseEntity<>(service.findInstructorByCpf(cpf), HttpStatus.OK);
+    }
+
+    @GetMapping("/find/name/")
+    public ResponseEntity<Instructor> findInstructorByName(@RequestParam("name") String name) {
+        return new ResponseEntity<>(service.findInstructorByName(name), HttpStatus.OK);
     }
 
     @PutMapping("/update/")

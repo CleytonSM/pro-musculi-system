@@ -16,7 +16,7 @@ import com.cleyton.promusculisystem.model.response.PageResponse;
 import com.cleyton.promusculisystem.services.AuthorityService;
 import com.cleyton.promusculisystem.services.ClientService;
 import com.cleyton.promusculisystem.services.GymPlanService;
-import com.cleyton.promusculisystem.services.UserService;
+import com.cleyton.promusculisystem.services.InstructorService;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class ModelAttributeSetterHelper {
     @Autowired
     private GymPlanService gymPlanService;
     @Autowired
-    private UserService userService;
+    private InstructorService instructorService;
     @Autowired
     private ClientService clientService;
 
@@ -168,7 +168,7 @@ public class ModelAttributeSetterHelper {
     public DanceClass postDanceClassAttributeSetter(DanceClassDto danceClassDto) {
         DanceClass danceClass = new DanceClass();
 
-        danceClass.setUser(userService.findUserByEmail(danceClassDto.getInstructorEmail()));
+        danceClass.setInstructor(instructorService.findInstructorByName(danceClassDto.getInstructorName()));
         danceClass.setClient(clientService.findClientByName(danceClassDto.getClientName()));
         danceClass.setName(danceClassDto.getName());
         danceClass.setStart(danceClassDto.getStart());

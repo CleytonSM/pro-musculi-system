@@ -6,12 +6,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_instructors")
@@ -33,10 +35,9 @@ public class Instructor{
     private Boolean active;
     private String phone;
     private LocalDateTime createdAt;
-
+    @OneToMany(mappedBy = "instructor")
+    @JsonIgnore
+    private Set<DanceClass> danceClasses;
 //    @OneToMany(mappedBy = "workoutClasses", fetch = FetchType.LAZY)
 //    private Set<WorkoutDance> workoutDances;
-//    @OneToMany(mappedBy = "user")
-//    @JsonIgnore
-//    private Set<DanceClass> danceClasses;
 }
