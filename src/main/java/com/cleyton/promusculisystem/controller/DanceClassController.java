@@ -61,4 +61,10 @@ public class DanceClassController {
         service.deleteDanceClassById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PutMapping("/reactive/")
+    public ResponseEntity<HttpStatus> reactivateDanceClassById(@RequestParam("id") Integer id) {
+        service.reactivateDanceClassById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
