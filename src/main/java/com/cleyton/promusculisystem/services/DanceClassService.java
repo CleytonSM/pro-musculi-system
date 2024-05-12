@@ -43,8 +43,24 @@ public class DanceClassService {
     }
 
     public PageResponse<?> findAllDanceClassesByInstructor(String instructorName, PaginationDto paginationDto) {
-        Page<DanceClass> danceClasses = repository.findAllByInstructorName(instructorName, modelAttributeSetterHelper.setupPageable(paginationDto));
+        Page<DanceClass> danceClasses = repository.findAllByInstructorName(instructorName,
+                modelAttributeSetterHelper.setupPageable(paginationDto));
 
         return modelAttributeSetterHelper.setupPageResponse(danceClasses);
+    }
+
+    public void updateDanceClassById(Integer id, DanceClassDto danceClassDto) {
+        DanceClass danceClass = verifyOptionalEntity(repository.findById(id));
+
+        if(danceClassDto.getStart() != danceClass.getStart() && danceClassDto.getEnd() != danceClass.getEnd()) {
+            Optional<DanceClass> optionalDanceClass = repository
+                    .findByStartAndEnd(danceClassDto.getStart(), danceClassDto.getEnd());
+
+            if(optionalDanceClass.isPresent()) {
+                throw new DanceClassAlreadyUsingThisDate("There is already a dance class scheduled for this time");
+            }
+        }
+
+        save(modelAttributeSetterHelper.updateDanceClassAttributeSetter(danceClass, danceClassDto));
     }
 }

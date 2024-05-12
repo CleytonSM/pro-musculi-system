@@ -1,6 +1,6 @@
 package com.cleyton.promusculisystem.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,7 +21,7 @@ public class DanceClass {
     @Id
     @GeneratedValue(generator = "native", strategy = GenerationType.AUTO)
     @GenericGenerator(name = "native")
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Integer id;
     @ManyToOne
     @JoinColumn(name = "client_id")
@@ -37,4 +37,5 @@ public class DanceClass {
     private LocalDateTime end;
     @Column(length = 100)
     private String description;
+    private LocalDateTime createdAt;
 }
