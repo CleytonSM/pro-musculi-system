@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,6 +45,13 @@ public class DanceClassController {
     public ResponseEntity<HttpStatus> updateDanceClassById(@RequestParam("id") Integer id,
                                                            @RequestBody DanceClassDto danceClassDto) {
         service.updateDanceClassById(id, danceClassDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PatchMapping("/update/partial/")
+    public ResponseEntity<HttpStatus> patchDanceClassById(@RequestParam("id") Integer id,
+                                                          @RequestBody DanceClassDto danceClassDto) {
+        service.patchDanceClassById(id, danceClassDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
