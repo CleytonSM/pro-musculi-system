@@ -53,7 +53,6 @@ CREATE TABLE tb_dance_classes (
                                   dt_start		TIMESTAMP UNIQUE,
                                   dt_end		TIMESTAMP UNIQUE,
                                   description 	VARCHAR(100),
-                                  created_at 	TIMESTAMP,
                                   CONSTRAINT pk_tb_dance_classes_id PRIMARY KEY (id),
                                   CONSTRAINT fk_tb_dance_classes_client_id FOREIGN KEY (client_id)
                                       REFERENCES tb_clients(id),

@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,16 +33,8 @@ public class DanceClassController {
         return new ResponseEntity<>(service.findDanceClassByName(name), HttpStatus.OK);
     }
 
-    @GetMapping("/find/all/instructor/")
-    public ResponseEntity<PageResponse<?>> findAllDanceClassesByInstructor(@RequestParam("instructor_name") String instructorName,
-                                                                           @RequestBody PaginationDto paginationDto) {
+    @GetMapping("/find/instructor/")
+    public ResponseEntity<PageResponse<?>> findAllDanceClassesByInstructor(@RequestParam("instructor_name") String instructorName, @RequestBody PaginationDto paginationDto) {
         return new ResponseEntity<>(service.findAllDanceClassesByInstructor(instructorName, paginationDto), HttpStatus.OK);
-    }
-
-    @PutMapping("/update/")
-    public ResponseEntity<HttpStatus> updateDanceClassById(@RequestParam("id") Integer id,
-                                                           @RequestBody DanceClassDto danceClassDto) {
-        service.updateDanceClassById(id, danceClassDto);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
