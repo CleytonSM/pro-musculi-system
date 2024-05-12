@@ -78,4 +78,10 @@ public class DanceClassService {
             }
         }
     }
+
+    public void deleteDanceClassById(Integer id) {
+        DanceClass danceClass = verifyOptionalEntity(repository.findById(id));
+
+        save(modelAttributeSetterHelper.deleteDanceClassAttributeSetter(danceClass));
+    }
 }
