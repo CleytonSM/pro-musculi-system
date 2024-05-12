@@ -38,15 +38,13 @@ public class DanceClassService {
         save(modelAttributeSetterHelper.postDanceClassAttributeSetter(danceClassDto));
     }
 
+    public DanceClass findDanceClassByName(String name) {
+        return verifyOptionalEntity(repository.findByName(name));
+    }
+
     public PageResponse<?> findAllDanceClassesByInstructor(String instructorName, PaginationDto paginationDto) {
         Page<DanceClass> danceClasses = repository.findAllByInstructorName(instructorName,
                 modelAttributeSetterHelper.setupPageable(paginationDto));
-
-        return modelAttributeSetterHelper.setupPageResponse(danceClasses);
-    }
-
-    public PageResponse<?> findAllInactiveDanceClassesByInstructor(String instructorName, PaginationDto paginationDto) {
-        Page<DanceClass> danceClasses = repository.findAllInactiveByInstructor(instructorName, modelAttributeSetterHelper.setupPageable(paginationDto));
 
         return modelAttributeSetterHelper.setupPageResponse(danceClasses);
     }
@@ -67,10 +65,6 @@ public class DanceClassService {
 
     public DanceClass findDanceClassById(Integer id) {
         return verifyOptionalEntity(repository.findById(id));
-    }
-
-    public DanceClass findInactiveDanceClassById(Integer id) {
-        return verifyOptionalEntity(repository.findInactiveById(id));
     }
 
     public void dateAlreadyInUse(DanceClassDto danceClassDto, DanceClass danceClass) {
