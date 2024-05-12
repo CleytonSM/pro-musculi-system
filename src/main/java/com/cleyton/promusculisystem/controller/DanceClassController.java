@@ -41,7 +41,7 @@ public class DanceClassController {
         return new ResponseEntity<>(service.findInactiveDanceClassById(id), HttpStatus.OK);
     }
 
-    @GetMapping("/find/inactive/all/")
+    @GetMapping("/find/inactive/all/instructor/")
     public ResponseEntity<PageResponse<?>> findAllInactiveDanceClassByNameByInstructor
             (@RequestParam("instructor_name") String instructorName, @RequestBody PaginationDto paginationDto) {
         return new ResponseEntity<>(service.findAllInactiveDanceClassesByInstructor(instructorName, paginationDto), HttpStatus.OK);
@@ -73,7 +73,7 @@ public class DanceClassController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/reactive/")
+    @PutMapping("/reactivate/")
     public ResponseEntity<HttpStatus> reactivateDanceClassById(@RequestParam("id") Integer id) {
         service.reactivateDanceClassById(id);
         return new ResponseEntity<>(HttpStatus.OK);
