@@ -84,10 +84,4 @@ public class DanceClassService {
 
         save(modelAttributeSetterHelper.deleteDanceClassAttributeSetter(danceClass));
     }
-
-    public void reactivateDanceClassById(Integer id) {
-        DanceClass danceClass = verifyOptionalEntity(repository.findById(id));
-
-        save(modelAttributeSetterHelper.reactivateDanceClassAttributeSetter(danceClass));
-    }
 }

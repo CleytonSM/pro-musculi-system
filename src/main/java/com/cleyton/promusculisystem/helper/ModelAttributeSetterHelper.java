@@ -215,13 +215,6 @@ public class ModelAttributeSetterHelper {
         return danceClass;
     }
 
-
-    public DanceClass reactivateDanceClassAttributeSetter(DanceClass danceClass) {
-        danceClass.setActive(Boolean.TRUE);
-
-        return danceClass;
-    }
-
     public Instructor postInstructorAttributeSetter(InstructorDto instructorDto) {
         Instructor instructor = new Instructor();
 
