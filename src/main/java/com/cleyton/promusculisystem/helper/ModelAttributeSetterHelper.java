@@ -208,6 +208,13 @@ public class ModelAttributeSetterHelper {
         return danceClass;
     }
 
+
+    public DanceClass deleteDanceClassAttributeSetter(DanceClass danceClass) {
+        danceClass.setActive(Boolean.FALSE);
+
+        return danceClass;
+    }
+
     public Instructor postInstructorAttributeSetter(InstructorDto instructorDto) {
         Instructor instructor = new Instructor();
 
