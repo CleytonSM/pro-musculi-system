@@ -35,6 +35,7 @@ public class DanceClass {
     private LocalDateTime start;
     @Column(name = "dt_end")
     private LocalDateTime end;
+    private Boolean active;
     @Column(length = 100)
     private String description;
     private LocalDateTime createdAt;
