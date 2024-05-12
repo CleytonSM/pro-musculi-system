@@ -50,7 +50,24 @@ public class DanceClassService {
     }
 
     public void updateDanceClassById(Integer id, DanceClassDto danceClassDto) {
-        DanceClass danceClass = verifyOptionalEntity(repository.findById(id));
+        DanceClass danceClass = findDanceClassById(id);
+        dateAlreadyInUse(danceClassDto, danceClass);
+
+        save(modelAttributeSetterHelper.updateDanceClassAttributeSetter(danceClass, danceClassDto));
+    }
+
+    public void patchDanceClassById(Integer id, DanceClassDto danceClassDto) {
+        DanceClass danceClass = findDanceClassById(id);
+        dateAlreadyInUse(danceClassDto, danceClass);
+
+        save(modelAttributeSetterHelper.patchDanceClassAttributeSetter(danceClass, danceClassDto));
+    }
+
+    public DanceClass findDanceClassById(Integer id) {
+        return verifyOptionalEntity(repository.findById(id));
+    }
+
+    public void dateAlreadyInUse(DanceClassDto danceClassDto, DanceClass danceClass) {
 
         if(danceClassDto.getStart() != danceClass.getStart() && danceClassDto.getEnd() != danceClass.getEnd()) {
             Optional<DanceClass> optionalDanceClass = repository
@@ -60,7 +77,5 @@ public class DanceClassService {
                 throw new DanceClassAlreadyUsingThisDate("There is already a dance class scheduled for this time");
             }
         }
-
-        save(modelAttributeSetterHelper.updateDanceClassAttributeSetter(danceClass, danceClassDto));
     }
 }
