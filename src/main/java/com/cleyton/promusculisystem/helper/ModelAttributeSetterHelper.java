@@ -274,7 +274,7 @@ public class ModelAttributeSetterHelper {
 
     public static <T> T verifyOptionalEntity(Optional<T> optionalT) {
         if(optionalT.isEmpty()) {
-            throw new EntityNotFoundException("This entity doesn't exist");
+            throw new EntityNotFoundException("This entity doesn't exists");
         }
 
         return optionalT.get();
