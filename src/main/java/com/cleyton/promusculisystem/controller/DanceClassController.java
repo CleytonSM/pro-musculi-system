@@ -8,6 +8,7 @@ import com.cleyton.promusculisystem.services.DanceClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,6 +53,12 @@ public class DanceClassController {
     public ResponseEntity<HttpStatus> patchDanceClassById(@RequestParam("id") Integer id,
                                                           @RequestBody DanceClassDto danceClassDto) {
         service.patchDanceClassById(id, danceClassDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/")
+    public ResponseEntity<HttpStatus> deleteDanceClassById(@RequestParam("id") Integer id) {
+        service.deleteDanceClassById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
