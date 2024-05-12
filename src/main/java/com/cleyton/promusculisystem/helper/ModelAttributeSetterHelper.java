@@ -190,24 +190,6 @@ public class ModelAttributeSetterHelper {
         return danceClass;
     }
 
-
-    public DanceClass patchDanceClassAttributeSetter(DanceClass danceClass, DanceClassDto danceClassDto) {
-        danceClass.setInstructor(Optional.ofNullable(instructorService.findInstructorByName(danceClassDto.getInstructorName()))
-                .orElse(danceClass.getInstructor()));
-        danceClass.setClient(Optional.ofNullable(clientService.findClientByEmail(danceClassDto.getClientEmail()))
-                .orElse(danceClass.getClient()));
-        danceClass.setName(Optional.ofNullable(danceClassDto.getName())
-                .orElse(danceClass.getName()));
-        danceClass.setStart(Optional.ofNullable(danceClassDto.getStart())
-                .orElse(danceClass.getStart()));
-        danceClass.setEnd(Optional.ofNullable(danceClassDto.getEnd())
-                .orElse(danceClass.getEnd()));
-        danceClass.setDescription(Optional.ofNullable(danceClassDto.getDescription())
-                .orElse(danceClass.getDescription()));
-
-        return danceClass;
-    }
-
     public Instructor postInstructorAttributeSetter(InstructorDto instructorDto) {
         Instructor instructor = new Instructor();
 
