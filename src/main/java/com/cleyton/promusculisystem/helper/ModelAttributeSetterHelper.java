@@ -169,23 +169,11 @@ public class ModelAttributeSetterHelper {
         DanceClass danceClass = new DanceClass();
 
         danceClass.setInstructor(instructorService.findInstructorByName(danceClassDto.getInstructorName()));
-        danceClass.setClient(clientService.findClientByName(danceClassDto.getClientEmail()));
+        danceClass.setClient(clientService.findClientByName(danceClassDto.getClientName()));
         danceClass.setName(danceClassDto.getName());
         danceClass.setStart(danceClassDto.getStart());
         danceClass.setEnd(danceClassDto.getEnd());
         danceClass.setDescription(danceClassDto.getDescription());
-        danceClass.setCreatedAt(LocalDateTime.now());
-
-        return danceClass;
-    }
-
-    public DanceClass updateDanceClassAttributeSetter(DanceClass danceClass, DanceClassDto danceClassDto) {
-        danceClass.setInstructor(instructorService.findInstructorByName(danceClassDto.getInstructorName()));
-        danceClass.setClient(clientService.findClientByEmail(danceClassDto.getClientEmail()));
-        danceClass.setName(danceClassDto.getName());
-        danceClass.setStart(danceClassDto.getStart());
-        danceClass.setEnd(danceClassDto.getEnd());
-        danceClass.setDescription(danceClass.getDescription());
 
         return danceClass;
     }
