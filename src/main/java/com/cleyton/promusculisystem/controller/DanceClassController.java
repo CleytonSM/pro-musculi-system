@@ -32,17 +32,17 @@ public class DanceClassController {
     }
 
     @GetMapping("/find/")
-    public ResponseEntity<DanceClass> findDanceClassByName(@RequestParam("id") Integer id) {
+    public ResponseEntity<DanceClass> findDanceClassById(@RequestParam("id") Integer id) {
         return new ResponseEntity<>(service.findDanceClassById(id), HttpStatus.OK);
     }
 
     @GetMapping("/find/inactive/")
-    public ResponseEntity<DanceClass> findInactiveDanceClassByName(@RequestParam("id") Integer id) {
+    public ResponseEntity<DanceClass> findInactiveDanceClassById(@RequestParam("id") Integer id) {
         return new ResponseEntity<>(service.findInactiveDanceClassById(id), HttpStatus.OK);
     }
 
     @GetMapping("/find/inactive/all/instructor/")
-    public ResponseEntity<PageResponse<?>> findAllInactiveDanceClassByNameByInstructor
+    public ResponseEntity<PageResponse<?>> findAllInactiveDanceClassByInstructor
             (@RequestParam("instructor_name") String instructorName, @RequestBody PaginationDTO paginationDto) {
         return new ResponseEntity<>(service.findAllInactiveDanceClassesByInstructor(instructorName, paginationDto), HttpStatus.OK);
     }
