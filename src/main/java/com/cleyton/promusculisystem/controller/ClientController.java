@@ -31,22 +31,22 @@ public class ClientController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping
+    @GetMapping("/find/all/")
     public ResponseEntity<PageResponse<Client>> findClients(@RequestBody PaginationDto paginationDto) {
         return new ResponseEntity<>(service.findClients(paginationDto), HttpStatus.OK);
     }
 
-    @GetMapping("/inactive")
+    @GetMapping("/find//inactive/all")
     public ResponseEntity<PageResponse<Client>> findInactiveClients(@RequestBody PaginationDto paginationDto) {
         return new ResponseEntity<>(service.findInactiveClients(paginationDto), HttpStatus.OK);
     }
 
-    @GetMapping("/findByEmail/")
+    @GetMapping("/find/email/")
     public ResponseEntity<?> findClientByEmail(@RequestParam("email") String email) {
         return new ResponseEntity<>(service.findClientByEmail(email), HttpStatus.OK);
     }
 
-    @GetMapping("/findByName/")
+    @GetMapping("/find/name/")
     public ResponseEntity<?> findClientByName(@RequestParam("name") String name) {
         return new ResponseEntity<>(service.findClientByName(name), HttpStatus.OK);
     }
