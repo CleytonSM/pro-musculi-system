@@ -40,12 +40,20 @@ public class WorkoutClassService {
     }
 
     public void updateWorkoutClassById(Integer id, WorkoutClassDTO workoutClassDTO) {
-        WorkoutClass workoutClass = dateAlreadyInUse(workoutClassDTO, findWorkoutClassById(id));
+        WorkoutClass workoutClass = findWorkoutClassById(id);
 
         save(modelAttributeSetterHelper.updateWorkoutClassAttributeSetter(workoutClass, workoutClassDTO));
     }
 
-    private WorkoutClass dateAlreadyInUse(WorkoutClassDTO workoutClassDTO, WorkoutClass workoutClass) {
+
+    public void patchWorkoutClassById(Integer id, WorkoutClassDTO workoutClassDTO) {
+        WorkoutClass workoutClass = findWorkoutClassById(id);
+        dateAlreadyInUse(workoutClassDTO, workoutClass);
+
+        save(modelAttributeSetterHelper.patchWorkoutClassAttributeSetter(workoutClass, workoutClassDTO));
+    }
+
+    private void dateAlreadyInUse(WorkoutClassDTO workoutClassDTO, WorkoutClass workoutClass) {
 
         if(workoutClassDTO.getDateClass() != workoutClass.getDateClass()) {
             Optional<WorkoutClass> workoutClassConflict = repository.findByDateClass(workoutClassDTO.getDateClass());
@@ -54,7 +62,5 @@ public class WorkoutClassService {
                 throw new EntityAlreadyExistsException("There is already a workout class scheduled at this time");
             }
         }
-
-        return workoutClass;
     }
 }

@@ -292,6 +292,23 @@ public class ModelAttributeSetterHelper {
         return workoutClass;
     }
 
+    public WorkoutClass patchWorkoutClassAttributeSetter(WorkoutClass workoutClass, WorkoutClassDTO workoutClassDTO) {
+        workoutClass.setClient(Optional.ofNullable(clientService
+                        .findClientByEmail(workoutClassDTO.getClientEmail()))
+                .orElse(workoutClass.getClient()));
+        workoutClass.setInstructor(Optional.ofNullable(instructorService
+                        .findInstructorByName(workoutClassDTO.getInstructorName()))
+                .orElse(workoutClass.getInstructor()));
+        workoutClass.setName(Optional.ofNullable(workoutClassDTO.getName())
+                .orElse(workoutClass.getName()));
+        workoutClass.setDateClass(Optional.ofNullable(workoutClassDTO.getDateClass())
+                .orElse(workoutClass.getDateClass()));
+        workoutClass.setDescription(Optional.ofNullable(workoutClassDTO.getDescription())
+                .orElse(workoutClassDTO.getDescription()));
+
+        return workoutClass;
+    }
+
     private Set<Authority> authoritySetup(Authority authority) {
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authority);
