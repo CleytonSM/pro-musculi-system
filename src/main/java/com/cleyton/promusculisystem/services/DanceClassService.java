@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper.isEntityAlreadyInUse;
 import static com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper.verifyOptionalEntity;
 
 @Service
@@ -28,12 +29,8 @@ public class DanceClassService {
     }
 
     public void createDanceClass(DanceClassDTO danceClassDto) {
-        Optional<DanceClass> optionalDanceClass = repository
-                .findByStartAndEnd(danceClassDto.getStart(), danceClassDto.getEnd());
-
-        if(optionalDanceClass.isPresent()) {
-            throw new NotFoundException("There is already a dance class scheduled for this time");
-        }
+        isEntityAlreadyInUse(repository
+                .findByStartAndEnd(danceClassDto.getStart(), danceClassDto.getEnd()));
 
         save(modelAttributeSetterHelper.postDanceClassAttributeSetter(danceClassDto));
     }

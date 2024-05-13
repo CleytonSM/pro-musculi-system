@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper.isEntityAlreadyInUse;
+import static com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper.verifyOptionalEntity;
 
 @Service
 public class WorkoutClassService {
@@ -25,5 +26,9 @@ public class WorkoutClassService {
         isEntityAlreadyInUse(repository.findByDateClass(workoutClassDTO.getDateClass()));
 
         save(modelAttributeSetterHelper.postWorkoutClassAttributeSetter(workoutClassDTO));
+    }
+
+    public WorkoutClass findWorkoutClassById(Integer id) {
+        return verifyOptionalEntity(repository.findById(id));
     }
 }
