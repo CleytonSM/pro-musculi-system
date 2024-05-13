@@ -3,11 +3,11 @@ package com.cleyton.promusculisystem.services;
 import com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper;
 import com.cleyton.promusculisystem.model.Authority;
 import com.cleyton.promusculisystem.model.User;
-import com.cleyton.promusculisystem.model.dto.LoginDto;
+import com.cleyton.promusculisystem.model.dto.LoginDTO;
 import com.cleyton.promusculisystem.model.response.PageResponse;
-import com.cleyton.promusculisystem.model.dto.PaginationDto;
-import com.cleyton.promusculisystem.model.dto.RoleDto;
-import com.cleyton.promusculisystem.model.dto.UserDto;
+import com.cleyton.promusculisystem.model.dto.PaginationDTO;
+import com.cleyton.promusculisystem.model.dto.RoleDTO;
+import com.cleyton.promusculisystem.model.dto.UserDTO;
 import com.cleyton.promusculisystem.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,35 +37,35 @@ public class UserService {
         repository.save(user);
     }
 
-    public void createUser(UserDto userDto) {
+    public void createUser(UserDTO userDto) {
         isEntityAlreadyInUse(repository.findByEmail(userDto.getEmail()));
 
-        Authority authority = new Authority(RoleDto.ROLE_USER.toString());
+        Authority authority = new Authority(RoleDTO.ROLE_USER.toString());
 
         save(modelAttributeSetterHelper.postUserAttributeSetter(userDto, passwordEncoder, authority));
         authorityService.create(authority);
     }
-    public void createAdmin(UserDto userDto) {
+    public void createAdmin(UserDTO userDto) {
         isEntityAlreadyInUse(repository.findByEmail(userDto.getEmail()));
-        Authority authority = new Authority(RoleDto.ROLE_ADMIN.toString());
+        Authority authority = new Authority(RoleDTO.ROLE_ADMIN.toString());
 
         repository.save(modelAttributeSetterHelper.postUserAttributeSetter(userDto, passwordEncoder, authority));
         authorityService.create(authority);
     }
 
-    public PageResponse<User> getUsers(PaginationDto paginationDto) {
+    public PageResponse<User> getUsers(PaginationDTO paginationDto) {
         Page<User> users = repository.findAllActive(modelAttributeSetterHelper.setupPageable(paginationDto));
 
         return modelAttributeSetterHelper.setupPageResponse(users);
     }
 
-    public PageResponse<User> getInactiveUsers(PaginationDto paginationDto) {
+    public PageResponse<User> getInactiveUsers(PaginationDTO paginationDto) {
         Page<User> users = repository.findAllInactive(modelAttributeSetterHelper.setupPageable(paginationDto));
 
         return modelAttributeSetterHelper.setupPageResponse(users);
     }
 
-    public HttpStatus login(LoginDto loginDto) {
+    public HttpStatus login(LoginDTO loginDto) {
         // TODO check a better way to implement this login section
         Optional<User> optionalUser = repository.findByEmail(loginDto.getEmail());
         if(optionalUser.isEmpty()) {
@@ -78,7 +78,7 @@ public class UserService {
         return HttpStatus.OK;
     }
 
-    public void updateUser(Integer id, UserDto userDto) {
+    public void updateUser(Integer id, UserDTO userDto) {
         User user = verifyOptionalEntity(repository.findById(id));
         if(!user.getEmail().equals(userDto.getEmail())) {
             isEntityAlreadyInUse(repository.findByEmail(userDto.getEmail()));
@@ -87,7 +87,7 @@ public class UserService {
         save(modelAttributeSetterHelper.updateUserAttributeSetter(user, userDto, passwordEncoder));
     }
 
-    public void patchUser(Integer id, UserDto userDto) {
+    public void patchUser(Integer id, UserDTO userDto) {
         User user = verifyOptionalEntity(repository.findById(id));
         if(!user.getEmail().equals(userDto.getEmail())) {
             isEntityAlreadyInUse(repository.findByEmail(userDto.getEmail()));

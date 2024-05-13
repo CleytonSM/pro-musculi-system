@@ -1,10 +1,10 @@
 package com.cleyton.promusculisystem.services;
 
-import com.cleyton.promusculisystem.exceptions.DanceClassAlreadyUsingThisDate;
+import com.cleyton.promusculisystem.exceptions.CustomException;
 import com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper;
 import com.cleyton.promusculisystem.model.DanceClass;
-import com.cleyton.promusculisystem.model.dto.DanceClassDto;
-import com.cleyton.promusculisystem.model.dto.PaginationDto;
+import com.cleyton.promusculisystem.model.dto.DanceClassDTO;
+import com.cleyton.promusculisystem.model.dto.PaginationDTO;
 import com.cleyton.promusculisystem.model.response.PageResponse;
 import com.cleyton.promusculisystem.repository.DanceClassRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,42 +23,42 @@ public class DanceClassService {
     @Autowired
     private ModelAttributeSetterHelper modelAttributeSetterHelper;
 
-    private void save(DanceClass danceClass) {
+    public void save(DanceClass danceClass) {
         repository.save(danceClass);
     }
 
-    public void createDanceClass(DanceClassDto danceClassDto) {
+    public void createDanceClass(DanceClassDTO danceClassDto) {
         Optional<DanceClass> optionalDanceClass = repository
                 .findByStartAndEnd(danceClassDto.getStart(), danceClassDto.getEnd());
 
         if(optionalDanceClass.isPresent()) {
-            throw new DanceClassAlreadyUsingThisDate("There is already a dance class scheduled for this time");
+            throw new CustomException("There is already a dance class scheduled for this time");
         }
 
         save(modelAttributeSetterHelper.postDanceClassAttributeSetter(danceClassDto));
     }
 
-    public PageResponse<?> findAllDanceClassesByInstructor(String instructorName, PaginationDto paginationDto) {
+    public PageResponse<?> findAllDanceClassesByInstructor(String instructorName, PaginationDTO paginationDto) {
         Page<DanceClass> danceClasses = repository.findAllByInstructorName(instructorName,
                 modelAttributeSetterHelper.setupPageable(paginationDto));
 
         return modelAttributeSetterHelper.setupPageResponse(danceClasses);
     }
 
-    public PageResponse<?> findAllInactiveDanceClassesByInstructor(String instructorName, PaginationDto paginationDto) {
+    public PageResponse<?> findAllInactiveDanceClassesByInstructor(String instructorName, PaginationDTO paginationDto) {
         Page<DanceClass> danceClasses = repository.findAllInactiveByInstructor(instructorName, modelAttributeSetterHelper.setupPageable(paginationDto));
 
         return modelAttributeSetterHelper.setupPageResponse(danceClasses);
     }
 
-    public void updateDanceClassById(Integer id, DanceClassDto danceClassDto) {
+    public void updateDanceClassById(Integer id, DanceClassDTO danceClassDto) {
         DanceClass danceClass = findDanceClassById(id);
         dateAlreadyInUse(danceClassDto, danceClass);
 
         save(modelAttributeSetterHelper.updateDanceClassAttributeSetter(danceClass, danceClassDto));
     }
 
-    public void patchDanceClassById(Integer id, DanceClassDto danceClassDto) {
+    public void patchDanceClassById(Integer id, DanceClassDTO danceClassDto) {
         DanceClass danceClass = findDanceClassById(id);
         dateAlreadyInUse(danceClassDto, danceClass);
 
@@ -73,14 +73,14 @@ public class DanceClassService {
         return verifyOptionalEntity(repository.findInactiveById(id));
     }
 
-    public void dateAlreadyInUse(DanceClassDto danceClassDto, DanceClass danceClass) {
+    public void dateAlreadyInUse(DanceClassDTO danceClassDto, DanceClass danceClass) {
 
         if(danceClassDto.getStart() != danceClass.getStart() && danceClassDto.getEnd() != danceClass.getEnd()) {
             Optional<DanceClass> optionalDanceClass = repository
                     .findByStartAndEnd(danceClassDto.getStart(), danceClassDto.getEnd());
 
             if(optionalDanceClass.isPresent()) {
-                throw new DanceClassAlreadyUsingThisDate("There is already a dance class scheduled for this time");
+                throw new CustomException("There is already a dance class scheduled for this time");
             }
         }
     }

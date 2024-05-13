@@ -2,13 +2,12 @@ package com.cleyton.promusculisystem.services;
 
 import com.cleyton.promusculisystem.model.Authority;
 import com.cleyton.promusculisystem.model.User;
-import com.cleyton.promusculisystem.model.dto.UserDto;
+import com.cleyton.promusculisystem.model.dto.UserDTO;
 import com.cleyton.promusculisystem.repository.AuthorityRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.desktop.AboutHandler;
 import java.util.Optional;
 
 @Service
@@ -21,7 +20,7 @@ public class AuthorityService {
         save(authority);
     }
 
-    public Authority update(User user, UserDto userDto) {
+    public Authority update(User user, UserDTO userDto) {
         Optional<Authority> optionalAuthority = repository.findByUser(user.getId());
 
         if(optionalAuthority.isEmpty()) {
@@ -61,7 +60,7 @@ public class AuthorityService {
         return authority;
     }
 
-    private void save(Authority authority) {
+    public void save(Authority authority) {
         repository.save(authority);
     }
 }

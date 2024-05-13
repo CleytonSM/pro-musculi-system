@@ -1,9 +1,9 @@
 package com.cleyton.promusculisystem.controller;
 
 import com.cleyton.promusculisystem.model.Client;
-import com.cleyton.promusculisystem.model.dto.ClientDto;
+import com.cleyton.promusculisystem.model.dto.ClientDTO;
 import com.cleyton.promusculisystem.model.response.PageResponse;
-import com.cleyton.promusculisystem.model.dto.PaginationDto;
+import com.cleyton.promusculisystem.model.dto.PaginationDTO;
 import com.cleyton.promusculisystem.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,25 +19,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/clients")
+@RequestMapping("/client")
 public class ClientController {
 
     @Autowired
     private ClientService service;
 
     @PostMapping("/register")
-    public ResponseEntity<HttpStatus> registerClient(@RequestBody ClientDto clientDto) {
+    public ResponseEntity<HttpStatus> registerClient(@RequestBody ClientDTO clientDto) {
         service.createClient(clientDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/find/all/")
-    public ResponseEntity<PageResponse<Client>> findClients(@RequestBody PaginationDto paginationDto) {
+    public ResponseEntity<PageResponse<Client>> findClients(@RequestBody PaginationDTO paginationDto) {
         return new ResponseEntity<>(service.findClients(paginationDto), HttpStatus.OK);
     }
 
     @GetMapping("/find//inactive/all")
-    public ResponseEntity<PageResponse<Client>> findInactiveClients(@RequestBody PaginationDto paginationDto) {
+    public ResponseEntity<PageResponse<Client>> findInactiveClients(@RequestBody PaginationDTO paginationDto) {
         return new ResponseEntity<>(service.findInactiveClients(paginationDto), HttpStatus.OK);
     }
 
@@ -52,13 +52,13 @@ public class ClientController {
     }
 
     @PutMapping("/update/")
-    public ResponseEntity<HttpStatus> updateClient(@RequestParam(name = "name") String name, @RequestBody ClientDto clientDto) {
+    public ResponseEntity<HttpStatus> updateClient(@RequestParam(name = "name") String name, @RequestBody ClientDTO clientDto) {
         service.updateClient(name, clientDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping("/update/partial/")
-    public ResponseEntity<HttpStatus> patchClient(@RequestParam(name = "name") String name, @RequestBody ClientDto clientDto) {
+    public ResponseEntity<HttpStatus> patchClient(@RequestParam(name = "name") String name, @RequestBody ClientDTO clientDto) {
         service.patchClient(name, clientDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }

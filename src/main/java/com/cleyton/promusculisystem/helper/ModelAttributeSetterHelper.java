@@ -6,12 +6,14 @@ import com.cleyton.promusculisystem.model.DanceClass;
 import com.cleyton.promusculisystem.model.GymPlan;
 import com.cleyton.promusculisystem.model.Instructor;
 import com.cleyton.promusculisystem.model.User;
-import com.cleyton.promusculisystem.model.dto.ClientDto;
-import com.cleyton.promusculisystem.model.dto.DanceClassDto;
-import com.cleyton.promusculisystem.model.dto.GymPlanDto;
-import com.cleyton.promusculisystem.model.dto.InstructorDto;
-import com.cleyton.promusculisystem.model.dto.PaginationDto;
-import com.cleyton.promusculisystem.model.dto.UserDto;
+import com.cleyton.promusculisystem.model.WorkoutClass;
+import com.cleyton.promusculisystem.model.dto.ClientDTO;
+import com.cleyton.promusculisystem.model.dto.DanceClassDTO;
+import com.cleyton.promusculisystem.model.dto.GymPlanDTO;
+import com.cleyton.promusculisystem.model.dto.InstructorDTO;
+import com.cleyton.promusculisystem.model.dto.PaginationDTO;
+import com.cleyton.promusculisystem.model.dto.UserDTO;
+import com.cleyton.promusculisystem.model.dto.WorkoutClassDTO;
 import com.cleyton.promusculisystem.model.response.PageResponse;
 import com.cleyton.promusculisystem.services.AuthorityService;
 import com.cleyton.promusculisystem.services.ClientService;
@@ -44,7 +46,7 @@ public class ModelAttributeSetterHelper {
     @Autowired
     private ClientService clientService;
 
-    public User postUserAttributeSetter(UserDto userDto, PasswordEncoder passwordEncoder, Authority authority) {
+    public User postUserAttributeSetter(UserDTO userDto, PasswordEncoder passwordEncoder, Authority authority) {
         User user = new User();
 
         authority.setUser(user);
@@ -57,18 +59,17 @@ public class ModelAttributeSetterHelper {
         return user;
     }
 
-    public User updateUserAttributeSetter(User user, UserDto userDto, PasswordEncoder passwordEncoder) {
+    public User updateUserAttributeSetter(User user, UserDTO userDto, PasswordEncoder passwordEncoder) {
         Authority authority = authorityService.update(user, userDto);
 
         user.setEmail(userDto.getEmail());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        user.setCreatedAt(LocalDateTime.now());
         user.setAuthorities(authoritySetup(authority));
 
         return user;
     }
 
-    public User patchUserAttributeSetter(User user, UserDto userDto, PasswordEncoder passwordEncoder) {
+    public User patchUserAttributeSetter(User user, UserDTO userDto, PasswordEncoder passwordEncoder) {
       user.setEmail(Optional.ofNullable(userDto.getEmail()).orElse(user.getEmail()));
       user.setPassword((Optional.ofNullable(passwordEncoder.encode(userDto.getPassword())).orElse(user.getPassword())));
       if(userDto.getRole() != null) {
@@ -98,7 +99,7 @@ public class ModelAttributeSetterHelper {
         return user;
     }
 
-    public Client postClientAttributeSetter(ClientDto clientDto) {
+    public Client postClientAttributeSetter(ClientDTO clientDto) {
         Client client = new Client();
         client.setGymPlan(gymPlanService.findByName(clientDto.getGymPlanName()));
         client.setName(clientDto.getName());
@@ -110,7 +111,7 @@ public class ModelAttributeSetterHelper {
         return client;
     }
 
-    public Client updateClientAttributeSetter(Client client, ClientDto clientDto) {
+    public Client updateClientAttributeSetter(Client client, ClientDTO clientDto) {
         client.setName(clientDto.getName());
         client.setEmail(clientDto.getEmail());
         client.setPhone(clientDto.getPhone());
@@ -119,7 +120,7 @@ public class ModelAttributeSetterHelper {
         return client;
     }
 
-    public Client patchClientAttributeSetter(Client client, ClientDto clientDto) {
+    public Client patchClientAttributeSetter(Client client, ClientDTO clientDto) {
         client.setName(Optional.ofNullable(clientDto.getName()).orElse(client.getName()));
         client.setEmail(Optional.ofNullable(clientDto.getEmail()).orElse(client.getEmail()));
         client.setPhone(Optional.ofNullable(client.getPhone()).orElse(client.getPhone()));
@@ -141,7 +142,7 @@ public class ModelAttributeSetterHelper {
         return client;
     }
 
-    public GymPlan postGymPlanAttributeSetter (GymPlanDto gymPlanDto) {
+    public GymPlan postGymPlanAttributeSetter (GymPlanDTO gymPlanDto) {
         GymPlan gymPlan = new GymPlan();
 
         gymPlan.setName(gymPlanDto.getName());
@@ -151,21 +152,21 @@ public class ModelAttributeSetterHelper {
         return gymPlan;
     }
 
-    public GymPlan updateGymPlanAttributeSetter(GymPlan gymPlan, GymPlanDto gymPlanDto) {
+    public GymPlan updateGymPlanAttributeSetter(GymPlan gymPlan, GymPlanDTO gymPlanDto) {
         gymPlan.setName(gymPlanDto.getName());
         gymPlan.setPrice(gymPlanDto.getPrice());
         gymPlan.setDuration(gymPlanDto.getDuration());
         return gymPlan;
     }
 
-    public GymPlan patchGymPlanAttributeSetter(GymPlan gymPlan, GymPlanDto gymPlanDto) {
+    public GymPlan patchGymPlanAttributeSetter(GymPlan gymPlan, GymPlanDTO gymPlanDto) {
         gymPlan.setName(Optional.ofNullable(gymPlanDto.getName()).orElse(gymPlan.getName()));
         gymPlan.setPrice(Optional.ofNullable(gymPlanDto.getPrice()).orElse(gymPlan.getPrice()));
         gymPlan.setDuration(Optional.ofNullable(gymPlanDto.getDuration()).orElse(gymPlan.getDuration()));
         return gymPlan;
     }
 
-    public DanceClass postDanceClassAttributeSetter(DanceClassDto danceClassDto) {
+    public DanceClass postDanceClassAttributeSetter(DanceClassDTO danceClassDto) {
         DanceClass danceClass = new DanceClass();
 
         danceClass.setInstructor(instructorService.findInstructorByName(danceClassDto.getInstructorName()));
@@ -179,7 +180,7 @@ public class ModelAttributeSetterHelper {
         return danceClass;
     }
 
-    public DanceClass updateDanceClassAttributeSetter(DanceClass danceClass, DanceClassDto danceClassDto) {
+    public DanceClass updateDanceClassAttributeSetter(DanceClass danceClass, DanceClassDTO danceClassDto) {
         danceClass.setInstructor(instructorService.findInstructorByName(danceClassDto.getInstructorName()));
         danceClass.setClient(clientService.findClientByEmail(danceClassDto.getClientEmail()));
         danceClass.setName(danceClassDto.getName());
@@ -191,7 +192,7 @@ public class ModelAttributeSetterHelper {
     }
 
 
-    public DanceClass patchDanceClassAttributeSetter(DanceClass danceClass, DanceClassDto danceClassDto) {
+    public DanceClass patchDanceClassAttributeSetter(DanceClass danceClass, DanceClassDTO danceClassDto) {
         danceClass.setInstructor(Optional.ofNullable(instructorService.findInstructorByName(danceClassDto.getInstructorName()))
                 .orElse(danceClass.getInstructor()));
         danceClass.setClient(Optional.ofNullable(clientService.findClientByEmail(danceClassDto.getClientEmail()))
@@ -222,7 +223,7 @@ public class ModelAttributeSetterHelper {
         return danceClass;
     }
 
-    public Instructor postInstructorAttributeSetter(InstructorDto instructorDto) {
+    public Instructor postInstructorAttributeSetter(InstructorDTO instructorDto) {
         Instructor instructor = new Instructor();
 
         instructor.setName(instructorDto.getName());
@@ -235,7 +236,7 @@ public class ModelAttributeSetterHelper {
         return instructor;
     }
 
-    public Instructor updateInstructorAttributeSetter(Instructor instructor, InstructorDto instructorDto) {
+    public Instructor updateInstructorAttributeSetter(Instructor instructor, InstructorDTO instructorDto) {
         instructor.setName(instructorDto.getName());
         instructor.setSalary(instructorDto.getSalary());
         instructor.setCpf(instructorDto.getCpf());
@@ -244,7 +245,7 @@ public class ModelAttributeSetterHelper {
         return instructor;
     }
 
-    public Instructor patchInstructorAttributeSetter(Instructor instructor, InstructorDto instructorDto) {
+    public Instructor patchInstructorAttributeSetter(Instructor instructor, InstructorDTO instructorDto) {
         instructor.setName(Optional.ofNullable(instructorDto.getName()).orElse(instructor.getName()));
         instructor.setSalary(Optional.ofNullable(instructorDto.getSalary()).orElse(instructor.getSalary()));
         instructor.setCpf(Optional.ofNullable(instructorDto.getCpf()).orElse(instructor.getCpf()));
@@ -263,6 +264,21 @@ public class ModelAttributeSetterHelper {
         instructor.setActive(Boolean.TRUE);
 
         return instructor;
+    }
+
+
+    public WorkoutClass postWorkoutClassAttributeSetter(WorkoutClassDTO workoutClassDTO) {
+        WorkoutClass workoutClass = new WorkoutClass();
+
+        workoutClass.setClient(clientService.findClientByEmail(workoutClassDTO.getClientEmail()));
+        workoutClass.setInstructor(instructorService.findInstructorByName(workoutClassDTO.getInstructorName()));
+        workoutClass.setName(workoutClassDTO.getName());
+        workoutClass.setDateClass(workoutClassDTO.getDateClass());
+        workoutClass.setActive(Boolean.TRUE);
+        workoutClass.setDescription(workoutClassDTO.getDescription());
+        workoutClass.setCreatedAt(LocalDateTime.now());
+
+        return workoutClass;
     }
 
     private Set<Authority> authoritySetup(Authority authority) {
@@ -286,7 +302,7 @@ public class ModelAttributeSetterHelper {
         }
     }
 
-    public Pageable setupPageable(PaginationDto paginationDto) {
+    public Pageable setupPageable(PaginationDTO paginationDto) {
         Sort sort = Sort.by(Sort.Direction.valueOf(paginationDto.getSortType()), paginationDto.getSortBy());
         return PageRequest.of(paginationDto.getPageNumber(), paginationDto.getPageSize(), sort);
     }

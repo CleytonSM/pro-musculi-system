@@ -3,8 +3,8 @@ package com.cleyton.promusculisystem.services;
 
 import com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper;
 import com.cleyton.promusculisystem.model.Client;
-import com.cleyton.promusculisystem.model.dto.ClientDto;
-import com.cleyton.promusculisystem.model.dto.PaginationDto;
+import com.cleyton.promusculisystem.model.dto.ClientDTO;
+import com.cleyton.promusculisystem.model.dto.PaginationDTO;
 import com.cleyton.promusculisystem.model.response.PageResponse;
 import com.cleyton.promusculisystem.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,23 +22,23 @@ public class ClientService {
     @Autowired
     private ModelAttributeSetterHelper modelAttributeSetterHelper;
 
-    public void createClient (ClientDto clientDto){
+    public void createClient (ClientDTO clientDto){
         isEntityAlreadyInUse(repository.findByEmail(clientDto.getEmail()));
         repository.save(modelAttributeSetterHelper.postClientAttributeSetter(clientDto));
     }
 
-    public PageResponse<Client> findClients(PaginationDto paginationDto) {
+    public PageResponse<Client> findClients(PaginationDTO paginationDto) {
         Page<Client> clients = repository.findAllActive(modelAttributeSetterHelper.setupPageable(paginationDto));
         return modelAttributeSetterHelper.setupPageResponse(clients);
     }
 
-    public PageResponse<Client> findInactiveClients(PaginationDto paginationDto) {
+    public PageResponse<Client> findInactiveClients(PaginationDTO paginationDto) {
         Page<Client> clients = repository.findAllInactive(modelAttributeSetterHelper.setupPageable(paginationDto));
 
         return modelAttributeSetterHelper.setupPageResponse(clients);
     }
 
-    public void updateClient(String name, ClientDto clientDto) {
+    public void updateClient(String name, ClientDTO clientDto) {
         Client client = verifyOptionalEntity(repository.findByName(name));
         if (!client.getEmail().equals(clientDto.getEmail())) {
             isEntityAlreadyInUse(repository.findByEmail(clientDto.getEmail()));
@@ -47,7 +47,7 @@ public class ClientService {
         save(modelAttributeSetterHelper.updateClientAttributeSetter(client, clientDto));
     }
 
-    public void patchClient(String name, ClientDto clientDto) {
+    public void patchClient(String name, ClientDTO clientDto) {
         Client client = verifyOptionalEntity(repository.findByName(name));
         if (!client.getEmail().equals(clientDto.getEmail())) {
             isEntityAlreadyInUse(repository.findByEmail(clientDto.getEmail()));
@@ -55,7 +55,7 @@ public class ClientService {
         save(modelAttributeSetterHelper.patchClientAttributeSetter(client, clientDto));
     }
 
-    private void save(Client client) {
+    public void save(Client client) {
         repository.save(client);
     }
 

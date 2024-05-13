@@ -1,8 +1,8 @@
 package com.cleyton.promusculisystem.controller;
 
 import com.cleyton.promusculisystem.model.GymPlan;
-import com.cleyton.promusculisystem.model.dto.GymPlanDto;
-import com.cleyton.promusculisystem.model.dto.PaginationDto;
+import com.cleyton.promusculisystem.model.dto.GymPlanDTO;
+import com.cleyton.promusculisystem.model.dto.PaginationDTO;
 import com.cleyton.promusculisystem.model.response.GymPlanClientsResponse;
 import com.cleyton.promusculisystem.model.response.PageResponse;
 import com.cleyton.promusculisystem.services.GymPlanService;
@@ -26,13 +26,13 @@ public class GymPlanController {
     private GymPlanService service;
 
     @PostMapping("/register")
-    public ResponseEntity<HttpStatus> createGymPlan(@RequestBody GymPlanDto gymPlanDto) {
+    public ResponseEntity<HttpStatus> createGymPlan(@RequestBody GymPlanDTO gymPlanDto) {
         service.createGymPlan(gymPlanDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<PageResponse<GymPlan>> findAllGymPlans(@RequestBody PaginationDto paginationDto){
+    public ResponseEntity<PageResponse<GymPlan>> findAllGymPlans(@RequestBody PaginationDTO paginationDto){
         return new ResponseEntity<>(service.findAllGymPlans(paginationDto), HttpStatus.OK);
     }
 
@@ -49,26 +49,26 @@ public class GymPlanController {
 
     @GetMapping("/find/clients/active/plan/")
     public ResponseEntity<GymPlanClientsResponse> findActiveClientsInGymPlanByName
-            (@RequestParam("name") String name, @RequestBody PaginationDto paginationDto) {
+            (@RequestParam("name") String name, @RequestBody PaginationDTO paginationDto) {
         return new ResponseEntity<>(service.findActiveClientsFromPlan(name, paginationDto), HttpStatus.OK);
     }
 
     @GetMapping("/find/clients/inactive/plan/")
     public ResponseEntity<GymPlanClientsResponse> findInactiveClientsInGymPlanByName
-            (@RequestParam("name") String name, @RequestBody PaginationDto paginationDto) {
+            (@RequestParam("name") String name, @RequestBody PaginationDTO paginationDto) {
         return new ResponseEntity<>(service.findInactiveClientsFromPlan(name, paginationDto), HttpStatus.OK);
     }
 
     @PutMapping("/update/")
     public ResponseEntity<HttpStatus> updateGymPlan
-            (@RequestParam("name") String name, @RequestBody GymPlanDto gymPlanDto) {
+            (@RequestParam("name") String name, @RequestBody GymPlanDTO gymPlanDto) {
         service.update(name, gymPlanDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping("/update/partial/")
     public ResponseEntity<HttpStatus> patchGymPlan
-            (@RequestParam("name") String name, @RequestBody GymPlanDto gymPlanDto) {
+            (@RequestParam("name") String name, @RequestBody GymPlanDTO gymPlanDto) {
         service.patch(name, gymPlanDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }

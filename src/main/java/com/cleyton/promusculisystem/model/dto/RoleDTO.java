@@ -1,6 +1,6 @@
 package com.cleyton.promusculisystem.model.dto;
 
-public enum RoleDto {
+public enum RoleDTO {
     ROLE_ADMIN,
     ROLE_USER
 }

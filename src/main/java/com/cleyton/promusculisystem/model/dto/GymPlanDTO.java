@@ -5,7 +5,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class GymPlanDto {
+public class GymPlanDTO {
     private String  name;
     private BigDecimal price;
     private Integer duration;
