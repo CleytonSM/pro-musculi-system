@@ -38,6 +38,7 @@ public class Instructor{
     @OneToMany(mappedBy = "instructor")
     @JsonIgnore
     private Set<DanceClass> danceClasses;
-//    @OneToMany(mappedBy = "workoutClasses", fetch = FetchType.LAZY)
-//    private Set<WorkoutDance> workoutDances;
+    @OneToMany(mappedBy = "instructor")
+    @JsonIgnore
+    private Set<WorkoutClass> workoutClasses;
 }
