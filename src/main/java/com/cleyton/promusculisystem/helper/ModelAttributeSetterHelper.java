@@ -1,5 +1,7 @@
 package com.cleyton.promusculisystem.helper;
 
+import com.cleyton.promusculisystem.exceptions.EntityAlreadyExistsException;
+import com.cleyton.promusculisystem.exceptions.NotFoundException;
 import com.cleyton.promusculisystem.model.Authority;
 import com.cleyton.promusculisystem.model.Client;
 import com.cleyton.promusculisystem.model.DanceClass;
@@ -19,8 +21,6 @@ import com.cleyton.promusculisystem.services.AuthorityService;
 import com.cleyton.promusculisystem.services.ClientService;
 import com.cleyton.promusculisystem.services.GymPlanService;
 import com.cleyton.promusculisystem.services.InstructorService;
-import jakarta.persistence.EntityExistsException;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -290,7 +290,7 @@ public class ModelAttributeSetterHelper {
 
     public static <T> T verifyOptionalEntity(Optional<T> optionalT) {
         if(optionalT.isEmpty()) {
-            throw new EntityNotFoundException("This entity doesn't exist");
+            throw new NotFoundException("This entity doesn't exist");
         }
 
         return optionalT.get();
@@ -298,7 +298,7 @@ public class ModelAttributeSetterHelper {
 
     public static <T> void isEntityAlreadyInUse(Optional<T> optionalT) {
         if(optionalT.isPresent()) {
-            throw new EntityExistsException("This Entity already exists");
+            throw new EntityAlreadyExistsException("This Entity already exists");
         }
     }
 

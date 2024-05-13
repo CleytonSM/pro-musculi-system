@@ -4,12 +4,11 @@ import com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper;
 import com.cleyton.promusculisystem.model.Authority;
 import com.cleyton.promusculisystem.model.User;
 import com.cleyton.promusculisystem.model.dto.LoginDTO;
-import com.cleyton.promusculisystem.model.response.PageResponse;
 import com.cleyton.promusculisystem.model.dto.PaginationDTO;
 import com.cleyton.promusculisystem.model.dto.RoleDTO;
 import com.cleyton.promusculisystem.model.dto.UserDTO;
+import com.cleyton.promusculisystem.model.response.PageResponse;
 import com.cleyton.promusculisystem.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -109,12 +108,6 @@ public class UserService {
     }
 
     public User findUserByEmail(String email) {
-        Optional<User> optionalUser = repository.findByEmail(email);
-
-        if(optionalUser.isEmpty()) {
-            throw new EntityNotFoundException("This user doesn't exists");
-        }
-
-        return optionalUser.get();
+        return verifyOptionalEntity(repository.findByEmail(email));
     }
 }
