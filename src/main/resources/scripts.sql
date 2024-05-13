@@ -61,3 +61,19 @@ CREATE TABLE tb_dance_classes (
                                   CONSTRAINT fk_tb_dance_classes_instructor_id FOREIGN KEY (instructor_id)
                                       REFERENCES tb_instructors(id)
 );
+
+CREATE TABLE tb_workout_classes (
+                                  id 			INTEGER AUTO_INCREMENT,
+                                  client_id		INTEGER,
+                                  instructor_id	INTEGER NOT NULL,
+                                  name			VARCHAR(60),
+                                  dt_class      TIMESTAMP UNIQUE,
+                                  description 	VARCHAR(100),
+                                  created_at 	TIMESTAMP,
+                                  active TINYINT DEFAULT(0),
+                                  CONSTRAINT pk_tb_workout_classes_id PRIMARY KEY (id),
+                                  CONSTRAINT fk_tb_workout_classes_client_id FOREIGN KEY (client_id)
+                                      REFERENCES tb_clients(id),
+                                  CONSTRAINT fk_tb_workout_classes_instructor_id FOREIGN KEY (instructor_id)
+                                      REFERENCES tb_instructors(id)
+);
