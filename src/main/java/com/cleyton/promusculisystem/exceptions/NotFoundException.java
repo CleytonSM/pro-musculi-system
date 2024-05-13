@@ -1,8 +1,8 @@
 package com.cleyton.promusculisystem.exceptions;
 
-public class CustomException extends RuntimeException{
+public class NotFoundException extends RuntimeException{
 
-    public CustomException(String message) {
+    public NotFoundException(String message) {
         super(message);
     }
 }

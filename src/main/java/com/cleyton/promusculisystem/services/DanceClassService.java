@@ -1,6 +1,6 @@
 package com.cleyton.promusculisystem.services;
 
-import com.cleyton.promusculisystem.exceptions.CustomException;
+import com.cleyton.promusculisystem.exceptions.NotFoundException;
 import com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper;
 import com.cleyton.promusculisystem.model.DanceClass;
 import com.cleyton.promusculisystem.model.dto.DanceClassDTO;
@@ -32,7 +32,7 @@ public class DanceClassService {
                 .findByStartAndEnd(danceClassDto.getStart(), danceClassDto.getEnd());
 
         if(optionalDanceClass.isPresent()) {
-            throw new CustomException("There is already a dance class scheduled for this time");
+            throw new NotFoundException("There is already a dance class scheduled for this time");
         }
 
         save(modelAttributeSetterHelper.postDanceClassAttributeSetter(danceClassDto));
@@ -80,7 +80,7 @@ public class DanceClassService {
                     .findByStartAndEnd(danceClassDto.getStart(), danceClassDto.getEnd());
 
             if(optionalDanceClass.isPresent()) {
-                throw new CustomException("There is already a dance class scheduled for this time");
+                throw new NotFoundException("There is already a dance class scheduled for this time");
             }
         }
     }

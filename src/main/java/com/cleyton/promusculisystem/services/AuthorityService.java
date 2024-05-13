@@ -4,11 +4,10 @@ import com.cleyton.promusculisystem.model.Authority;
 import com.cleyton.promusculisystem.model.User;
 import com.cleyton.promusculisystem.model.dto.UserDTO;
 import com.cleyton.promusculisystem.repository.AuthorityRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import static com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper.verifyOptionalEntity;
 
 @Service
 public class AuthorityService {
@@ -21,12 +20,8 @@ public class AuthorityService {
     }
 
     public Authority update(User user, UserDTO userDto) {
-        Optional<Authority> optionalAuthority = repository.findByUser(user.getId());
+        Authority authority = verifyOptionalEntity(repository.findByUser(user.getId()));
 
-        if(optionalAuthority.isEmpty()) {
-            throw new EntityNotFoundException("This entity doesn't exist");
-        }
-        Authority authority = optionalAuthority.get();
         authority.setName(userDto.getRole().toString());
         save(authority);
 
@@ -34,13 +29,8 @@ public class AuthorityService {
     }
 
     public Authority reactivateAuthority(User user) {
-        Optional<Authority> optionalAuthority = repository.findByUser(user.getId());
+        Authority authority = verifyOptionalEntity(repository.findByUser(user.getId()));
 
-        if(optionalAuthority.isEmpty()) {
-            throw new EntityNotFoundException("This entity doesn't exist");
-        }
-
-        Authority authority = optionalAuthority.get();
         authority.setName("ROLE_USER");
         save(authority);
 
@@ -48,12 +38,8 @@ public class AuthorityService {
     }
 
     public Authority delete(User user) {
-        Optional<Authority> optionalAuthority = repository.findByUser(user.getId());
+        Authority authority = verifyOptionalEntity(repository.findByUser(user.getId()));
 
-        if(optionalAuthority.isEmpty()) {
-            throw new EntityNotFoundException("This entity doesn't exist");
-        }
-        Authority authority = optionalAuthority.get();
         authority.setName("ROLE_DELETED");
         save(authority);
 
