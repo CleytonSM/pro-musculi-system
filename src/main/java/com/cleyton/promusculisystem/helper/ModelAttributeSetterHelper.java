@@ -281,6 +281,17 @@ public class ModelAttributeSetterHelper {
         return workoutClass;
     }
 
+
+    public WorkoutClass updateWorkoutClassAttributeSetter(WorkoutClass workoutClass, WorkoutClassDTO workoutClassDTO) {
+        workoutClass.setClient(clientService.findClientByEmail(workoutClassDTO.getClientEmail()));
+        workoutClass.setInstructor(instructorService.findInstructorByName(workoutClassDTO.getInstructorName()));
+        workoutClass.setName(workoutClassDTO.getName());
+        workoutClass.setDateClass(workoutClassDTO.getDateClass());
+        workoutClass.setDescription(workoutClassDTO.getDescription());
+
+        return workoutClass;
+    }
+
     private Set<Authority> authoritySetup(Authority authority) {
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authority);

@@ -1,6 +1,6 @@
 package com.cleyton.promusculisystem.services;
 
-import com.cleyton.promusculisystem.exceptions.NotFoundException;
+import com.cleyton.promusculisystem.exceptions.EntityAlreadyExistsException;
 import com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper;
 import com.cleyton.promusculisystem.model.DanceClass;
 import com.cleyton.promusculisystem.model.dto.DanceClassDTO;
@@ -28,38 +28,36 @@ public class DanceClassService {
         repository.save(danceClass);
     }
 
-    public void createDanceClass(DanceClassDTO danceClassDto) {
+    public void createDanceClass(DanceClassDTO danceClassDTO) {
         isEntityAlreadyInUse(repository
-                .findByStartAndEnd(danceClassDto.getStart(), danceClassDto.getEnd()));
+                .findByStartAndEnd(danceClassDTO.getStart(), danceClassDTO.getEnd()));
 
-        save(modelAttributeSetterHelper.postDanceClassAttributeSetter(danceClassDto));
+        save(modelAttributeSetterHelper.postDanceClassAttributeSetter(danceClassDTO));
     }
 
-    public PageResponse<?> findAllDanceClassesByInstructor(String instructorName, PaginationDTO paginationDto) {
+    public PageResponse<?> findAllDanceClassesByInstructor(String instructorName, PaginationDTO paginationDTO) {
         Page<DanceClass> danceClasses = repository.findAllByInstructorName(instructorName,
-                modelAttributeSetterHelper.setupPageable(paginationDto));
+                modelAttributeSetterHelper.setupPageable(paginationDTO));
 
         return modelAttributeSetterHelper.setupPageResponse(danceClasses);
     }
 
-    public PageResponse<?> findAllInactiveDanceClassesByInstructor(String instructorName, PaginationDTO paginationDto) {
-        Page<DanceClass> danceClasses = repository.findAllInactiveByInstructor(instructorName, modelAttributeSetterHelper.setupPageable(paginationDto));
+    public PageResponse<?> findAllInactiveDanceClassesByInstructor(String instructorName, PaginationDTO paginationDTO) {
+        Page<DanceClass> danceClasses = repository.findAllInactiveByInstructor(instructorName, modelAttributeSetterHelper.setupPageable(paginationDTO));
 
         return modelAttributeSetterHelper.setupPageResponse(danceClasses);
     }
 
-    public void updateDanceClassById(Integer id, DanceClassDTO danceClassDto) {
-        DanceClass danceClass = findDanceClassById(id);
-        dateAlreadyInUse(danceClassDto, danceClass);
+    public void updateDanceClassById(Integer id, DanceClassDTO danceClassDTO) {
+        DanceClass danceClass = dateAlreadyInUse(danceClassDTO, findDanceClassById(id));
 
-        save(modelAttributeSetterHelper.updateDanceClassAttributeSetter(danceClass, danceClassDto));
+        save(modelAttributeSetterHelper.updateDanceClassAttributeSetter(danceClass, danceClassDTO));
     }
 
-    public void patchDanceClassById(Integer id, DanceClassDTO danceClassDto) {
-        DanceClass danceClass = findDanceClassById(id);
-        dateAlreadyInUse(danceClassDto, danceClass);
+    public void patchDanceClassById(Integer id, DanceClassDTO danceClassDTO) {
+        DanceClass danceClass = dateAlreadyInUse(danceClassDTO, findDanceClassById(id));
 
-        save(modelAttributeSetterHelper.patchDanceClassAttributeSetter(danceClass, danceClassDto));
+        save(modelAttributeSetterHelper.patchDanceClassAttributeSetter(danceClass, danceClassDTO));
     }
 
     public DanceClass findDanceClassById(Integer id) {
@@ -70,16 +68,17 @@ public class DanceClassService {
         return verifyOptionalEntity(repository.findInactiveById(id));
     }
 
-    public void dateAlreadyInUse(DanceClassDTO danceClassDto, DanceClass danceClass) {
+    public DanceClass dateAlreadyInUse(DanceClassDTO danceClassDTO, DanceClass danceClass) {
 
-        if(danceClassDto.getStart() != danceClass.getStart() && danceClassDto.getEnd() != danceClass.getEnd()) {
-            Optional<DanceClass> optionalDanceClass = repository
-                    .findByStartAndEnd(danceClassDto.getStart(), danceClassDto.getEnd());
+        if(danceClassDTO.getStart() != danceClass.getStart() && danceClassDTO.getEnd() != danceClass.getEnd()) {
+            Optional<DanceClass> danceClassConflict = repository
+                    .findByStartAndEnd(danceClassDTO.getStart(), danceClassDTO.getEnd());
 
-            if(optionalDanceClass.isPresent()) {
-                throw new NotFoundException("There is already a dance class scheduled for this time");
+            if(danceClassConflict.isPresent()) {
+                throw new EntityAlreadyExistsException("There is already a dance class scheduled at this time");
             }
         }
+        return danceClass;
     }
 
     public void deleteDanceClassById(Integer id) {

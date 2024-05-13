@@ -26,8 +26,8 @@ public class DanceClassController {
     private DanceClassService service;
 
     @PostMapping("/register")
-    public ResponseEntity<HttpStatus> createDanceClass(@RequestBody DanceClassDTO danceClassDto) {
-        service.createDanceClass(danceClassDto);
+    public ResponseEntity<HttpStatus> createDanceClass(@RequestBody DanceClassDTO danceClassDTO) {
+        service.createDanceClass(danceClassDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -43,27 +43,27 @@ public class DanceClassController {
 
     @GetMapping("/find/inactive/all/instructor/")
     public ResponseEntity<PageResponse<?>> findAllInactiveDanceClassByInstructor
-            (@RequestParam("instructor_name") String instructorName, @RequestBody PaginationDTO paginationDto) {
-        return new ResponseEntity<>(service.findAllInactiveDanceClassesByInstructor(instructorName, paginationDto), HttpStatus.OK);
+            (@RequestParam("instructor_name") String instructorName, @RequestBody PaginationDTO paginationDTO) {
+        return new ResponseEntity<>(service.findAllInactiveDanceClassesByInstructor(instructorName, paginationDTO), HttpStatus.OK);
     }
 
     @GetMapping("/find/all/instructor/")
     public ResponseEntity<PageResponse<?>> findAllDanceClassesByInstructor(@RequestParam("instructor_name") String instructorName,
-                                                                           @RequestBody PaginationDTO paginationDto) {
-        return new ResponseEntity<>(service.findAllDanceClassesByInstructor(instructorName, paginationDto), HttpStatus.OK);
+                                                                           @RequestBody PaginationDTO paginationDTO) {
+        return new ResponseEntity<>(service.findAllDanceClassesByInstructor(instructorName, paginationDTO), HttpStatus.OK);
     }
 
     @PutMapping("/update/")
     public ResponseEntity<HttpStatus> updateDanceClassById(@RequestParam("id") Integer id,
-                                                           @RequestBody DanceClassDTO danceClassDto) {
-        service.updateDanceClassById(id, danceClassDto);
+                                                           @RequestBody DanceClassDTO danceClassDTO) {
+        service.updateDanceClassById(id, danceClassDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping("/update/partial/")
     public ResponseEntity<HttpStatus> patchDanceClassById(@RequestParam("id") Integer id,
-                                                          @RequestBody DanceClassDTO danceClassDto) {
-        service.patchDanceClassById(id, danceClassDto);
+                                                          @RequestBody DanceClassDTO danceClassDTO) {
+        service.patchDanceClassById(id, danceClassDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

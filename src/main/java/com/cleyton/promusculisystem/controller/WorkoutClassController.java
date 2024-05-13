@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,5 +35,12 @@ public class WorkoutClassController {
     @GetMapping("/find/inactive/")
     public ResponseEntity<WorkoutClass> findInactiveWorkoutClassById(@RequestParam("id") Integer id) {
         return new ResponseEntity<>(service.findInactiveWorkoutClassById(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/update/")
+    public ResponseEntity<HttpStatus> updateWorkoutClassById(@RequestParam("id") Integer id,
+                                                             @RequestBody WorkoutClassDTO workoutClassDTO) {
+        service.updateWorkoutClassById(id, workoutClassDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
