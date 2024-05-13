@@ -1,7 +1,7 @@
 package com.cleyton.promusculisystem.controller;
 
 import com.cleyton.promusculisystem.model.Instructor;
-import com.cleyton.promusculisystem.model.dto.InstructorDto;
+import com.cleyton.promusculisystem.model.dto.InstructorDTO;
 import com.cleyton.promusculisystem.services.InstructorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +24,7 @@ public class InstructorController {
     private InstructorService service;
 
     @PostMapping("/register")
-    public ResponseEntity<HttpStatus> registerInstructor(@RequestBody InstructorDto instructorDto) {
+    public ResponseEntity<HttpStatus> registerInstructor(@RequestBody InstructorDTO instructorDto) {
         service.createInstructor(instructorDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -40,13 +40,13 @@ public class InstructorController {
     }
 
     @PutMapping("/update/")
-    public ResponseEntity<HttpStatus> updateInstructorByCpf(@RequestParam("cpf") String cpf, @RequestBody InstructorDto instructorDto) {
+    public ResponseEntity<HttpStatus> updateInstructorByCpf(@RequestParam("cpf") String cpf, @RequestBody InstructorDTO instructorDto) {
         service.updateInstructorByCpf(cpf, instructorDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping("/partial_update/")
-    public ResponseEntity<HttpStatus> patchInstructorByCpf(@RequestParam("cpf") String cpf, @RequestBody InstructorDto instructorDto) {
+    public ResponseEntity<HttpStatus> patchInstructorByCpf(@RequestParam("cpf") String cpf, @RequestBody InstructorDTO instructorDto) {
         service.patchInstructorByCpf(cpf, instructorDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }

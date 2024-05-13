@@ -1,10 +1,10 @@
 package com.cleyton.promusculisystem.controller;
 
 import com.cleyton.promusculisystem.model.User;
-import com.cleyton.promusculisystem.model.dto.LoginDto;
-import com.cleyton.promusculisystem.model.dto.PaginationDto;
+import com.cleyton.promusculisystem.model.dto.LoginDTO;
+import com.cleyton.promusculisystem.model.dto.PaginationDTO;
 import com.cleyton.promusculisystem.model.response.PageResponse;
-import com.cleyton.promusculisystem.model.dto.UserDto;
+import com.cleyton.promusculisystem.model.dto.UserDTO;
 import com.cleyton.promusculisystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,35 +27,35 @@ public class UserController {
     private UserService service;
 
     @PostMapping("/register")
-    public ResponseEntity<User> createUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<User> createUser(@RequestBody UserDTO userDto) {
         service.createUser(userDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PostMapping("/admin/register")
-    public ResponseEntity<User> createAdmin(@RequestBody UserDto userDto) {
+    public ResponseEntity<User> createAdmin(@RequestBody UserDTO userDto) {
         service.createAdmin(userDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/admin/users")
-    public ResponseEntity<PageResponse<User>> findUsers(@RequestBody PaginationDto paginationDto) {
+    public ResponseEntity<PageResponse<User>> findUsers(@RequestBody PaginationDTO paginationDto) {
         return new ResponseEntity<>(service.getUsers(paginationDto), HttpStatus.OK);
     }
 
     @GetMapping("/auth")
-    public ResponseEntity<HttpStatus> login(@RequestBody LoginDto logInDto) {
+    public ResponseEntity<HttpStatus> login(@RequestBody LoginDTO logInDto) {
         return new ResponseEntity<>(service.login(logInDto));
     }
 
     @PutMapping("/admin/update/")
-    public ResponseEntity<?> updateUser(@RequestParam(name = "id") Integer id, @RequestBody UserDto userDto) {
+    public ResponseEntity<?> updateUser(@RequestParam(name = "id") Integer id, @RequestBody UserDTO userDto) {
         service.updateUser(id, userDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping("/admin/update/partial/")
-    public ResponseEntity<?> patchUser(@RequestParam(name = "id") Integer id, @RequestBody UserDto userDto) {
+    public ResponseEntity<?> patchUser(@RequestParam(name = "id") Integer id, @RequestBody UserDTO userDto) {
         service.patchUser(id, userDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -73,7 +73,7 @@ public class UserController {
     }
 
     @GetMapping("/admin/inactive/users")
-    public ResponseEntity<PageResponse<User>> findInactiveUsers(@RequestBody PaginationDto paginationDto) {
+    public ResponseEntity<PageResponse<User>> findInactiveUsers(@RequestBody PaginationDTO paginationDto) {
         return new ResponseEntity<>(service.getInactiveUsers(paginationDto), HttpStatus.OK);
     }
 

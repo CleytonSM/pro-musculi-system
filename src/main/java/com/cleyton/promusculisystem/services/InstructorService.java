@@ -3,7 +3,7 @@ package com.cleyton.promusculisystem.services;
 
 import com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper;
 import com.cleyton.promusculisystem.model.Instructor;
-import com.cleyton.promusculisystem.model.dto.InstructorDto;
+import com.cleyton.promusculisystem.model.dto.InstructorDTO;
 import com.cleyton.promusculisystem.repository.InstructorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class InstructorService {
         repository.save(instructor);
     }
 
-    public void createInstructor(InstructorDto instructorDto) {
+    public void createInstructor(InstructorDTO instructorDto) {
         isEntityAlreadyInUse(repository.findByCpf(instructorDto.getCpf()));
         save(modelAttributeSetterHelper.postInstructorAttributeSetter(instructorDto));
     }
@@ -38,7 +38,7 @@ public class InstructorService {
         return Optional.of(verifyOptionalEntity(repository.findByName(instructorName))).orElseThrow();
     }
 
-    public void updateInstructorByCpf(String cpf, InstructorDto instructorDto) {
+    public void updateInstructorByCpf(String cpf, InstructorDTO instructorDto) {
         Instructor instructor = verifyOptionalEntity(repository.findByCpf(cpf));
         if(!instructor.getCpf().equals(instructorDto.getCpf())) {
             isEntityAlreadyInUse(repository.findByCpf(instructorDto.getCpf()));
@@ -47,7 +47,7 @@ public class InstructorService {
         save(modelAttributeSetterHelper.updateInstructorAttributeSetter(instructor, instructorDto));
     }
 
-    public void patchInstructorByCpf(String cpf, InstructorDto instructorDto) {
+    public void patchInstructorByCpf(String cpf, InstructorDTO instructorDto) {
         Instructor instructor = verifyOptionalEntity(repository.findByCpf(cpf));
         if(!instructor.getCpf().equals(instructorDto.getCpf())) {
             isEntityAlreadyInUse(repository.findByCpf(instructorDto.getCpf()));

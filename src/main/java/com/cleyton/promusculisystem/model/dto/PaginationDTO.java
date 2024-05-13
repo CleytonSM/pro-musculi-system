@@ -3,7 +3,7 @@ package com.cleyton.promusculisystem.model.dto;
 import lombok.Data;
 
 @Data
-public class PaginationDto {
+public class PaginationDTO {
 
     private String sortBy;
     private String sortType;

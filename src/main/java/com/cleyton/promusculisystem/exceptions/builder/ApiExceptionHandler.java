@@ -1,6 +1,6 @@
 package com.cleyton.promusculisystem.exceptions.builder;
 
-import com.cleyton.promusculisystem.exceptions.DanceClassAlreadyUsingThisDate;
+import com.cleyton.promusculisystem.exceptions.CustomException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,12 +11,12 @@ import java.time.ZonedDateTime;
 @ControllerAdvice
 public class ApiExceptionHandler {
 
-    @ExceptionHandler({DanceClassAlreadyUsingThisDate.class})
-    public ResponseEntity<ApiException> danceClassAlreadyUsingThisDate(DanceClassAlreadyUsingThisDate e) {
+    @ExceptionHandler({CustomException.class})
+    public ResponseEntity<ApiException> danceClassAlreadyUsingThisDate(CustomException e) {
         HttpStatus conflict = HttpStatus.CONFLICT;
         ApiException apiException = new ApiException(
                 conflict,
-                "There is already a dance class scheduled for this time",
+                e.getMessage(),
                 ZonedDateTime.now()
         );
 
