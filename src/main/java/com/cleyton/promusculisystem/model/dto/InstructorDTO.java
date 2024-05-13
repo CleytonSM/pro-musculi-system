@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 
 @Data
 public class InstructorDTO {
-
     private String name;
     private BigDecimal salary;
     private String cpf;

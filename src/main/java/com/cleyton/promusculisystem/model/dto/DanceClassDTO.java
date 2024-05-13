@@ -6,8 +6,8 @@ import java.time.LocalDateTime;
 
 @Data
 public class DanceClassDTO {
-    private String clientEmail;
     private String instructorName;
+    private String clientEmail;
     private String name;
     private LocalDateTime start;
     private LocalDateTime end;
