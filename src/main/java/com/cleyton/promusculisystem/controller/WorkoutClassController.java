@@ -30,4 +30,9 @@ public class WorkoutClassController {
     public ResponseEntity<WorkoutClass> findWorkoutClassById(@RequestParam("id") Integer id) {
         return new ResponseEntity<>(service.findWorkoutClassById(id), HttpStatus.OK);
     }
+
+    @GetMapping("/find/inactive/")
+    public ResponseEntity<WorkoutClass> findInactiveWorkoutClassById(@RequestParam("id") Integer id) {
+        return new ResponseEntity<>(service.findInactiveWorkoutClassById(id), HttpStatus.OK);
+    }
 }

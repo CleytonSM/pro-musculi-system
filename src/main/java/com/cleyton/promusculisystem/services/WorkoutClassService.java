@@ -29,6 +29,10 @@ public class WorkoutClassService {
     }
 
     public WorkoutClass findWorkoutClassById(Integer id) {
-        return verifyOptionalEntity(repository.findById(id));
+        return verifyOptionalEntity(repository.findActiveById(id));
+    }
+
+    public WorkoutClass findInactiveWorkoutClassById(Integer id) {
+        return verifyOptionalEntity(repository.findInactiveById(id));
     }
 }
