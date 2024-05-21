@@ -315,6 +315,12 @@ public class ModelAttributeSetterHelper {
         return workoutClass;
     }
 
+    public WorkoutClass reactivateWorkoutClassAttributeSetter(WorkoutClass workoutClass) {
+        workoutClass.setActive(Boolean.TRUE);
+
+        return workoutClass;
+    }
+
     private Set<Authority> authoritySetup(Authority authority) {
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authority);

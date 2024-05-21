@@ -58,4 +58,10 @@ public class WorkoutClassController {
         service.deleteWorkoutClassById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PutMapping("/reactivate/")
+    public ResponseEntity<HttpStatus> reactivateWorkoutClassById(@RequestParam("id") Integer id) {
+        service.reactivateWorkoutClassById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
