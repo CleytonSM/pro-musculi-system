@@ -69,4 +69,10 @@ public class WorkoutClassService {
 
         save(modelAttributeSetterHelper.deleteWorkoutClassAttributeSetter(workoutClass));
     }
+
+    public void reactivateWorkoutClassById(Integer id) {
+        WorkoutClass workoutClass = verifyOptionalEntity(repository.findInactiveById(id));
+
+        save(modelAttributeSetterHelper.reactivateWorkoutClassAttributeSetter(workoutClass));
+    }
 }
