@@ -309,6 +309,12 @@ public class ModelAttributeSetterHelper {
         return workoutClass;
     }
 
+    public WorkoutClass deleteWorkoutClassAttributeSetter(WorkoutClass workoutClass) {
+        workoutClass.setActive(Boolean.FALSE);
+
+        return workoutClass;
+    }
+
     private Set<Authority> authoritySetup(Authority authority) {
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authority);
