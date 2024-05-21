@@ -63,4 +63,10 @@ public class WorkoutClassService {
             }
         }
     }
+
+    public void deleteWorkoutClassById(Integer id) {
+        WorkoutClass workoutClass = verifyOptionalEntity(repository.findActiveById(id));
+
+        save(modelAttributeSetterHelper.deleteWorkoutClassAttributeSetter(workoutClass));
+    }
 }
