@@ -6,6 +6,7 @@ import com.cleyton.promusculisystem.services.WorkoutClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,6 +50,12 @@ public class WorkoutClassController {
     public ResponseEntity<HttpStatus> patchWorkoutClassById(@RequestParam("id") Integer id,
                                                             @RequestBody WorkoutClassDTO workoutClassDTO) {
         service.patchWorkoutClassById(id, workoutClassDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/")
+    public ResponseEntity<HttpStatus> deleteWorkoutClassById(@RequestParam("id") Integer id) {
+        service.deleteWorkoutClassById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
