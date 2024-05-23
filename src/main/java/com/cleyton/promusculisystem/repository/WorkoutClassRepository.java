@@ -19,4 +19,3 @@ public interface WorkoutClassRepository extends JpaRepository<WorkoutClass, Inte
     @Query("SELECT wc FROM WorkoutClass wc WHERE wc.active = FALSE")
     Optional<WorkoutClass> findInactiveById(Integer id);
 }
-
