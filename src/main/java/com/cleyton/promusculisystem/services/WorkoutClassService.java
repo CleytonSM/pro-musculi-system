@@ -48,6 +48,9 @@ public class WorkoutClassService {
 
     public void patchWorkoutClassById(Integer id, WorkoutClassDTO workoutClassDTO) {
         WorkoutClass workoutClass = findWorkoutClassById(id);
+        if(workoutClassDTO.getDateClass() == null) {
+            workoutClassDTO.setDateClass(workoutClass.getDateClass());
+        }
         dateAlreadyInUse(workoutClassDTO, workoutClass);
 
         save(modelAttributeSetterHelper.patchWorkoutClassAttributeSetter(workoutClass, workoutClassDTO));
