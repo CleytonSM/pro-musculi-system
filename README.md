@@ -1,6 +1,6 @@
 # 💪 Pro Musculi System API 💪
 
-A Pro Musculi System API é um sistema desenvolvido em Java utilizando tecnologias como Spring, JPA, Spring Security e Docker, com o objetivo de administrar uma academia. Este projeto oferece controle sobre instrutores, clientes, aulas de dança e musculação, além de fornecer diferentes níveis de acesso para usuários administradores e comuns.
+A Pro Musculi System API é um sistema desenvolvido em Java utilizando tecnologias como Spring, JPA, Spring Security e Docker, com o objetivo de administrar uma academia. Este projeto oferece controle sobre usuários e seus diferentes níveis de acesso, instrutores, clientes, aulas de dança e musculação.
 
 ## Funcionalidades Principais
 
@@ -41,7 +41,7 @@ spring.main.allow-circular-references=true (Necessário para o funcionamento cor
 
 ## Segurança
 
-A segurança da API é garantida através de tokens que previnem ataques CSRF (Cross-Site Request Forgery) e roles que determinam o nível de acesso dos usuários na plataforma.
+A segurança da API é garantida através de tokens que previnem ataques CSRF (Cross-Site Request Forgery) e roles que determinam o nível de acesso dos usuários na plataforma, variando entre administrador e usuário.
 
 ## Próximos Passos
 
