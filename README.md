@@ -30,10 +30,10 @@ Os artefatos do projeto relacionados à engenharia de software, estão disponív
 2. Configure o ambiente Docker para o banco de dados que desejar.
 
 3. Configure as propriedades no application.properties da aplicação Spring baseado o que foi definido na dockerfile. 
-spring.datasource.url=
-spring.datasource.username=
-spring.datasource.password=
-spring.main.allow-circular-references=true (Necessário para o funcionamento correto da aplicação)
+- `spring.datasource.url=`
+- `spring.datasource.username=`
+- `spring.datasource.password=`
+- `spring.main.allow-circular-references=true` (Necessário para o funcionamento correto da aplicação)
 
 4. Ao preparar o Docker, rode os script SQL presente em /src/main/resources/scripts.sql para criar as entidades.
 
