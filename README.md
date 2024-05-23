@@ -39,7 +39,7 @@ Os artefatos do projeto relacionados à engenharia de software, estão disponív
 
 5. Rode a aplicação. 
 
-## Segurança 🐱‍💻
+## Segurança 🔐
 
 A segurança da API é garantida através de tokens que previnem ataques CSRF (Cross-Site Request Forgery) e roles que determinam o nível de acesso dos usuários na plataforma, variando entre administrador e usuário.
 
