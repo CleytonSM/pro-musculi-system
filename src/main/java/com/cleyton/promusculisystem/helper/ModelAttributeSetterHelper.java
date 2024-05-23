@@ -193,10 +193,11 @@ public class ModelAttributeSetterHelper {
 
 
     public DanceClass patchDanceClassAttributeSetter(DanceClass danceClass, DanceClassDTO danceClassDto) {
-        danceClass.setInstructor(Optional.ofNullable(instructorService.findInstructorByName(danceClassDto.getInstructorName()))
-                .orElse(danceClass.getInstructor()));
-        danceClass.setClient(Optional.ofNullable(clientService.findClientByEmail(danceClassDto.getClientEmail()))
-                .orElse(danceClass.getClient()));
+        danceClass.setInstructor(danceClassDto.getInstructorName() == null
+                    ? danceClass.getInstructor() : instructorService.findInstructorByName(danceClassDto.getInstructorName()));
+
+        danceClass.setClient(danceClassDto.getClientEmail() == null
+                ? danceClass.getClient() : clientService.findClientByEmail(danceClassDto.getClientEmail()));
         danceClass.setName(Optional.ofNullable(danceClassDto.getName())
                 .orElse(danceClass.getName()));
         danceClass.setStart(Optional.ofNullable(danceClassDto.getStart())
@@ -293,12 +294,11 @@ public class ModelAttributeSetterHelper {
     }
 
     public WorkoutClass patchWorkoutClassAttributeSetter(WorkoutClass workoutClass, WorkoutClassDTO workoutClassDTO) {
-        workoutClass.setClient(Optional.ofNullable(clientService
-                        .findClientByEmail(workoutClassDTO.getClientEmail()))
-                .orElse(workoutClass.getClient()));
-        workoutClass.setInstructor(Optional.ofNullable(instructorService
-                        .findInstructorByName(workoutClassDTO.getInstructorName()))
-                .orElse(workoutClass.getInstructor()));
+        workoutClass.setClient(workoutClassDTO.getClientEmail() == null
+                ? workoutClass.getClient() : clientService.findClientByEmail(workoutClassDTO.getClientEmail()));
+        workoutClass.setInstructor(workoutClassDTO.getInstructorName() == null
+                ? workoutClass.getInstructor() : instructorService.findInstructorByName(workoutClassDTO.getInstructorName()));
+
         workoutClass.setName(Optional.ofNullable(workoutClassDTO.getName())
                 .orElse(workoutClass.getName()));
         workoutClass.setDateClass(Optional.ofNullable(workoutClassDTO.getDateClass())
