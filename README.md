@@ -39,6 +39,7 @@ A segurança da API é garantida através de tokens que previnem ataques CSRF (C
 - Implementação de JWT Security para melhorar a autenticação e autorização.
 - Integração de filas de mensagens usando RabbitMQ para processamento assíncrono.
 - Aprimoramento das funcionalidades existentes.
+- Implementação de testes unitários utilizando JUnit 5 a fim de trazer mais confiabilidade no projeto
 
 ## Versão
 1.0.0
