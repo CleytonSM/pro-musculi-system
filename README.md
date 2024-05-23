@@ -11,7 +11,7 @@ A Pro Musculi System API é um sistema desenvolvido em Java utilizando tecnologi
 
 ## Repositório de Artefatos
 
-Os artefatos do projeto, incluindo documentação e outros recursos relacionados à engenharia de software, estão disponíveis no repositório: [Artefatos-Pro-Musculi-System](https://github.com/CleytonSM/Artefatos-Pro-Musculi-System)
+Os artefatos do projeto relacionados à engenharia de software, estão disponíveis no repositório: [Artefatos-Pro-Musculi-System](https://github.com/CleytonSM/Artefatos-Pro-Musculi-System)
 
 ## Tecnologias Utilizadas
 
