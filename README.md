@@ -51,7 +51,7 @@ A segurança da API é garantida através de tokens que previnem ataques CSRF (C
 - Implementação de testes unitários utilizando JUnit 5 a fim de trazer mais confiabilidade no projeto
 
 ## Versão 💪
-1.0.0
+- 1.0.0
 
 ## Tem alguma sugestão? 🙂
 Se tiver alguma sugestão de melhora no código, caso haja uma má prática ou até uma questão de performace, ou se quiser contribuir para o projeto, entre em contato comigo pelo [linkedin](https://www.linkedin.com/in/cleyton-souza-martins/)!
