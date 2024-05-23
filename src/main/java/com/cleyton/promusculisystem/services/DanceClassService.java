@@ -57,6 +57,14 @@ public class DanceClassService {
 
     public void patchDanceClassById(Integer id, DanceClassDTO danceClassDTO) {
         DanceClass danceClass = findDanceClassById(id);
+        if(danceClassDTO.getStart() == null) {
+            danceClassDTO.setStart(danceClass.getStart());
+        }
+
+        if(danceClassDTO.getEnd() == null) {
+            danceClassDTO.setEnd(danceClass.getEnd());
+        }
+
         dateAlreadyInUse(danceClassDTO, danceClass);
 
         save(modelAttributeSetterHelper.patchDanceClassAttributeSetter(danceClass, danceClassDTO));
