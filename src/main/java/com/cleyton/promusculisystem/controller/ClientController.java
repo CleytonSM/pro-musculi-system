@@ -36,7 +36,7 @@ public class ClientController {
         return new ResponseEntity<>(service.findClients(paginationDto), HttpStatus.OK);
     }
 
-    @GetMapping("/find//inactive/all")
+    @GetMapping("/find/inactive/all")
     public ResponseEntity<PageResponse<Client>> findInactiveClients(@RequestBody PaginationDTO paginationDto) {
         return new ResponseEntity<>(service.findInactiveClients(paginationDto), HttpStatus.OK);
     }
