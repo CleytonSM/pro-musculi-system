@@ -1,9 +1,10 @@
-# Pro Musculi System API
+# 💪 Pro Musculi System API 💪
 
 A Pro Musculi System API é um sistema desenvolvido em Java utilizando tecnologias como Spring, JPA, Spring Security e Docker, com o objetivo de administrar uma academia. Este projeto oferece controle sobre instrutores, clientes, aulas de dança e musculação, além de fornecer diferentes níveis de acesso para usuários administradores e comuns.
 
 ## Funcionalidades Principais
 
+- Gerenciamento de usuários
 - Gerenciamento de instrutores
 - Gerenciamento de clientes
 - Agendamento de aulas de dança e musculação
@@ -26,9 +27,17 @@ Os artefatos do projeto relacionados à engenharia de software, estão disponív
 
 1. Clone o repositório:
 `git clone https://github.com/CleytonSM/pro-musculi-system.git`
-2. Configure o ambiente Docker para o MySQL e a aplicação Spring.
+2. Configure o ambiente Docker para o banco de dados que desejar.
 
-3. Execute a aplicação Spring.
+3. Configure as propriedades no application.properties da aplicação Spring baseado o que foi definido na dockerfile. 
+spring.datasource.url=
+spring.datasource.username=
+spring.datasource.password=
+spring.main.allow-circular-references=true (Necessário para o funcionamento correto da aplicação)
+
+4. Ao preparar o Docker, rode os script SQL presente em /src/main/resources/scripts.sql para criar as entidades.
+
+5. Rode a aplicação. 
 
 ## Segurança
 
@@ -43,3 +52,8 @@ A segurança da API é garantida através de tokens que previnem ataques CSRF (C
 
 ## Versão
 1.0.0
+
+## Tem alguma sugestão?
+Se tiver alguma sugestão de melhora no código, caso haja uma má prática ou até uma questão de performace, ou se quiser contribuir para o projeto, entre em contato comigo pelo [linkedin](https://www.linkedin.com/in/cleyton-souza-martins/)!
+
+Fique a vontade em me corrigir 😀, todo aprendizado e reaprendizado é sempre positivo.
