@@ -1,6 +1,7 @@
 package com.cleyton.promusculisystem.exceptions.builder;
 
 import com.cleyton.promusculisystem.exceptions.EntityAlreadyExistsException;
+import com.cleyton.promusculisystem.exceptions.InvalidJWTToken;
 import com.cleyton.promusculisystem.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,5 +35,17 @@ public class ApiExceptionHandler {
         );
 
         return new ResponseEntity<>(apiException, conflict);
+    }
+
+    @ExceptionHandler({InvalidJWTToken.class})
+    public ResponseEntity<ApiException> invalidJWTToken(InvalidJWTToken e) {
+        HttpStatus unauthorized = HttpStatus.UNAUTHORIZED;
+        ApiException apiException = new ApiException(
+                unauthorized,
+                e.getMessage(),
+                ZonedDateTime.now()
+        );
+
+        return new ResponseEntity<>(apiException, unauthorized);
     }
 }
