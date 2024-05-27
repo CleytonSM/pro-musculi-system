@@ -23,8 +23,7 @@ public class SecurityConfig {
         CsrfTokenRequestHandler requestHandler = new CsrfTokenRequestAttributeHandler();
 
         return http
-                .securityContext(s -> s.requireExplicitSave(false))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(csrf -> csrf
                         .csrfTokenRequestHandler(requestHandler)
                         .ignoringRequestMatchers("/user/register", "/user/auth")
