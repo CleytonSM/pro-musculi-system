@@ -1,10 +1,12 @@
 package com.cleyton.promusculisystem.helper;
 
 import io.jsonwebtoken.security.Keys;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 
+@Component
 public class SecretKeyHelper {
 
     public SecretKey secretKeyBuilder(String secretKey) {

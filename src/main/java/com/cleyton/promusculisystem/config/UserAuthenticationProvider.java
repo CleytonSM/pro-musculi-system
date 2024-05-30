@@ -3,7 +3,6 @@ package com.cleyton.promusculisystem.config;
 import com.cleyton.promusculisystem.model.Authority;
 import com.cleyton.promusculisystem.model.User;
 import com.cleyton.promusculisystem.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,8 +16,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
+
+import static com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper.verifyOptionalEntity;
 
 @Component
 public class UserAuthenticationProvider implements AuthenticationProvider {
@@ -34,19 +34,13 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         String userName = authentication.getName();
         String password = authentication.getCredentials().toString();
 
-        Optional<User> optionalUser = repository.findByEmail(userName);
+        User user = verifyOptionalEntity(repository.findByEmail(userName));
 
-        if(optionalUser.isPresent()) {
-            User user = optionalUser.get();
-
-            if(passwordEncoder.matches(password, user.getPassword())) {
-                return new UsernamePasswordAuthenticationToken(user, password, grantedAuthority(user.getAuthorities()));
-            }
-
-            throw new BadCredentialsException("Wrong Email or Password");
+        if(passwordEncoder.matches(password, user.getPassword())) {
+            return new UsernamePasswordAuthenticationToken(user, password, grantedAuthority(user.getAuthorities()));
         }
 
-        throw new EntityNotFoundException("User not found");
+        throw new BadCredentialsException("Wrong Email or Password");
 
     }
 
