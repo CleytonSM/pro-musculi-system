@@ -3,8 +3,8 @@ package com.cleyton.promusculisystem.controller;
 import com.cleyton.promusculisystem.model.User;
 import com.cleyton.promusculisystem.model.dto.LoginDTO;
 import com.cleyton.promusculisystem.model.dto.PaginationDTO;
-import com.cleyton.promusculisystem.model.response.PageResponse;
 import com.cleyton.promusculisystem.model.dto.UserDTO;
+import com.cleyton.promusculisystem.model.response.PageResponse;
 import com.cleyton.promusculisystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,13 +27,13 @@ public class UserController {
     private UserService service;
 
     @PostMapping("/register")
-    public ResponseEntity<User> createUser(@RequestBody UserDTO userDto) {
-        service.createUser(userDto);
+    public ResponseEntity<String> createUser(@RequestBody UserDTO userDto) {
+
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PostMapping("/admin/register")
-    public ResponseEntity<User> createAdmin(@RequestBody UserDTO userDto) {
+    public ResponseEntity<HttpStatus> createAdmin(@RequestBody UserDTO userDto) {
         service.createAdmin(userDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -43,9 +43,9 @@ public class UserController {
         return new ResponseEntity<>(service.getUsers(paginationDto), HttpStatus.OK);
     }
 
-    @GetMapping("/auth")
-    public ResponseEntity<HttpStatus> login(@RequestBody LoginDTO logInDto) {
-        return new ResponseEntity<>(service.login(logInDto));
+    @PostMapping("/auth")
+    public ResponseEntity<?> login(@RequestBody LoginDTO logInDto) {
+        return new ResponseEntity<>(service.login(logInDto), HttpStatus.OK);
     }
 
     @PutMapping("/admin/update/")

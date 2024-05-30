@@ -1,5 +1,6 @@
 package com.cleyton.promusculisystem.services;
 
+import com.cleyton.promusculisystem.config.UserAuthenticationProvider;
 import com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper;
 import com.cleyton.promusculisystem.model.Authority;
 import com.cleyton.promusculisystem.model.User;
@@ -9,13 +10,13 @@ import com.cleyton.promusculisystem.model.dto.RoleDTO;
 import com.cleyton.promusculisystem.model.dto.UserDTO;
 import com.cleyton.promusculisystem.model.response.PageResponse;
 import com.cleyton.promusculisystem.repository.UserRepository;
+import com.cleyton.promusculisystem.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 import static com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper.isEntityAlreadyInUse;
 import static com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper.verifyOptionalEntity;
@@ -31,6 +32,10 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private AuthorityService authorityService;
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    private UserAuthenticationProvider userAuthenticationProvider;
 
     public void save(User user) {
         repository.save(user);
@@ -64,17 +69,15 @@ public class UserService {
         return modelAttributeSetterHelper.setupPageResponse(users);
     }
 
-    public HttpStatus login(LoginDTO loginDto) {
+    public String login(LoginDTO loginDto) {
         // TODO check a better way to implement this login section
-        Optional<User> optionalUser = repository.findByEmail(loginDto.getEmail());
-        if(optionalUser.isEmpty()) {
-            return HttpStatus.UNAUTHORIZED;
-        }
-        if(!passwordEncoder.matches(loginDto.getPassword(), optionalUser.get().getPassword())) {
-            return HttpStatus.FORBIDDEN;
-        }
+        User user = verifyOptionalEntity(repository.findByEmail(loginDto.getEmail()));
 
-        return HttpStatus.OK;
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user,user.getPassword());
+
+        userAuthenticationProvider.authenticate(authentication);
+
+        return jwtTokenProvider.createToken();
     }
 
     public void updateUser(Integer id, UserDTO userDto) {
