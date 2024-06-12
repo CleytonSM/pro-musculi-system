@@ -1,8 +1,8 @@
 package com.cleyton.promusculisystem.security;
 
 import com.cleyton.promusculisystem.exceptions.InvalidJWTToken;
-import com.cleyton.promusculisystem.exceptions.JwtTokenCreationException;
 import com.cleyton.promusculisystem.helper.SecretKeyHelper;
+import com.cleyton.promusculisystem.model.Authority;
 import com.cleyton.promusculisystem.model.User;
 import com.cleyton.promusculisystem.repository.UserRepository;
 import io.jsonwebtoken.JwtException;
@@ -10,18 +10,23 @@ import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper.verifyOptionalEntity;
 
 @Component
 public class JwtTokenProvider {
@@ -38,13 +43,7 @@ public class JwtTokenProvider {
     @Autowired
     private SecretKeyHelper secretKeyHelper;
 
-    public String createToken() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new JwtTokenCreationException("Unauthorized User");
-        }
-
+    public String createToken(Authentication authentication) {
         Date now = new Date();
         SecretKey key = secretKeyHelper.secretKeyBuilder(secretKey);
 
@@ -67,10 +66,9 @@ public class JwtTokenProvider {
 
     public Map<String, Object> claimsSetUp(Authentication authentication) {
         Map<String, Object> claims = new HashMap<>();
-        User user = (User) authentication.getPrincipal();
 
-        claims.put("email", user.getEmail());
-        claims.put("authorities", populateAuthorities(authentication.getAuthorities()));
+        claims.put("email", authentication.getName());
+        //claims.put("authorities", l.getAuthorities()));
 
         return claims;
     }
@@ -92,22 +90,22 @@ public class JwtTokenProvider {
             throw new InvalidJWTToken("Expired or invalid JWT token");
         }
     }
-//
-//    public String getUsername(String token) {
-//        SecretKey key = secretKeyHelper.secretKeyBuilder(secretKey);
-//
-//        return Jwts.parser().verifyWith(key).build().parseUnsecuredClaims(token)
-//                .getPayload().getSubject();
-//    }
-//
-//    public Authentication getAuthentication(String token) {
-//        User user = verifyOptionalEntity(userRepository.findByEmail(getUsername(token)));
-//
-//        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-//
-//        for (Authority authority : user.getAuthorities()) {
-//            grantedAuthorities.add(new SimpleGrantedAuthority(authority.getName()));
-//        }
-//        return new UsernamePasswordAuthenticationToken(user, "", grantedAuthorities);
-//    }
+
+    public String getUsername(String token) {
+        SecretKey key = secretKeyHelper.secretKeyBuilder(secretKey);
+
+        return Jwts.parser().verifyWith(key).build().parseUnsecuredClaims(token)
+                .getPayload().getSubject();
+    }
+
+    public Authentication getAuthentication(String token) {
+        User user = verifyOptionalEntity(userRepository.findByEmail(getUsername(token)));
+
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+
+        for (Authority authority : user.getAuthorities()) {
+            grantedAuthorities.add(new SimpleGrantedAuthority(authority.getName()));
+        }
+        return new UsernamePasswordAuthenticationToken(user, "", grantedAuthorities);
+    }
 }
