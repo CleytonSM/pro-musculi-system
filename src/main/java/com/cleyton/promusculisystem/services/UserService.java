@@ -70,14 +70,10 @@ public class UserService {
     }
 
     public String login(LoginDTO loginDto) {
-        // TODO check a better way to implement this login section
-        User user = verifyOptionalEntity(repository.findByEmail(loginDto.getEmail()));
+        Authentication authentication = userAuthenticationProvider
+                .authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(user,user.getPassword());
-
-        userAuthenticationProvider.authenticate(authentication);
-
-        return jwtTokenProvider.createToken();
+        return jwtTokenProvider.createToken(authentication);
     }
 
     public void updateUser(Integer id, UserDTO userDto) {

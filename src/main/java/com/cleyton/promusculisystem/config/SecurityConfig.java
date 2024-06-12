@@ -5,6 +5,7 @@ import com.cleyton.promusculisystem.filter.JwtTokenValidatorFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -57,7 +58,7 @@ public class SecurityConfig {
                 )
                 .addFilterAfter(new CsrfCookieFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(new JwtTokenValidatorFilter(), UsernamePasswordAuthenticationFilter.class)
-                .formLogin(login -> login.loginProcessingUrl("/user/auth"))
+                .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(withDefaults())
                 .build();
     }
