@@ -9,7 +9,8 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class SecretKeyHelper {
 
-    public SecretKey secretKeyBuilder(String secretKey) {
+    public SecretKey secretKeyBuilder() {
+        String secretKey = "MDocZiuc5sJExb0XvMKSOeFj_2_spFjZYRCJpwRB69Y";
         return Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 }

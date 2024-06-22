@@ -1,7 +1,7 @@
 package com.cleyton.promusculisystem.config;
 
 import com.cleyton.promusculisystem.filter.CsrfCookieFilter;
-import com.cleyton.promusculisystem.filter.JwtTokenValidatorFilter;
+import com.cleyton.promusculisystem.filter.JwtTokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,7 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.csrf.CsrfTokenRequestHandler;
 import org.springframework.web.cors.CorsConfiguration;
@@ -30,10 +29,11 @@ public class SecurityConfig {
 
         return http
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .csrf(csrf -> csrf
-                        .csrfTokenRequestHandler(requestHandler)
-                        .ignoringRequestMatchers("/user/auth", "/user/register")
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .csrf(csrf -> csrf.disable()
+//                        csrf -> csrf
+//                        .csrfTokenRequestHandler(requestHandler)
+//                        .ignoringRequestMatchers("/user/auth", "/user/register")
+//                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 )
                 .cors(corsConfig -> corsConfig.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
@@ -57,7 +57,7 @@ public class SecurityConfig {
                         .requestMatchers("/workoutclass/**").hasAnyRole("ADMIN", "USER")
                 )
                 .addFilterAfter(new CsrfCookieFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(new JwtTokenValidatorFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new JwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(withDefaults())
                 .build();
