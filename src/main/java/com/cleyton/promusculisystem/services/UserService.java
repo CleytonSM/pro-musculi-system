@@ -26,14 +26,19 @@ public class UserService {
 
     @Autowired
     private UserRepository repository;
+
     @Autowired
     private ModelAttributeSetterHelper modelAttributeSetterHelper;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @Autowired
     private AuthorityService authorityService;
+
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
+
     @Autowired
     private UserAuthenticationProvider userAuthenticationProvider;
 

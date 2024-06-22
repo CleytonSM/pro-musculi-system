@@ -9,43 +9,33 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper.verifyOptionalEntity;
 
 @Component
 public class JwtTokenProvider {
 
-    @Value("${security.jwt.token.secret-key}")
-    private String secretKey;
-
-    @Value("${security.jwt.token.expire-length}")
-    private long validityInMilliseconds;
+    private SecretKeyHelper secretKeyHelper = new SecretKeyHelper();
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private SecretKeyHelper secretKeyHelper;
+    private UserRepository repository;
 
     public String createToken(Authentication authentication) {
         Date now = new Date();
-        SecretKey key = secretKeyHelper.secretKeyBuilder(secretKey);
+        SecretKey key = secretKeyHelper.secretKeyBuilder();
 
         return Jwts.builder().issuer("ProMusculiSystem")
                 .claims(claimsSetUp(authentication))
@@ -58,6 +48,7 @@ public class JwtTokenProvider {
 
     public String resolveToken(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
+
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
@@ -66,40 +57,36 @@ public class JwtTokenProvider {
 
     public Map<String, Object> claimsSetUp(Authentication authentication) {
         Map<String, Object> claims = new HashMap<>();
+        User user = (User) authentication.getPrincipal();
 
-        claims.put("email", authentication.getName());
+        claims.put("email", user.getEmail());
         //claims.put("authorities", l.getAuthorities()));
 
         return claims;
     }
 
-    private String populateAuthorities(Collection<? extends GrantedAuthority> collection) {
-        Set<String> authoritiesSet = new HashSet<>();
-        for (GrantedAuthority authority : collection) {
-            authoritiesSet.add(authority.getAuthority());
-        }
-        return String.join(",", authoritiesSet);
-    }
-
     public boolean validateToken(String token) {
-        SecretKey key = secretKeyHelper.secretKeyBuilder(secretKey);
+        SecretKey key = secretKeyHelper.secretKeyBuilder();
+
         try {
-            Jwts.parser().verifyWith(key).build().parseUnsecuredClaims(token);
+            Jwts.parser().verifyWith(key).build().parseSignedClaims(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            throw new InvalidJWTToken("Expired or invalid JWT token");
+            throw new InvalidJWTToken(e.getMessage());
         }
     }
 
     public String getUsername(String token) {
-        SecretKey key = secretKeyHelper.secretKeyBuilder(secretKey);
+        SecretKey key = secretKeyHelper.secretKeyBuilder();
 
         return Jwts.parser().verifyWith(key).build().parseUnsecuredClaims(token)
                 .getPayload().getSubject();
     }
 
     public Authentication getAuthentication(String token) {
-        User user = verifyOptionalEntity(userRepository.findByEmail(getUsername(token)));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        User user = verifyOptionalEntity(repository.findByEmail(getUsername(token)));
 
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 
