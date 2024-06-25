@@ -9,6 +9,8 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.data.repository.cdi.Eager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -79,13 +81,11 @@ public class JwtTokenProvider {
     public String getUsername(String token) {
         SecretKey key = secretKeyHelper.secretKeyBuilder();
 
-        return Jwts.parser().verifyWith(key).build().parseUnsecuredClaims(token)
-                .getPayload().getSubject();
+        return Jwts.parser().verifyWith(key).build().parseSignedClaims(token)
+                .getPayload().get("email", String.class);
     }
 
     public Authentication getAuthentication(String token) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         User user = verifyOptionalEntity(repository.findByEmail(getUsername(token)));
 
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();

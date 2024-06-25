@@ -2,6 +2,8 @@ package com.cleyton.promusculisystem.config;
 
 import com.cleyton.promusculisystem.filter.CsrfCookieFilter;
 import com.cleyton.promusculisystem.filter.JwtTokenFilter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,6 +24,9 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 public class SecurityConfig {
+
+    @Autowired
+    ApplicationContext applicationContext;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -57,7 +62,7 @@ public class SecurityConfig {
                         .requestMatchers("/workoutclass/**").hasAnyRole("ADMIN", "USER")
                 )
                 .addFilterAfter(new CsrfCookieFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(new JwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(applicationContext.getBean(JwtTokenFilter.class), UsernamePasswordAuthenticationFilter.class)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(withDefaults())
                 .build();
