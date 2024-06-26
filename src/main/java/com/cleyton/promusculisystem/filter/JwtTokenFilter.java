@@ -33,6 +33,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             return;
         }
 
+        response.setHeader("Authentication", token);
         filterChain.doFilter(request, response);
     }
 

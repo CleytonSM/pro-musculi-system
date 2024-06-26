@@ -11,7 +11,9 @@ import com.cleyton.promusculisystem.model.dto.UserDTO;
 import com.cleyton.promusculisystem.model.response.PageResponse;
 import com.cleyton.promusculisystem.repository.UserRepository;
 import com.cleyton.promusculisystem.security.JwtTokenProvider;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -41,6 +43,9 @@ public class UserService {
 
     @Autowired
     private UserAuthenticationProvider userAuthenticationProvider;
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
     public void save(User user) {
         repository.save(user);
