@@ -28,9 +28,11 @@ import java.util.Map;
 import static com.cleyton.promusculisystem.helper.ModelAttributeSetterHelper.verifyOptionalEntity;
 
 @Component
+@Eager
 public class JwtTokenProvider {
 
-    private SecretKeyHelper secretKeyHelper = new SecretKeyHelper();
+    @Autowired
+    private SecretKeyHelper secretKeyHelper;
 
     @Autowired
     private UserRepository repository;
